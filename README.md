@@ -8,5 +8,17 @@ NSIS script (.nsi) into an executable. NSIS is released under an open
 source license and is completely free for any use. For more details,
 please visit [nsis]
 
+## Script dependencies
+- **NSIS** distribution (version >= 3.0). Type `makensis -VERSION` to test your version.  
+  If you need an update version, please visit [nsis]
+- **Inetc plug-in** - Internet client plug-in for files download and upload.  
+  http://nsis.sourceforge.net/Inetc_plug-in. To install, go to your nsis  
+  folder (the directory containing Bin, Contrib, ... subfolders) and type:  
+  `wget http://nsis.sourceforge.net/mediawiki/images/c/c9/Inetc.zip &&  
+  unzip Inetc.zip &&  
+  rm Inetc.zip`
+- **GNU awk** (version >= 3.0) Type `awk --version` to test your version.  
+  If you need an update version, please visit http://www.gnu.org/software/gawk/
+
 [nsis]:   http://nsis.sourceforge.net
 [unitex]: http://unitexgramlab.org
