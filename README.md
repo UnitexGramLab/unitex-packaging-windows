@@ -66,5 +66,25 @@ command line parameters. Some common options are:
 | `/NCRC`                      | The installer will not perform a Cyclic Redundancy Check (CRC) on itself before allowing an install     |
 | `/S`                         | Runs the installer or the uninstaller silently        |
 
+### Setup installer features
+
+ - [x] User selection of Unitex/GramLab installation components (Core Components,  
+   Visual IDEs, Linguistic Resources, Source Code, User Manual, Start Menu  
+   and Desktop Shortcuts).
+ - [x] Several installation types : Full, Standard, Minimal and Custom.
+ - [x] Automatic JRE (Java Runtime Edition) detection. If the JRE isn't installed,  
+   a dialog allows the user to choose between a manual or automatic install.  
+ - [x] System language detection to preselect Linguistic Resources to install.
+ - [x] Same, older or newer version detection.
+ - [x] Application, Manual, and Web links shortcuts.
+ - [x] Admin or user installation mode support.
+ - [x] Mixed-mode installer that can both be installed per-machine or per-user.
+ - [x] Silent mode support for batch installs.
+ - [x] Uninstall support.
+ - [ ] Support for a web installation mode. 
+ - [ ] Check for updates.
+ - [ ] User interface i18n.
+ - [ ] Include support for creating pure 64-bit Windows installers.
+  
 [nsis]:   http://nsis.sourceforge.net
 [unitex]: http://unitexgramlab.org
