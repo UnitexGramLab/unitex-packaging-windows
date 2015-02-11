@@ -85,6 +85,14 @@ command line parameters. Some common options are:
  - [ ] Check for updates.
  - [ ] User interface i18n.
  - [ ] Include support for creating pure 64-bit Windows installers.
-  
+
+### Contributing
+
+We welcome everyone to contribute to improve this project. Below are some of the
+things that you can do to contribute:
+
+-  [Fork us](https://github.com/UnitexGramLab/unitex-packaging-windows/fork) and [request a pull](https://github.com/UnitexGramLab/unitex-packaging-windows/pulls) to the [devel branch](https://github.com/UnitexGramLab/unitex-packaging-windows/tree/devel).
+-  Submit [bug reports or feature requests](https://github.com/UnitexGramLab/unitex-packaging-windows/issues)
+
 [nsis]:   http://nsis.sourceforge.net
 [unitex]: http://unitexgramlab.org
