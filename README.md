@@ -1,4 +1,4 @@
-# Unitex/GramLab Setup Installer for Windows
+## Unitex/GramLab Setup Installer for Windows
 
 This NSIS script is used to create the [Unitex/GramLab][unitex] setup installers
 for Windows on POSIX compliant systems. NSIS (Nullsoft Scriptable
@@ -8,7 +8,7 @@ NSIS script (.nsi) into an executable. NSIS is released under an open
 source license and is completely free for any use. For more details,
 please visit [nsis]
 
-## Script dependencies
+### Script dependencies
 - **NSIS** distribution (version >= 3.0). Type `makensis -VERSION` to test your version.  
   If you need an update version, please visit [nsis]
 - **Inetc plug-in** - Internet client plug-in for files download and upload.  
@@ -20,7 +20,7 @@ please visit [nsis]
 - **GNU awk** (version >= 3.0) Type `awk --version` to test your version.  
   If you need an update version, please visit http://www.gnu.org/software/gawk/
 
-## Script compilation
+### Script compilation
 Usage:  
  `makensis -DVER_MAJOR=# -DVER_MINOR=# -DVER_REVISION=# [OPTIONS] unitex.nsi`
 
@@ -29,7 +29,7 @@ For a full list of compiler flags supported by this program, just type
 parameters and further information about the makensis command, type
 `makensis` [return]. 
 
-### Example
+#### Example
 
 > Before beginning, please remember that this program only compiles on
 > POSIX compliant systems (i.e. not on Windows). This is mainly due to the use
@@ -52,6 +52,19 @@ parameters and further information about the makensis command, type
    This will create an executable named: `Unitex-GramLab-3.1beta_anonymous_win32-setup.exe`
 
 Non-anonymous builds are further documented [here](unitex.nsi)
+
+### Setup installer command line parameters
+
+The produced Unitex/GramLab Windows setup installer accepts several optional
+command line parameters. Some common options are:
+
+| Option                     | Description                                           |
+| -------------------------- | ----------------------------------------------------- |
+| `/AllUsers`                  | Set default to a per-machine installation             |
+| `/CurrentUser`               | Set default to a per-user installation.               |
+| `/D C:\path\without quotes\` | Sets the default installation directory. It mustbe the last parameter and must not contain any quotes. Only absolute paths are supported|
+| `/NCRC`                      | The installer will not perform a Cyclic Redundancy Check (CRC) on itself before allowing an install     |
+| `/S`                         | Runs the installer or the uninstaller silently        |
 
 [nsis]:   http://nsis.sourceforge.net
 [unitex]: http://unitexgramlab.org
