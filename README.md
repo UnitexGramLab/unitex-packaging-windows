@@ -20,5 +20,38 @@ please visit [nsis]
 - **GNU awk** (version >= 3.0) Type `awk --version` to test your version.  
   If you need an update version, please visit http://www.gnu.org/software/gawk/
 
+## Script compilation
+Usage:  
+ `makensis -DVER_MAJOR=# -DVER_MINOR=# -DVER_REVISION=# [OPTIONS] unitex.nsi`
+
+For a full list of compiler flags supported by this program, just type
+`makensis unitex.nsi` [return] at the command line. For a full list of
+parameters and further information about the makensis command, type
+`makensis` [return]. 
+
+### Example
+
+> Before beginning, please remember that this program only compiles on
+> POSIX compliant systems (i.e. not on Windows). This is mainly due to the use
+> of the `!system` command thats runs with /bin/sh. There aren't any plans for
+> a Windows support at the moment.
+
+1. Download the [bundle zip](http://www-igm.univ-mlv.fr/~unitex/zips/Unitex3.1beta.zip)
+   containing the Unitex/GramLab distribution from the [Unitex/GramLab][unitex] homepage.
+2. Unzip all files in a folder at one time.
+3. Take notice of the main folder name:  
+   `Unitex${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}`, e.g.  
+   **Unitex3.0**      `VER_MAJOR=3 VER_MINOR=0 VER_SUFFIX=""`  
+   **Unitex3.1beta**  `VER_MAJOR=3 VER_MINOR=1 VER_SUFFIX="beta"`
+4. Take notice of the parent folder name, i.e. the directory where the  
+   main Unitex directory is placed. This directory will be your `${INPUT_BASEDIR}` path.
+5. Create the final setup installer typing:  
+   `makensis -DANONYMOUS_BUILD  -DINPUT_BASEDIR=path -DVER_MAJOR=number -DVER_MINOR=number -DVER_SUFFIX=suffix unitex.nsi`  
+   For example:  
+   `makensis -DANONYMOUS_BUILD  -DINPUT_BASEDIR=. -DVER_MAJOR=3 -DVER_MINOR=1 -DVER_SUFFIX=beta unitex.nsi`  
+   This will create an executable named: `Unitex-GramLab-3.1beta_anonymous_win32-setup.exe`
+
+Non-anonymous builds are further documented [here](unitex.nsi)
+
 [nsis]:   http://nsis.sourceforge.net
 [unitex]: http://unitexgramlab.org
