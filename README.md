@@ -91,7 +91,7 @@ command line parameters. Some common options are:
 We welcome everyone to contribute to improve this project. Below are some of the
 things that you can do to contribute:
 
--  [Fork us](https://github.com/UnitexGramLab/unitex-packaging-windows/fork) and [request a pull](https://github.com/UnitexGramLab/unitex-packaging-windows/pulls) to the [devel branch](https://github.com/UnitexGramLab/unitex-packaging-windows/tree/devel).
+-  [Fork us](https://github.com/UnitexGramLab/unitex-packaging-windows/fork) and [request a pull](https://github.com/UnitexGramLab/unitex-packaging-windows/pulls) to the [develop branch](https://github.com/UnitexGramLab/unitex-packaging-windows/tree/develop).
 -  Submit [bug reports or feature requests](https://github.com/UnitexGramLab/unitex-packaging-windows/issues)
 
 ### Licensing information
