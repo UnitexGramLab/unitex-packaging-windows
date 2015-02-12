@@ -872,42 +872,46 @@ Var locale_language_id
 # use makensis -DFORCE_JRE_UPDATE_INSTALLER_LINK to force updated
 # =============================================================================
 !ifdef FORCE_JRE_UPDATE_INSTALLER_LINK
-# First create a temporal file
-!tempfile _TEMPFILE
-# Try to obtain the JRE Windows' BundleId and put it in _TEMPFILE
-!system 'wget -qO- http://www.java.com/en/download/manual.jsp | grep AutoDL | \
-         grep Windows | grep Offline | uniq | \
-         sed -e $\'s/.*BundleId=// ; s/">$//$\' > "${_TEMPFILE}"'
-# Read ${_TEMPFILE} and stuffed into _JRE_INSTALLER_BUNDLEID global flag
-!define /file _JRE_INSTALLER_BUNDLEID "${_TEMPFILE}"
-# Build the download link
-!define _JRE_INSTALLER "${JRE_INSTALLER_URL_PREFIX}=${_JRE_INSTALLER_BUNDLEID}"
-# Check if the download link is valid
-# If link is not valid ${_TEMPFILE} will be empty
-!system 'wget --quiet --spider ${_JRE_INSTALLER} && \
-         echo "!define JRE_INSTALLER ${_JRE_INSTALLER}" > "${_TEMPFILE}" || \
-         echo -n "" > "${_TEMPFILE}"'
-# Define JRE_INSTALLER iff '${_TEMPFILE}' is not empty
-!include '${_TEMPFILE}'
-# Remove
-!delfile '${_TEMPFILE}'
+  # First create a temporal file
+  !tempfile _TEMPFILE
+  # Try to obtain the JRE Windows' BundleId and put it in _TEMPFILE
+  !system 'wget -qO- http://www.java.com/en/download/manual.jsp        | \
+           grep BundleId                                               | \
+           grep Windows                                                | \
+           grep -v Online                                              | \
+           grep -v 64-bit                                              | \
+           uniq                                                        | \
+           sed -e $\'s/.*BundleId//g ; s/[^0-9]//g$\' > "${_TEMPFILE}"'
+  # Read ${_TEMPFILE} and stuffed into _JRE_INSTALLER_BUNDLEID global flag
+  !define /file _JRE_INSTALLER_BUNDLEID "${_TEMPFILE}"
+  # Build the download link
+  !define _JRE_INSTALLER "${JRE_INSTALLER_URL_PREFIX}=${_JRE_INSTALLER_BUNDLEID}"
+  # Check if the download link is valid
+  # If link is not valid ${_TEMPFILE} will be empty
+  !system 'wget --quiet --spider ${_JRE_INSTALLER} && \
+           echo "!define JRE_INSTALLER ${_JRE_INSTALLER}" > "${_TEMPFILE}" || \
+           echo -n "" > "${_TEMPFILE}"'
+  # Define JRE_INSTALLER iff '${_TEMPFILE}' is not empty
+  !include '${_TEMPFILE}'
+  # Remove
+  !delfile '${_TEMPFILE}'
 
-!ifdef JRE_INSTALLER
-  !verbose push
-  !verbose 4
-  !echo '[info] New JRE installer link is $\"${JRE_INSTALLER}$\"'
-  !verbose pop
-!endif
-
-# Undef temporal gflags
-!undef _TEMPFILE
-!undef _JRE_INSTALLER_BUNDLEID
-!undef _JRE_INSTALLER
+  !ifdef JRE_INSTALLER
+    !verbose push
+    !verbose 4
+    !echo '[info] New JRE installer link is $\"${JRE_INSTALLER}$\"'
+    !verbose pop
+  !endif
+  
+  # Undef temporal gflags
+  !undef _TEMPFILE
+  !undef _JRE_INSTALLER_BUNDLEID
+  !undef _JRE_INSTALLER
 !endif  #  FORCE_JRE_UPDATE_INSTALLER_LINK
 
 # Fallback when JRE_INSTALLER is not defined
 !ifndef JRE_INSTALLER
-  !define /ifndef  JRE_INSTALLER_BUNDLEID "83383"
+  !define /ifndef  JRE_INSTALLER_BUNDLEID "101406"
   !define JRE_INSTALLER "${JRE_INSTALLER_URL_PREFIX}=${JRE_INSTALLER_BUNDLEID}"
 !endif
 
