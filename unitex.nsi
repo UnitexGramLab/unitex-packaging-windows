@@ -710,7 +710,7 @@ ManifestSupportedOS all
 !define ABOUT_URL     "${HOMEPAGE_URL}/index.php?page=1"
 !define UPDATE_URL    "${HOMEPAGE_URL}/index.php?page=3"
 !define BUG_URL       "${HOMEPAGE_URL}/index.php?page=15"
-!define LGPLLR_URL    "${HOMEPAGE_URL}/lgpllr.html"
+!define LGPLLR_URL    "http://bit.do/LGPL-LR"
 !define LGPL_URL      "http://www.gnu.org/licenses/lgpl.html"
 !define FORUM_URL     "http://groups.google.com/d/forum/unitex-gramlab"
 
