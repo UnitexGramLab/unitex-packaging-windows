@@ -9,7 +9,7 @@
 !include "WordFunc.nsh"
 
 !macro CUSTOM_PAGE_JREINFO
-		Page custom CUSTOM_PAGE_JREINFO CUSTOM_PAGE_JREINFOLeave
+    Page custom CUSTOM_PAGE_JREINFO CUSTOM_PAGE_JREINFOLeave
 !macroend
 
 !ifndef JRE_VERSION
@@ -187,8 +187,8 @@ Function DownloadAndInstallJREIfNecessary
   DetailPrint "Detecting JRE Version"
   Push "${JRE_VERSION}"
   Call DetectJRE
-  Pop $0	; Get return value from stack
-  Pop $1	; get JRE path (or error message)
+  Pop $0  ; Get return value from stack
+  Pop $1  ; get JRE path (or error message)
   DetailPrint "JRE Version detection completed ($1)"
 
 
@@ -200,7 +200,7 @@ downloadJRE:
     goto End
   ${EndIf} 
 
-  DetailPrint "About to download JRE from ${JRE_INSTALLER}"
+  DetailPrint "Downloading JRE from ${JRE_INSTALLER}"
   Inetc::get "${JRE_INSTALLER}" "$TEMP\jre_Setup.exe" /END
   Pop $0 # return value = exit code, "OK" if OK
   DetailPrint "Download result = $0"
@@ -251,8 +251,8 @@ InstallVerif:
   DetailPrint "Checking the JRE Setup's outcome"
   Push "${JRE_VERSION}"
   Call DetectJRE  
-  Pop $0	  ; DetectJRE's return value
-  Pop $1	  ; JRE home (or error message if compatible JRE could not be found)
+  Pop $0    ; DetectJRE's return value
+  Pop $1    ; JRE home (or error message if compatible JRE could not be found)
   StrCmp $0 "OK" 0 JavaVerStillWrong
   Goto JREPathStorage
 JavaVerStillWrong:
@@ -264,20 +264,20 @@ JavaVerStillWrong:
   Goto ExitInstallJRE
  
 JREPathStorage:
-  push $0	; => rv, r1, r0
-  exch 2	; => r0, r1, rv
-  exch		; => r1, r0, rv
+  push $0 ; => rv, r1, r0
+  exch 2  ; => r0, r1, rv
+  exch    ; => r1, r0, rv
   Goto End
  
 ExitInstallJRE:
   Pop $1
   MessageBox MB_OK "Unable to install Java - Setup will be aborted$\n$\n$1"
-  Pop $1 	; Restore $1
-  Pop $0 	; Restore $0
+  Pop $1  ; Restore $1
+  Pop $0  ; Restore $0
   Abort
 End:
-  Pop $1	; Restore $1
-  Pop $0	; Restore $0
+  Pop $1  ; Restore $1
+  Pop $0  ; Restore $0
 
 FunctionEnd
 
@@ -290,13 +290,13 @@ FunctionEnd
  
 Function DetectJRE
 
-  Exch $0	; Get version requested  
-		; Now the previous value of $0 is on the stack, and the asked for version of JDK is in $0
-  Push $1	; $1 = Java version string (ie 1.5.0)
-  Push $2	; $2 = Javahome
-  Push $3	; $3 = holds the version comparison result
+  Exch $0 ; Get version requested  
+    ; Now the previous value of $0 is on the stack, and the asked for version of JDK is in $0
+  Push $1 ; $1 = Java version string (ie 1.5.0)
+  Push $2 ; $2 = Javahome
+  Push $3 ; $3 = holds the version comparison result
 
-		; stack is now:  r3, r2, r1, r0
+    ; stack is now:  r3, r2, r1, r0
 
   ; first, check for an installed JRE
   ReadRegStr $1 HKLM "SOFTWARE\JavaSoft\Java Runtime Environment" "CurrentVersion"
@@ -340,19 +340,19 @@ FoundNew:
   Goto DetectJREEnd
 
 DetectJREEnd:
-	; at this stage, $0 contains rv0, $1 contains rv1
-	; now, straighten the stack out and recover original values for r0, r1, r2 and r3
-	; there are two return values: rv0 = -1, 0, OK and rv1 = JRE path or problem description
-	; stack looks like this: 
+  ; at this stage, $0 contains rv0, $1 contains rv1
+  ; now, straighten the stack out and recover original values for r0, r1, r2 and r3
+  ; there are two return values: rv0 = -1, 0, OK and rv1 = JRE path or problem description
+  ; stack looks like this: 
           ;    r3,r2,r1,r0
-	Pop $3	; => r2,r1,r0
-	Pop $2	; => r1,r0
-	Push $0 ; => rv0, r1, r0
-	Exch 2	; => r0, r1, rv0
-	Push $1 ; => rv1, r0, r1, rv0
-	Exch 2	; => r1, r0, rv1, rv0
-	Pop $1	; => r0, rv1, rv0
-	Pop $0	; => rv1, rv0	
-	Exch	  ; => rv0, rv1
+  Pop $3  ; => r2,r1,r0
+  Pop $2  ; => r1,r0
+  Push $0 ; => rv0, r1, r0
+  Exch 2  ; => r0, r1, rv0
+  Push $1 ; => rv1, r0, r1, rv0
+  Exch 2  ; => r1, r0, rv1, rv0
+  Pop $1  ; => r0, rv1, rv0
+  Pop $0  ; => rv1, rv0 
+  Exch    ; => rv0, rv1
 FunctionEnd
 !endif # JRE_SETUP_INCLUDED
