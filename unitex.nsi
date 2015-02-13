@@ -704,6 +704,13 @@ ManifestSupportedOS all
 !endif  # SETUP_DISABLE_FILE_CHECKS
 
 # =============================================================================
+# Unitex/GramLab workspace directories and configuration files
+!define UNITEX_WORKSPACE_NAME   "Unitex"      # Unitex workspace directory name
+!define UNITEX_WORKSPACE_FILE   ".unitex.cfg" # Unitex workspace config file
+!define GRAMLAB_WORKSPACE_NAME  "GramLab"     # GramLab workspace directory name
+!define GRAMLAB_WORKSPACE_FILE  ".gramlab"    # GramLab workspace config file
+
+# =============================================================================
 # Unitex/GramLab related URLs
 # =============================================================================
 !define HOMEPAGE_URL  "http://www-igm.univ-mlv.fr/~unitex"
@@ -911,7 +918,7 @@ Var locale_language_id
 
 # Fallback when JRE_INSTALLER is not defined
 !ifndef JRE_INSTALLER
-  !define /ifndef  JRE_INSTALLER_BUNDLEID "101406"
+  !define /ifndef  JRE_INSTALLER_BUNDLEID "83383"
   !define JRE_INSTALLER "${JRE_INSTALLER_URL_PREFIX}=${JRE_INSTALLER_BUNDLEID}"
 !endif
 
@@ -1119,14 +1126,48 @@ reboot your computer.${NEW_LINE}${NEW_LINE}$_CLICK"
 !define MUI_DIRECTORYPAGE_TEXT_TOP "Setup will install the application in the \
         following folder. To install in a different folder, click Browse and \
         select another.${NEW_LINE}${NEW_LINE}\
-        Notice that this folder will be the technical Unitex/Gramlab folder. \
-        It must be different from your private Unitex/Gramlab workspace folder."
+        Notice that this folder will be the installation ${PRETTYAPPNAME} folder. \
+        It must be different from your ${PRETTYAPPNAME} workspace folder."
 
 # Custom destination folder text
 !define MUI_DIRECTORYPAGE_TEXT_DESTINATION "Destination folder where \
         ${PRETTYAPPNAME} will be installed"
 
 # Insert directory page
+!insertmacro MUI_PAGE_DIRECTORY
+
+# =============================================================================
+# Workspace folder
+# =============================================================================
+# Define a custom pre function
+!define MUI_PAGE_CUSTOMFUNCTION_PRE   MUI_PAGE_DIRECTORY_Workspace_PreFunction
+# Define a custom show function
+!define MUI_PAGE_CUSTOMFUNCTION_SHOW  MUI_PAGE_DIRECTORY_Workspace_ShowFunction
+# Define a custom leave function
+!define MUI_PAGE_CUSTOMFUNCTION_LEAVE MUI_PAGE_DIRECTORY_Workspace_LeaveFunction
+
+# Custom page header text
+!define MUI_PAGE_HEADER_TEXT    "${PRETTYAPPNAME} workspace folder"
+
+# Custom page header subtext
+!define MUI_PAGE_HEADER_SUBTEXT "Choose the folder in which to create your workspace."
+
+# Custom directory top text
+!define MUI_DIRECTORYPAGE_TEXT_TOP "Setup will create your workspace  \
+        in the following folder. To select a different folder, click \
+        &Workspace and select another.${NEW_LINE}${NEW_LINE} \
+        Notice that this folder will be your ${PRETTYAPPNAME} workspace \
+        folder. It must be different from the installation folder."
+
+# Custom destination folder text
+!define MUI_DIRECTORYPAGE_TEXT_DESTINATION "Destination folder where \
+        your ${PRETTYAPPNAME} workspace will be created"
+
+# Store the workspace folder in WORKSPACE_DIR
+Var WORKSPACE_DIR
+!define MUI_DIRECTORYPAGE_VARIABLE $WORKSPACE_DIR
+
+; # Insert directory page
 !insertmacro MUI_PAGE_DIRECTORY
 
 # =============================================================================
@@ -1176,9 +1217,9 @@ reboot your computer.${NEW_LINE}${NEW_LINE}$_CLICK"
 # =============================================================================
 # @ Languages
 # ===========================================================================
-# Add ../i18n directory to the include directories list. This list is searched
+# Add ./i18n directory to the include directories list. This list is searched
 # when !include is used.
-!AddIncludeDir "../i18n"
+!AddIncludeDir "./i18n"
 
 # First language is the default language
 !insertmacro MUI_LANGUAGE "English"
@@ -1682,7 +1723,7 @@ SectionGroupEnd  # IDESection
 # Set JRE_SETUP_HIDE_INFO_PAGE to 0 if both Unitex Java IDE and GramLab Java IDE
 # sections were not selected
 # =============================================================================
-function MUI_PAGE_COMPONENTS_LeaveFunction
+Function MUI_PAGE_COMPONENTS_LeaveFunction
   ; JRE manually install by default
   IntOp  $RB_Ar3_State $RB_Ar3_State | ${BST_CHECKED}
 
@@ -1706,6 +1747,159 @@ function MUI_PAGE_COMPONENTS_LeaveFunction
   IntOp  $JRE_SETUP_HIDE_INFO_PAGE $JRE_SETUP_HIDE_INFO_PAGE | 1
 exit:
 FunctionEnd  # MUI_PAGE_COMPONENTS_LeaveFunction
+
+# =============================================================================
+# Macro MUI_INNERDIALOG_TEXT
+# This macro was adapted from Modern UI/System.nsh
+# =============================================================================
+!macro MUI_INNERDIALOG_TEXT CONTROL TEXT
+
+  !verbose push
+  !verbose 4
+
+  FindWindow  $mui.DirectoryPage "#32770" "" $HWNDPARENT
+  GetDlgItem  $mui.DirectoryPage $mui.DirectoryPage  ${CONTROL}
+  SendMessage $mui.DirectoryPage ${WM_SETTEXT} 0 "STR:${TEXT}"
+
+  !verbose pop
+
+!macroend
+
+# =============================================================================
+# Page components Pre Function
+# =============================================================================
+Function MUI_PAGE_DIRECTORY_Workspace_PreFunction
+  # Workspace page will be showed only if at least one IDE section was selected
+  ${IfNot}   ${SectionIsSelected} ${IDESectionUnitex}
+  ${OrIfNot} ${SectionIsSelected} ${IDESectionGramLab}
+    Abort
+  ${EndIf}
+  # TODO(martinec) Check if workspace configuration files are already created
+FunctionEnd  # MUI_PAGE_DIRECTORY_Workspace_PreFunction
+
+# =============================================================================
+# Page components Show Function
+# =============================================================================
+Function MUI_PAGE_DIRECTORY_Workspace_ShowFunction
+  ; !insertmacro MUI_INNERDIALOG_TEXT 1006 "A"                   # Text
+  ; !insertmacro MUI_INNERDIALOG_TEXT 1020 "B"                   # DirectoryBox
+  !insertmacro MUI_INNERDIALOG_TEXT 1019 "$DOCUMENTS\${APPNAME}" # Directory
+  !insertmacro MUI_INNERDIALOG_TEXT 1001 "&Workspace..."         # BrowseButton
+  ; !insertmacro MUI_INNERDIALOG_TEXT 1023 "D"                   # SpaceRequired
+  ; !insertmacro MUI_INNERDIALOG_TEXT 1024 "E"                   # SpaceAvailable
+FunctionEnd  # MUI_PAGE_DIRECTORY_Workspace_ShowFunction
+
+# =============================================================================
+# Function isEmptyDir
+# @source http://nsis.sourceforge.net/Check_if_dir_is_empty
+# =============================================================================
+Function isEmptyDir
+  # Stack ->                    # Stack: <directory>
+  Exch $0                       # Stack: $0
+  Push $1                       # Stack: $1, $0
+  FindFirst $0 $1 "$0\*.*"
+  strcmp $1 "." 0 _notempty
+    FindNext $0 $1
+    strcmp $1 ".." 0 _notempty
+      ClearErrors
+      FindNext $0 $1
+      IfErrors 0 _notempty
+        FindClose $0
+        Pop $1                  # Stack: $0
+        StrCpy $0 1
+        Exch $0                 # Stack: 1 (true)
+        goto _end
+     _notempty:
+       FindClose $0
+       ClearErrors
+       Pop $1                   # Stack: $0
+       StrCpy $0 0
+       Exch $0                  # Stack: 0 (false)
+  _end:
+FunctionEnd
+
+# =============================================================================
+# Page components Leave Function
+# =============================================================================
+Function MUI_PAGE_DIRECTORY_Workspace_LeaveFunction
+  # Retrieves the full path of the workspace directory
+  Push "$WORKSPACE_DIR"
+  System::Call 'KERNEL32::GetFullPathName(ts,i${NSIS_MAX_STRLEN},t.r1,t)i.r0'
+  ${If} $0 <> 0
+     StrCpy $WORKSPACE_DIR $1
+  ${Else}
+    MessageBox mb_IconStop|mb_TopMost|mb_SetForeground "Can not create folder $WORKSPACE_DIR"
+    Abort
+  ${EndIf}
+
+  # Test that $WORKSPACE_DIR and $INSTDIR are not at the same level
+  # i.e. $WORKSPACE_DIR is not the $INSTDIR or a subdirectory of it
+  ${StrStr} $R0 "$WORKSPACE_DIR" "$INSTDIR"
+  ${If} $R0 == "$WORKSPACE_DIR"
+    MessageBox mb_IconStop|mb_TopMost|mb_SetForeground \
+    "Your workspace directory can not be created at the ${PRETTYAPPNAME} installation directory \
+    level. Please select another folder."
+    Abort
+  ${EndIf}
+
+  # Try to create the parent workspace directory
+  CreateDirectory "$WORKSPACE_DIR"
+
+  # Check if the directory has been created
+  ${IfNot} ${FileExists} "$WORKSPACE_DIR\*.*"
+    MessageBox mb_IconStop|mb_TopMost|mb_SetForeground "Can not create folder $WORKSPACE_DIR"
+    Abort
+  ${EndIf}
+  
+  # Check if the root directory workspace is empty, warning if not
+  Push "$WORKSPACE_DIR"
+  Call isEmptyDir
+  Pop $0
+  ${If} $0 <> 1
+    MessageBox MB_ICONINFORMATION|MB_YESNO "Your workspace folder: $WORKSPACE_DIR \
+    already exists and is not empty. Continue anyway ?" IDYES +2
+     Abort
+  ${EndIf}
+
+  # Unitex workspace
+  ${If} ${SectionIsSelected} ${IDESectionUnitex}
+    # Create the Unitex workspace directory
+    CreateDirectory "$WORKSPACE_DIR\${UNITEX_WORKSPACE_NAME}"
+
+    # Check if the Unitex workspace directory has been created
+    ${IfNot} ${FileExists} "$WORKSPACE_DIR\${UNITEX_WORKSPACE_NAME}\*.*"
+      MessageBox mb_IconStop|mb_TopMost|mb_SetForeground "Can not create folder \
+      $WORKSPACE_DIR\${UNITEX_WORKSPACE_NAME}"
+      Abort
+    ${EndIf}
+
+    # Save the Unitex workspace configuration
+    FileOpen  $R0 "$PROFILE\${UNITEX_WORKSPACE_FILE}" w
+    FileWrite $R0 "$WORKSPACE_DIR\${UNITEX_WORKSPACE_NAME}"
+    FileClose $R0
+  ${EndIf}  # ${SectionIsSelected} ${IDESectionUnitex}
+
+  # GramLab workspace
+  ${If} ${SectionIsSelected} ${IDESectionGramLab}
+    # Create the GramLab workspace directory
+    CreateDirectory "$WORKSPACE_DIR\${GRAMLAB_WORKSPACE_NAME}"
+
+    # Check if the GramLab workspace directory has been created
+    ${IfNot} ${FileExists} "$WORKSPACE_DIR\${GRAMLAB_WORKSPACE_NAME}\*.*"
+      MessageBox mb_IconStop|mb_TopMost|mb_SetForeground "Can not create folder \
+      $WORKSPACE_DIR\${GRAMLAB_WORKSPACE_NAME}"
+      Abort
+    ${EndIf}
+
+    # Save the GramLab workspace configuration
+    FileOpen  $R0 "$PROFILE\${GRAMLAB_WORKSPACE_FILE}" w
+    FileWrite $R0 "svn_repositories: 0$\r$\n"
+    FileWrite $R0 "$WORKSPACE_DIR\${GRAMLAB_WORKSPACE_NAME}"
+    FileWrite $R0 "$\r$\n"
+    FileClose $R0
+  ${EndIf} #  ${SectionIsSelected} ${IDESectionGramLab}
+
+FunctionEnd  # MUI_PAGE_DIRECTORY_Workspace_LeaveFunction
 
 # =============================================================================
 # Third Party Visual IDEs Components
@@ -2275,7 +2469,7 @@ FunctionEnd # CreateRegistryKeys
 # =============================================================================
 !ifdef VER_MAJOR & VER_MINOR & VER_REVISION
 Function PageCheckUpdate
-# ENHANCEMENT(martinec) Check for installer updates
+# TODO(martinec) Check for installer updates
 FunctionEnd
 
 Function PageLeaveCheckUpdate
