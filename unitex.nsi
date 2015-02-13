@@ -1196,6 +1196,18 @@ Var WORKSPACE_DIR
 # Disables support for the page that allows the user to reboot the system.
 !define MUI_FINISHPAGE_NOREBOOTSUPPORT
 
+# Application which the user can select to run using a checkbox
+# empty when used within MUI_FINISHPAGE_RUN_FUNCTION
+!define MUI_FINISHPAGE_RUN
+
+# Texts to display next to the 'Run program' checkbox
+!define MUI_FINISHPAGE_RUN_TEXT       ""
+
+# Call a function instead of executing an application (define MUI_FINISHPAGE_RUN 
+# without parameters). You can use the function to execute multiple applications 
+# or you can change the checkbox name and use it for other things.
+!define MUI_FINISHPAGE_RUN_FUNCTION   RunUnitexGramLab
+
 # Define a custom show function
 !define MUI_PAGE_CUSTOMFUNCTION_SHOW  MUI_PAGE_FINISH_ShowFunction
 
@@ -2647,17 +2659,47 @@ functionEnd
 # =============================================================================
 # MUI_PAGE_FINISH_ShowFunction
 # =============================================================================
-;Var LaunchChoice
-;Var ReadmeChoice
+Var RunUnitexRadioButton
+Var RunGramLabRadioButton
 function MUI_PAGE_FINISH_ShowFunction
-	;${NSD_CreateCheckBox} 180 80u 70% 12u "Launch Unitex Java IDE"
-	;Pop $LaunchChoice
-	;${NSD_Check} $LaunchChoice
+  # Hide the run application checkbox
+  ShowWindow  $mui.FinishPage.Run 0
+  
+  # Add a radio button to launch the Unitex Classic IDE
+  ${If}   ${SectionIsSelected} ${IDESectionUnitex}
+  	${NSD_CreateRadioButton} 180 110u 70% 12u "Launch the Unitex Classic IDE"
+  	Pop $RunUnitexRadioButton
+    SetCtlColors $RunUnitexRadioButton "" "${MUI_BGCOLOR}"
+  	${NSD_Check} $RunUnitexRadioButton
+  ${endif}
 
-	;${NSD_CreateCheckBox} 180 106u 70% 12u "View README"
-	;Pop $ReadmeChoice
-	;${NSD_Check} $ReadmeChoice
+  # Add a radio button to launch the Unitex GramLab IDE
+  ${If}   ${SectionIsSelected} ${IDESectionGramLab}
+  	${NSD_CreateRadioButton} 180 125u 70% 12u "Launch the Unitex GramLab IDE"
+  	Pop $RunGramLabRadioButton
+    SetCtlColors $RunGramLabRadioButton "" "${MUI_BGCOLOR}"
+    ${IfNot}   ${SectionIsSelected} ${IDESectionUnitex}
+  	 ${NSD_Check} $RunGramLabRadioButton
+    ${endif} 
+  ${endif}
 functionEnd
+
+# =============================================================================
+# Function
+# =============================================================================
+Function RunUnitexGramLab
+  # Check if a user asks to run the Unitex Classic IDE
+  ${NSD_GetState} $RunUnitexRadioButton  $R0
+  ${If} $R0 == ${BST_CHECKED}
+    ExecShell "" "$SMPROGRAMS\${STARTMENUFOLDER}\${UNITEX_JAVA_NAME}.lnk"
+  ${endif}
+
+  # Check if a user asks to run the Unitex GramLab IDE
+  ${NSD_GetState} $RunGramLabRadioButton $R0
+  ${If} $R0 == ${BST_CHECKED}
+    ExecShell "" "$SMPROGRAMS\${STARTMENUFOLDER}\${GRAMLAB_JAVA_NAME}.lnk"
+  ${endif}
+FunctionEnd
 
 # Every command from StrFunc.nsh used in install sections and functions have
 # to be called first before and out of any sections and functions, and without
