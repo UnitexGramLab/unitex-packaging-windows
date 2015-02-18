@@ -2667,7 +2667,7 @@ function MUI_PAGE_FINISH_ShowFunction
 
   # Add a radio button to launch the Unitex Classic IDE
   ${If}   ${SectionIsSelected} ${IDESectionUnitex}
-  	${NSD_CreateRadioButton} 180 110u 70% 12u "Launch the Unitex Classic IDE"
+  	${NSD_CreateRadioButton} 180 110u 70% 12u "Launch the ${UNITEX_JAVA_NAME}"
   	Pop $RunUnitexRadioButton
     SetCtlColors $RunUnitexRadioButton "" "${MUI_BGCOLOR}"
   	${NSD_Check} $RunUnitexRadioButton
@@ -2675,7 +2675,7 @@ function MUI_PAGE_FINISH_ShowFunction
 
   # Add a radio button to launch the Unitex GramLab IDE
   ${If}   ${SectionIsSelected} ${IDESectionGramLab}
-  	${NSD_CreateRadioButton} 180 125u 70% 12u "Launch the Unitex GramLab IDE"
+  	${NSD_CreateRadioButton} 180 125u 70% 12u "Launch the ${GRAMLAB_JAVA_NAME}"
   	Pop $RunGramLabRadioButton
     SetCtlColors $RunGramLabRadioButton "" "${MUI_BGCOLOR}"
     ${IfNot}   ${SectionIsSelected} ${IDESectionUnitex}
