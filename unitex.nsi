@@ -130,12 +130,12 @@
 # Setup installer features
 # =============================================================================
 # - User selection of Unitex/GramLab installation components (Core Components,
-#   Visual IDEs, Linguistic Resources, Source Code, User Manual, Start Menu
+#   Visual IDEs, Language Resources, Source Code, User Manual, Start Menu
 #   and Desktop Shortcuts).
 # - Several installation types : Full, Standard, Minimal and Custom.
 # - Automatic JRE (Java Runtime Edition) detection. If the JRE isn't installed,
 #   a dialog allows the user to choose between a manual or automatic install.
-# - System language detection to preselect Linguistic Resources to install.
+# - System language detection to preselect Language Resources to install.
 # - Same, older or newer version detection.
 # - Application, Manual, and Web links shortcuts.
 # - Admin or user installation mode support.
@@ -164,7 +164,7 @@
 # └───/UnitexManual (*)
 #
 # (*) Only required for non-anonymous builds.
-# (+) Linguistics resources, a separate directory for each language. e.g.
+# (+) Language resources, a separate directory for each language. e.g.
 #     'Spanish', 'French, 'English', 'Greek (Modern)', ...
 #
 # All Unitex/GramLab build subdirectories (except those marked by an asterisk)
@@ -467,8 +467,8 @@ ManifestSupportedOS all
 !define PRETTYAPPNAME    "Unitex/GramLab"
 !define COMPANYNAME      "Université Paris-Est Marne-la-Vallée"
 !define SHORTDESCRIPTION "corpus processing suite"
-!define DESCRIPTION      "the next-generation, open source, cross-platform \
-                          multilingual ${SHORTDESCRIPTION}"
+!define DESCRIPTION      "the next-generation, open source, cross-platform, \
+                          multilingual lexicon and grammar-based ${SHORTDESCRIPTION}"
 
 # Customize pretty version and pretty caption strings
 !ifdef VER_UNSTABLE
@@ -517,7 +517,7 @@ ManifestSupportedOS all
 # └───/UnitexManual (*)
 #
 # (*) Only required for non-anonymous builds.
-# (+) Linguistics resources, a separate directory for each language. e.g.
+# (+) Language resources, a separate directory for each language. e.g.
 #     'Spanish', 'French, 'English', 'Greek (Modern)', .
 
 # Basedir (root build directory) where all files are stored
@@ -533,7 +533,7 @@ ManifestSupportedOS all
 
 # Unitex/GramLab root directory
 # This is the folder where /App, /Src, /Users /XAlign
-# and the linguistic resources directories are located
+# and the language resources directories are located
 !define /ifndef INPUT_UNITEXDIR    "${INPUT_BASEDIR}/Unitex\
                                     ${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}"
 
@@ -600,7 +600,7 @@ ManifestSupportedOS all
   # XAlign  (Unitex/XAlign) directory
   ${CheckIfDirExist}    "${INPUT_XALIGNDIR}"
 
-  # Test if at least English linguistic resources are present,
+  # Test if at least English language resources are present,
   # other resources are automatically detected and further checked
   # and processed
   ${CheckIfDirExist}    "${INPUT_UNITEXDIR}/English"
@@ -692,7 +692,7 @@ ManifestSupportedOS all
 !define UNITEX_JAVA_FILE   "Unitex.jar"  # Unitex Java IDE executable
 !define GRAMLAB_JAVA_FILE  "Gramlab.jar" # GramLab Java IDE executable
 !define LGPL_FILE          "LGPL.txt"    # Lesser General Public License (LGPL)
-!define LGPLLR_FILE        "LGPLLR.txt"  # LGPL f or Linguistic Resources (LGPL-LR)
+!define LGPLLR_FILE        "LGPLLR.txt"  # LGPL for Linguistic Resources (LGPL-LR)
 
 # Check Unitex/GramLab setup files. Other Files included with the 'File'
 # command are automatically tested at compile time, this is why there are
@@ -743,9 +743,9 @@ ManifestSupportedOS all
 # Software\Unitex-GramLab\CoreComponents
 !define APP_CORE_KEY          "${APP_REGISTRY_KEY}\CoreComponents"
 
-# Linguistic Resources sub-key
-# Software\Unitex-GramLab\LinguisticResources
-!define APP_LINGRES_KEY       "${APP_REGISTRY_KEY}\LinguisticResources"
+# Language Resources sub-key
+# Software\Unitex-GramLab\LanguageResources
+!define APP_LANGRES_KEY       "${APP_REGISTRY_KEY}\LanguageResources"
 
 # Third Party sub-key
 # Software\Unitex-GramLab\ThirdParty
@@ -779,7 +779,7 @@ ManifestSupportedOS all
   InstType "Full"               # 1
   # Standard : Without source code
   InstType "Standard"           # 2
-  # Minimal  : Only English linguistic resources and user manual
+  # Minimal  : Only English language resources and user manual
   InstType "Minimal"            # 3
 !endif
 
@@ -1044,9 +1044,9 @@ XPStyle on
 # Bitmap for the Welcome page and the Finish uninstaller page
 !define MUI_UNWELCOMEFINISHPAGE_BITMAP "theme/wizard_uninstall.bmp"
 
-# Temporal list of linguistic resources files installed
-!tempfile LINGRES_INSTALLED_FILES_LIST
-${CheckIfFileExist} "${LINGRES_INSTALLED_FILES_LIST}"
+# Temporal list of language resources files installed
+!tempfile LANGRES_INSTALLED_FILES_LIST
+${CheckIfFileExist} "${LANGRES_INSTALLED_FILES_LIST}"
 
 # =============================================================================
 # @ Pages
@@ -1584,7 +1584,7 @@ functionEnd
 # - Visual Integrated Environments
 # - Third Party Visual IDEs Components (hide)
 # - JRE installation (hide)
-# - Linguistic Resources
+# - Language Resources
 # - Source Code
 # - User Manual
 # - Start Menu and Desktop Shortcuts
@@ -1961,21 +1961,21 @@ section -InstallJRE
 sectionEnd  # -InstallJRE
 
 # =============================================================================
-# AddLingResSection
-# 'LANGUAGE NAME' 'SECTION_NAME' 'DEFAULT_RESLING_INSTTYPEIDX'
+# AddLangResSection
+# 'LANGUAGE NAME' 'SECTION_NAME' 'DEFAULT_RESLANG_INSTTYPEIDX'
 # =============================================================================
-!define AddLingResSection "!insertmacro _AddLingResSection"
-!macro _AddLingResSection LangName SectionName InstTypeIdx
-  ${MementoSection}  "${LangName}"      "LingResSection${SectionName}"
+!define AddLangResSection "!insertmacro _AddLangResSection"
+!macro _AddLangResSection LangName SectionName InstTypeIdx
+  ${MementoSection}  "${LangName}"      "LangResSection${SectionName}"
     SectionIn ${InstTypeIdx}
 
     SetDetailsPrint textonly
-    DetailPrint "Installing Linguistic Resources | ${LangName}..."
+    DetailPrint "Installing Language Resources | ${LangName}..."
     SetDetailsPrint listonly
 
     setOutPath "$INSTDIR\${LangName}"
 
-    # We don't want to overwrite user's customized linguistic resources
+    # We don't want to overwrite user's customized language resources
     SetOverwrite off
 
     !tempfile "_SHELL_SCRIPT_TEMP_FILE_${SectionName}"
@@ -1998,10 +1998,10 @@ sectionEnd  # -InstallJRE
       while read -r file ; do                                            \
         if [ -d "$file" ]; then                                          \
           DIRECTORY="$file";                                             \
-          LINGRES_OUTPUT_PATH=$(printf $\'%cINSTDIR%s$\'                 \
+          LANGRES_OUTPUT_PATH=$(printf $\'%cINSTDIR%s$\'                 \
              $ "$(echo -n /${file#${INPUT_UNITEXDIR}/} |                 \
              tr $\"/$\" $\"$(${ESCAPED_BACKSLASH})$\")");                \
-          printf "setOutPath %s" "$\'$LINGRES_OUTPUT_PATH$\'";           \
+          printf "setOutPath %s" "$\'$LANGRES_OUTPUT_PATH$\'";           \
         else                                                             \
           if [ -f "$DIRECTORY/$file" ]; then                             \
             FILE=$(echo -n "$DIRECTORY/$file" |                          \
@@ -2011,7 +2011,7 @@ sectionEnd  # -InstallJRE
         fi;                                                              \
         echo "";                                                         \
       done | tee "${_SHELL_SCRIPT_TEMP_FILE_${SectionName}}"             \
-              >> "${LINGRES_INSTALLED_FILES_LIST}"'
+              >> "${LANGRES_INSTALLED_FILES_LIST}"'
 
     !system  '${SHELL_SCRIPT_GET_LANG_FILES}'  = 0
     !include '${_SHELL_SCRIPT_TEMP_FILE_${SectionName}}'
@@ -2026,32 +2026,32 @@ sectionEnd  # -InstallJRE
     # Restore overwrite
     SetOverwrite on
 
-    # Store linguistic resource (LangName.last) Last Changed Date info
-    ${WriteRegLastChangedInfo} "${LangName}" "${APP_LINGRES_KEY}\${LangName}"
+    # Store language resource (LangName.last) Last Changed Date info
+    ${WriteRegLastChangedInfo} "${LangName}" "${APP_LANGRES_KEY}\${LangName}"
 
-  ${MementoSectionEnd}  # LingResSection${SectionName}
-!macroend #  _AddLingResSection
+  ${MementoSectionEnd}  # LangResSection${SectionName}
+!macroend #  _AddLangResSection
 
 # =============================================================================
-# Linguistic Resources
+# Language Resources
 # =============================================================================
-SectionGroup "Linguistic Resources" LingResSection
+SectionGroup "Language Resources" LangResSection
 
-  # Include English linguistic resources
-  # ${AddLingResSection} 'LANGUAGE NAME' 'SECTION_NAME' 'DEFAULT_RESLING_INSTTYPEIDX'
-  ${AddLingResSection} 'English'              'English'   '1 2 3 RO'
+  # Include English language resources
+  # ${AddLangResSection} 'LANGUAGE NAME' 'SECTION_NAME' 'DEFAULT_RESLANG_INSTTYPEIDX'
+  ${AddLangResSection} 'English'              'English'   '1 2 3 RO'
 
-  # Dynamically include all other linguistic resources
+  # Dynamically include all other language resources
 
-  # Default installation type for linguistic resources
-  !define DEFAULT_RESLING_INSTTYPEIDX          "1 2"
+  # Default installation type for language resources
+  !define DEFAULT_RESLANG_INSTTYPEIDX          "1 2"
 
   !tempfile _SHELL_SCRIPT_TEMP_FILE
 
   # Get all first-level directories inside ${INPUT_UNITEXDIR} excluding
   # /App, /English, /Src, /Users, /XAlign and hidden files. Then create a list
   # with each 'DIRECTORY NAME' having the next form
-  # ${AddLingResSection} 'DIRECTORY NAME'   'DIRECTORY_NAME'   '1 2'
+  # ${AddLangResSection} 'DIRECTORY NAME'   'DIRECTORY_NAME'   '1 2'
 	# try to don't use simple quote (') characters, escape it with $\'
   !define SHELL_SCRIPT_GET_LANG_NAMES '                             \
    find -L "${INPUT_UNITEXDIR}" -maxdepth 1                         \
@@ -2067,22 +2067,22 @@ SectionGroup "Linguistic Resources" LingResSection
    while read -r directory ; do                                     \
          LANG_NAME=$(basename "$directory");                        \
          SECTION_NAME=$(echo -n "$LANG_NAME"  | tr [:blank:] "_");  \
-         printf "%cinsertmacro _AddLingResSection %-25s %-25s %s" ! \
+         printf "%cinsertmacro _AddLangResSection %-25s %-25s %s" ! \
                 "$\'$LANG_NAME$\'" "$\'$SECTION_NAME$\'"            \
-                "$\'${DEFAULT_RESLING_INSTTYPEIDX}$\'" ;            \
+                "$\'${DEFAULT_RESLANG_INSTTYPEIDX}$\'" ;            \
          echo "" ;                                                  \
    done | sort > "${_SHELL_SCRIPT_TEMP_FILE}"'
 
   !system  '${SHELL_SCRIPT_GET_LANG_NAMES}'
   !ifndef DEBUG_MODE
-     # Other linguistic resources inclusion is not enabled when DEBUG_MODE flag
+     # Other language resources inclusion is not enabled when DEBUG_MODE flag
      # is passed. This speed up the compilation process when testing
     !include '${_SHELL_SCRIPT_TEMP_FILE}'
   !endif
   !delfile '${_SHELL_SCRIPT_TEMP_FILE}'
   !undef  SHELL_SCRIPT_GET_LANG_NAMES
 	!undef _SHELL_SCRIPT_TEMP_FILE
-SectionGroupEnd  # LingResSection
+SectionGroupEnd  # LangResSection
 
 # =============================================================================
 # Source Code
@@ -2712,7 +2712,7 @@ ${StrLoc}
 # Try to get all sections names, if a section name match, even partially, the
 # contents of $locale_language_name, this section will be available in all
 # installation types (Full, Standard and Minimal). e.g. if the system language
-# is French, French Linguistic Resources will be default checked in all modes.
+# is French, French Language Resources will be default checked in all modes.
 # =============================================================================
 function SetLocaleOptions
 	Push $0
@@ -2795,9 +2795,9 @@ LangString DESC_CoreSection     ${LANG_ENGLISH} \
 LangString DESC_IDESection      ${LANG_ENGLISH} \
  "${PRETTYAPPNAME} Visual Integrated Environments."
 
-# Linguistic Resources Section
-LangString DESC_LingResSection  ${LANG_ENGLISH} \
- "${PRETTYAPPNAME} Linguistic Resources."
+# Language Resources Section
+LangString DESC_LangResSection  ${LANG_ENGLISH} \
+ "${PRETTYAPPNAME} Language Resources."
 
 # Code Source Section
 !ifndef SETUP_NO_SOURCES_SECTION
@@ -2821,8 +2821,8 @@ LangString DESC_LnkSection      ${LANG_ENGLISH} \
   !insertmacro MUI_DESCRIPTION_TEXT   ${CoreSection}      $(DESC_CoreSection)
   # IDE Section
   !insertmacro MUI_DESCRIPTION_TEXT   ${IDESection}       $(DESC_IDESection)
-  # Linguistic Resources Section
-  !insertmacro MUI_DESCRIPTION_TEXT   ${LingResSection}   $(DESC_LingResSection)
+  # Language Resources Section
+  !insertmacro MUI_DESCRIPTION_TEXT   ${LangResSection}   $(DESC_LangResSection)
   # Code Source Section
   !ifndef SETUP_NO_SOURCES_SECTION
     !insertmacro MUI_DESCRIPTION_TEXT ${SrcSection}       $(DESC_SrcSection)
@@ -2983,7 +2983,7 @@ Function un.CleanRegistryKeys
   !endif  # SETUP_NO_MANUAL_SECTION
 
   # Remove
-  DeleteRegKey SHCTX ${APP_LINGRES_KEY}
+  DeleteRegKey SHCTX ${APP_LANGRES_KEY}
 
   # Remove
   DeleteRegKey SHCTX ${APP_IDE_KEY}
@@ -3036,17 +3036,17 @@ Function un.CleanFiles
   delete "$INSTDIR\${APP_DIRNAME}\xercesImpl.jar"
   delete "$INSTDIR\${APP_DIRNAME}\xml-apis.jar"
 
-  # Remove Linguistic Resources
-  Call un.CleanLingResFiles
+  # Remove Language Resources
+  Call un.CleanLangResFiles
 FunctionEnd
 
 # =============================================================================
-# un.CleanLingResFiles
-# Remove Linguistic Resources
+# un.CleanLangResFiles
+# Remove Language Resources
 # =============================================================================
-Function un.CleanLingResFiles
+Function un.CleanLangResFiles
   SetDetailsPrint textonly
-  DetailPrint "Removing Linguistic Resources..."
+  DetailPrint "Removing Language Resources..."
   SetDetailsPrint listonly
 
   !tempfile "_SHELL_SCRIPT_TEMP_FILE"
@@ -3065,27 +3065,27 @@ Function un.CleanLingResFiles
   # replace slashes (/) by  back-slashes (\)
   # replace "setOutPath" by "rmDir"
   # replace "file" by "delete"
-  !define SHELL_SCRIPT_GET_LIST_LINGRES_TO_REMOVE      '\
-   tac "${LINGRES_INSTALLED_FILES_LIST}"              | \
+  !define SHELL_SCRIPT_GET_LIST_LANGRES_TO_REMOVE      '\
+   tac "${LANGRES_INSTALLED_FILES_LIST}"              | \
    sed -e $\'s:${INPUT_UNITEXDIR}/:$INSTDIR/:$\'      | \
    tr $\"/$\" $\"$(${ESCAPED_BACKSLASH})$\"           | \
    sed -e $\'s:^setOutPath:rmDir       :$\'           | \
    sed -e $\'s:^file:delete:$\'                         \
    > "${_SHELL_SCRIPT_TEMP_FILE}"                       \
    '
-  !system  '${SHELL_SCRIPT_GET_LIST_LINGRES_TO_REMOVE}'  = 0
+  !system  '${SHELL_SCRIPT_GET_LIST_LANGRES_TO_REMOVE}'  = 0
   !include '${_SHELL_SCRIPT_TEMP_FILE}'
   !delfile '${_SHELL_SCRIPT_TEMP_FILE}'
 
-  !undef SHELL_SCRIPT_GET_LIST_LINGRES_TO_REMOVE
+  !undef SHELL_SCRIPT_GET_LIST_LANGRES_TO_REMOVE
   !undef ESCAPED_SEQUENCE
   !undef ESCAPED_DOLLAR
   !undef ESCAPED_BACKSLASH
 
   !undef _SHELL_SCRIPT_TEMP_FILE
 
-  !delfile "${LINGRES_INSTALLED_FILES_LIST}"
-  !undef   LINGRES_INSTALLED_FILES_LIST
+  !delfile "${LANGRES_INSTALLED_FILES_LIST}"
+  !undef   LANGRES_INSTALLED_FILES_LIST
 FunctionEnd
 
 # =============================================================================
