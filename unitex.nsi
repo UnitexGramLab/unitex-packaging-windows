@@ -468,7 +468,7 @@ ManifestSupportedOS all
 !define COMPANYNAME      "Université Paris-Est Marne-la-Vallée"
 !define SHORTDESCRIPTION "corpus processing suite"
 !define DESCRIPTION      "the next-generation, open source, cross-platform, \
-                          multilingual, lexicon and grammar-based ${SHORTDESCRIPTION}"
+                          multilingual, lexicon- and grammar-based ${SHORTDESCRIPTION}"
 
 # Customize pretty version and pretty caption strings
 !ifdef VER_UNSTABLE
