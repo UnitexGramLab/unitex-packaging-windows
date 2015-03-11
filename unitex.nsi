@@ -922,6 +922,19 @@ Var locale_language_id
   !define JRE_INSTALLER "${JRE_INSTALLER_URL_PREFIX}=${JRE_INSTALLER_BUNDLEID}"
 !endif
 
+# Causes the NSIS compiler to scan the ./plugins directory for plug-in DLLs
+# Bundled plugins are:
+#
+# - Inetc: Internet client plug-in for files download and upload.  
+#          @source http://nsis.sourceforge.net/Inetc_plug-in. To global install, 
+#          go to your nsis folder (the directory containing Bin, Contrib, ... 
+#          subfolders) and type:  
+#          `wget http://nsis.sourceforge.net/mediawiki/images/c/c9/Inetc.zip &&  
+#          unzip Inetc.zip && rm Inetc.zip`
+!addplugindir /x86-ansi    "./plugins/x86-ansi"
+!addplugindir /x86-unicode "./plugins/x86-unicode"
+
+# Include the JRE Dynamic Installer header file
 !include "jre_setup.nsh"
 # =============================================================================
 
