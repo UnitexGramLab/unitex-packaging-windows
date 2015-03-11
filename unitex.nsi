@@ -256,16 +256,16 @@ ManifestSupportedOS all
   !define /ifndef SETUP_NO_MANUAL_SECTION
 
   # set the StrFunc library verbosity to  4 (all)
-  ;!define /ifndef  STRFUNC_VERBOSITY  4
+  !define /ifndef  STRFUNC_VERBOSITY   4
 
   # set the LogicLib library verbosity to 4 (all)
-  ;!define /ifndef LOGICLIB_VERBOSITY  4
+  !define /ifndef  LOGICLIB_VERBOSITY  4
 !else  # Release mode
   # set the StrFunc library verbosity to  3 (no script)
-  !define /ifndef  STRFUNC_VERBOSITY  3
+  !define /ifndef  STRFUNC_VERBOSITY   3
 
   # set the LogicLib library verbosity to 3 (no script)
-  !define /ifndef LOGICLIB_VERBOSITY  3
+  !define /ifndef  LOGICLIB_VERBOSITY  3
 !endif  # DEBUG_MODE
 
 # =============================================================================
