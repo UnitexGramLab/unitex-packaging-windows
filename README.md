@@ -93,7 +93,7 @@ things that you can do to contribute:
 ### Licensing information
 This program is licensed under the [GNU Lesser General Public License version 2.1](/LICENSE). Contact unitex-devel@univ-mlv.fr for further inquiries.
 
-Copyright (C) 2014-2015 Université Paris-Est Marne-la-Vallée. 
+Copyright (C) 2014-2015 Université Paris-Est Marne-la-Vallée
 
 [nsis]:   http://nsis.sourceforge.net
 [unitex]: http://unitexgramlab.org
