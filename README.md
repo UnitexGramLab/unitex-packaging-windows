@@ -1,5 +1,7 @@
 ## Unitex/GramLab Setup Installer for Windows
 
+> [Unitex/GramLab][unitex] is an open source, cross-platform, multilingual, lexicon- and grammar-based corpus processing suite.
+
 This NSIS script is used to create the [Unitex/GramLab][unitex] setup installers
 for Windows on POSIX compliant systems. NSIS (Nullsoft Scriptable
 Install System) is a scripting tool to create Windows installers.
