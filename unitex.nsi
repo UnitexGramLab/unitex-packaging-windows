@@ -154,7 +154,7 @@
 # A typical Unitex/GramLab build directory is shown in the next figure:
 #
 # ${INPUT_BASEDIR}
-# ├───/checkout     (*)
+# ├───/timestamp   (*)
 # └───/Unitex${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}
 #     ├───/App
 #     ├───/Src
@@ -284,8 +284,8 @@ ManifestSupportedOS all
   !define /ifndef SETUP_NO_MANUAL_SECTION
 
   # Always omit to store in the registry the Last Changed Date information
-  # available in the checkout directory (checkout/*.last)
-  !define /ifndef SETUP_NO_CHECKOUT_INFO
+  # available in the timestamp directory (timestamp/*.last)
+  !define /ifndef SETUP_NO_TIMESTAMP_INFO
 !endif # ANONYMOUS_BUILD
 
 # =============================================================================
@@ -337,14 +337,14 @@ ManifestSupportedOS all
    -DFORCE_JRE_SILENT_INSTALL${NEW_LINE}${OPTIONS_SPACE}\
    -DFORCE_JRE_UPDATE_INSTALLER_LINK${NEW_LINE}${OPTIONS_SPACE}\
    -DINPUT_BASEDIR=path${NEW_LINE}${OPTIONS_SPACE}\
-   -DINPUT_CHKDIR=path${NEW_LINE}${OPTIONS_SPACE}\
+   -DINPUT_TIMESTAMPDIR=path${NEW_LINE}${OPTIONS_SPACE}\
    -DINPUT_MANDIR=path${NEW_LINE}${OPTIONS_SPACE}\
    -DINPUT_UNITEXDIR=path${NEW_LINE}${OPTIONS_SPACE}\
    -DINPUT_XALIGNDIR=path${NEW_LINE}${OPTIONS_SPACE}\
    -DOUTPUT_SETUP_DIR=path${NEW_LINE}${OPTIONS_SPACE}\
    -DOUTPUT_SETUP_NAME=name${NEW_LINE}${OPTIONS_SPACE}\
    -DSETUP_BUILD_DATE=%Y-%m-%d %H:%M:%S${NEW_LINE}${OPTIONS_SPACE}\
-   -DSETUP_CHECKOUT_FILE${NEW_LINE}${OPTIONS_SPACE}\
+   -DSETUP_TIMESTAMP_FILE${NEW_LINE}${OPTIONS_SPACE}\
    -DSETUP_HAVE_UPX${NEW_LINE}${OPTIONS_SPACE}\
    -DSETUP_NO_COMPILE_CHECKS${NEW_LINE}${OPTIONS_SPACE}\
    -DSETUP_NO_INSTTYPES${NEW_LINE}${OPTIONS_SPACE}\
@@ -505,31 +505,31 @@ ManifestSupportedOS all
 # Directories containing the files to be packaged
 # =============================================================================
 # ${INPUT_BASEDIR}
-# ├───/checkout     (*)
-# ├───/Unitex${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}
-# │    ├───/App
-# │    ├───/Src
-# │    ├───/Users
-# │    ├───/XAlign
-# │    └───/...     (+)
-# └───/UnitexManual (*)
+# ├───/timestamp   (*)
+# └───/Unitex${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}
+#     ├───/App
+#     ├───/Src
+#     ├───/Users
+#     ├───/XAlign
+#     └───/...     (+)
 #
 # (*) Only required for non-anonymous builds.
 # (+) Language resources, a separate directory for each language. e.g.
 #     'Spanish', 'French, 'English', 'Greek (Modern)', .
 
 # Basedir (root build directory) where all files are stored
-!define /ifndef INPUT_BASEDIR      "."
+!define /ifndef INPUT_BASEDIR       "."
 
-# Unitex/GramLab CheckOut directory, only available in non-anonymous builds
-!define  CHK_DIRNAME               "checkout"
-!define /ifndef INPUT_CHKDIR       "${INPUT_BASEDIR}/${CHK_DIRNAME}"
-
+# Unitex/GramLab timestamp directory, only available in non-anonymous builds
+!define  TIMESTAMP_DIRNAME          "timestamp"
+!define /ifndef INPUT_TIMESTAMPDIR  "${INPUT_BASEDIR}/${TIMESTAMP_DIRNAME}\
+                                     ${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}"
+                                    
 # Unitex/GramLab root directory
 # This is the folder where /App, /Src, /Users /XAlign
 # and the language resources directories are located
-!define /ifndef INPUT_UNITEXDIR    "${INPUT_BASEDIR}/Unitex\
-                                    ${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}"
+!define /ifndef INPUT_UNITEXDIR     "${INPUT_BASEDIR}/Unitex\
+                                     ${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}"
 
 # Unitex/GramLab /App path
 !define  APP_DIRNAME                "App"
@@ -609,14 +609,14 @@ ManifestSupportedOS all
     ${CheckIfDirExist}  "${INPUT_MANDIR}"
   !endif  # SETUP_NO_MANUAL_SECTION
 
-  # Unitex/GramLab CheckOut directory (./checkout) contains timestamp
+  # Unitex/GramLab timestamp directory (./timestamp) contains timestamp
   # .last-files with the Last Changed Date of an Unitex/GramLab component.
   # Timestamp format is "%Y-%m-%d %H:%M:%S" as showed by the "svn info"
   # command. This directory is only present in non-anonymous builds,
-  # -DANONYMOUS_BUILD flag defines -DSETUP_NO_CHECKOUT_INFO
-  !ifndef SETUP_NO_CHECKOUT_INFO
-    # checkout/*.last
-    ${CheckIfDirExist}  "${INPUT_CHKDIR}"
+  # -DANONYMOUS_BUILD flag defines -DSETUP_NO_TIMESTAMP_INFO
+  !ifndef SETUP_NO_TIMESTAMP_INFO
+    # timestamp/*.last
+    ${CheckIfDirExist}  "${INPUT_TIMESTAMPDIR}"
   !endif
 !endif  # SETUP_DISABLE_FILE_CHECKS
 
@@ -939,30 +939,30 @@ Var locale_language_id
 # =============================================================================
 # WriteRegLastChangedInfo FIRST_ARGUMENT SECOND_ARGUMENT
 # In a non anonymous build this compile-time macro read the file located at
-# 'checkout/FIRST_ARGUMENT.last' and stores its contents to SECOND_ARGUMENT
+# 'timestamp/FIRST_ARGUMENT.last' and stores its contents to SECOND_ARGUMENT
 # registry key. e.g.
 # !insertmacro WriteRegLastChangedInfo "C++" "${APP_CORE_KEY}"
-# read checkout/C++.last and stores its contents in ${APP_CORE_KEY} registry key
+# read timestamp/C++.last and stores its contents in ${APP_CORE_KEY} registry key
 # =============================================================================
 !define WriteRegLastChangedInfo "!insertmacro _WriteRegLastChangedInfo"
-!macro _WriteRegLastChangedInfo _APP_CHK_FILENAME _APP_CHK_REGISTRY_KEY
-  !ifndef SETUP_NO_CHECKOUT_INFO
+!macro _WriteRegLastChangedInfo _APP_TMS_FILENAME _APP_TMS_REGISTRY_KEY
+  !ifndef SETUP_NO_TIMESTAMP_INFO
     SetDetailsPrint textonly
-    DetailPrint "Creating Build Date Registry Key| ${_APP_CHK_FILENAME}"
+    DetailPrint "Creating Build Date Registry Key| ${_APP_TMS_FILENAME}"
     SetDetailsPrint listonly
-    # Read 'checkout/FIRST_ARGUMENT.last' file and stuffed into
+    # Read 'timestamp/FIRST_ARGUMENT.last' file and stuffed into
     # 'LastChanged_FIRST_ARGUMENT' global flag
-    !define /file "LastChanged_${_APP_CHK_FILENAME}" \
-                  "${INPUT_CHKDIR}/${_APP_CHK_FILENAME}.last"
-    !if "${LastChanged_${_APP_CHK_FILENAME}}" != ""
+    !define /file "LastChanged_${_APP_TMS_FILENAME}" \
+                  "${INPUT_TIMESTAMPDIR}/${_APP_TMS_FILENAME}.last"
+    !if "${LastChanged_${_APP_TMS_FILENAME}}" != ""
       # Store Last Changed Date (%Y-%m-%d %H:%M:%S) read from
-      # 'checkout/FIRST_ARGUMENT.last' into SECOND_ARGUMENT registry key
-      WriteRegStr SHCTX "${_APP_CHK_REGISTRY_KEY}"                 \
+      # 'timestamp/FIRST_ARGUMENT.last' into SECOND_ARGUMENT registry key
+      WriteRegStr SHCTX "${_APP_TMS_REGISTRY_KEY}"                 \
                         "${INSTALL_BUILD_DATE_REGISTRY_VALUENAME}" \
-                        "${LastChanged_${_APP_CHK_FILENAME}}"
+                        "${LastChanged_${_APP_TMS_FILENAME}}"
     !endif
-    !undef "LastChanged_${_APP_CHK_FILENAME}"
-  !endif # SETUP_NO_CHECKOUT_INFO
+    !undef "LastChanged_${_APP_TMS_FILENAME}"
+  !endif # SETUP_NO_TIMESTAMP_INFO
 !macroend
 
 # =============================================================================
@@ -1944,7 +1944,7 @@ section -ThirdPartySVNKitSection
     # (see section "Uninstall")
     file "${INPUT_APPDIR}/svnkitclient.jar"
 
-    # FIXME(martinec) Actually SVNKit.last doesn't exist in the /checkout folder.
+    # FIXME(martinec) Actually SVNKit.last doesn't exist in the /timestamp folder.
     # Store SVNKit (SVNKit.last) Last Changed Date info
     # ${WriteRegLastChangedInfo} "SVNKit" "${APP_THIRDPARTY_KEY}\SVNKit"
   ${endif}
@@ -2181,7 +2181,7 @@ SectionGroup "User Manual"                    ManSection
 
     # Store manual (Manual_en.last) Last Changed Date info
     # FIXME(martinec) Actually Manual_en.last doesn't currently exist in the
-    # /checkout folder
+    # /timestamp folder
     ;${WriteRegLastChangedInfo} "Manual_en" "${APP_MAN_KEY}\en"
   ${MementoSectionEnd}
 
@@ -2200,7 +2200,7 @@ SectionGroup "User Manual"                    ManSection
 
     # Store manual (Manual_fr.last) Last Changed Date info
     # FIXME(martinec) Actually Manual_fr.last doesn't currently exist in the
-    # /checkout folder
+    # /timestamp folder
     ;${WriteRegLastChangedInfo} "Manual_fr" "${APP_MAN_KEY}\fr"
   ${MementoSectionEnd}
 SectionGroupEnd  # ManSection
@@ -3221,18 +3221,18 @@ FunctionEnd
   !verbose pop
 !endif
 
-!ifndef SETUP_NO_CHECKOUT_INFO
+!ifndef SETUP_NO_TIMESTAMP_INFO
 # Try to create a file named Setup_${VER_SUFFIX}_win${BITS}.last inside the
-# /checkout directory containing the last date when the setup was
+# /timestamp directory containing the last date when the setup was
 # successfully compiled
-!define SETUP_CHECKOUT_FILE "${INPUT_CHKDIR}/Setup_${VER_SUFFIX}_win${BITS}.last"
+!define SETUP_TIMESTAMP_FILE "${INPUT_TIMESTAMPDIR}/Setup_${VER_SUFFIX}_win${BITS}.last"
 # if VER_SUFFIX is empty replace the double underscore with a
 # single-underscore
-!searchreplace SETUP_CHECKOUT_FILE "${SETUP_CHECKOUT_FILE}" __ _
-!finalize  'echo "${SETUP_BUILD_DATE}" > "${SETUP_CHECKOUT_FILE}"'
+!searchreplace SETUP_TIMESTAMP_FILE "${SETUP_TIMESTAMP_FILE}" __ _
+!finalize  'echo "${SETUP_BUILD_DATE}" > "${SETUP_TIMESTAMP_FILE}"'
 !verbose push
 !verbose 4
 !echo '[info] Last changed timestamp ($\"${SETUP_BUILD_DATE}$\") \
-       saved to "${SETUP_CHECKOUT_FILE}"'
+       saved to "${SETUP_TIMESTAMP_FILE}"'
 !verbose pop
-!endif  # SETUP_NO_CHECKOUT_INFO
+!endif  # SETUP_NO_TIMESTAMP_INFO
