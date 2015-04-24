@@ -522,7 +522,7 @@ ManifestSupportedOS all
 
 # Unitex/GramLab timestamp directory, only available in non-anonymous builds
 !define  TIMESTAMP_DIRNAME          "timestamp"
-!define /ifndef INPUT_TIMESTAMPDIR  "${INPUT_BASEDIR}/${TIMESTAMP_DIRNAME}\
+!define /ifndef INPUT_TIMESTAMPDIR  "${INPUT_BASEDIR}/${TIMESTAMP_DIRNAME}/\
                                      ${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}"
                                     
 # Unitex/GramLab root directory
