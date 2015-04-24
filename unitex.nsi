@@ -2196,7 +2196,7 @@ SectionGroup "User Manual"                    ManSection
     # Files added here should be removed by the uninstaller
     # (see section "Uninstall")
     #    "/oname=ManuelUnitex${VER_MAJOR}.${VER_MINOR}.pdf"
-    File "/oname=ManuelUnitex.pdf" "${INPUT_MANDIR}/fr/UnitexManual.pdf"
+    File "/oname=ManuelUnitex.pdf" "${INPUT_MANDIR}/fr/ManuelUnitex.pdf"
 
     # Store manual (Manual_fr.last) Last Changed Date info
     # FIXME(martinec) Actually Manual_fr.last doesn't currently exist in the
