@@ -155,13 +155,12 @@
 #
 # ${INPUT_BASEDIR}
 # ├───/checkout     (*)
-# ├───/Unitex${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}
-# │    ├───/App
-# │    ├───/Src
-# │    ├───/Users
-# │    ├───/XAlign
-# │    └───/...     (+)
-# └───/UnitexManual (*)
+# └───/Unitex${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}
+#     ├───/App
+#     ├───/Src
+#     ├───/Users
+#     ├───/XAlign
+#     └───/...     (+)
 #
 # (*) Only required for non-anonymous builds.
 # (+) Language resources, a separate directory for each language. e.g.
@@ -206,7 +205,7 @@
 # When this script should be modified or updated ?
 # =============================================================================
 # New Core files              (/App)          ? Yes. (see 'CoreSection')
-# New Manual translation      (/UnitexManual) ? Yes. (see 'ManSection')
+# New Manual translation      (/App/manual)   ? Yes. (see 'ManSection')
 # New Source files            (/Src)          ? No.  (automatically updated)
 # New directory language      (/LANG_NAME)    ? No.  (automatically detected)
 # New language resources      (/LANG_NAME/*)  ? No.  (automatically added)
@@ -224,7 +223,6 @@
 # - Add support for a web installation mode.
 # - Use components timestamp (registry key 'LastChanged') to check for updates.
 # - Localize the installer user interface (i18n folder).
-# - Include support for creating pure 64-bit Windows installers.
 #
 # =============================================================================
 
