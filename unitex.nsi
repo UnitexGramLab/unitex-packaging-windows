@@ -523,10 +523,6 @@ ManifestSupportedOS all
 # Basedir (root build directory) where all files are stored
 !define /ifndef INPUT_BASEDIR      "."
 
-# Unitex/GramLab Manual directory, only available in non-anonymous builds
-!define  MAN_DIRNAME               "UnitexManual"
-!define /ifndef INPUT_MANDIR       "${INPUT_BASEDIR}/${MAN_DIRNAME}"
-
 # Unitex/GramLab CheckOut directory, only available in non-anonymous builds
 !define  CHK_DIRNAME               "checkout"
 !define /ifndef INPUT_CHKDIR       "${INPUT_BASEDIR}/${CHK_DIRNAME}"
@@ -540,6 +536,10 @@ ManifestSupportedOS all
 # Unitex/GramLab /App path
 !define  APP_DIRNAME                "App"
 !define /ifndef INPUT_APPDIR        "${INPUT_UNITEXDIR}/${APP_DIRNAME}"
+
+# Unitex/GramLab Manual directory
+!define  MAN_DIRNAME                "manual"
+!define /ifndef INPUT_MANDIR        "${INPUT_APPDIR}/${MAN_DIRNAME}"
 
 # Unitex/GramLab /Src path
 !define  SRC_DIRNAME                "Src"
@@ -605,8 +605,8 @@ ManifestSupportedOS all
   # and processed
   ${CheckIfDirExist}    "${INPUT_UNITEXDIR}/English"
 
-  # Unitex/GramLab Manual directory (./UnitexManual) is only present in
-  # non-anonymous builds, -DANONYMOUS_BUILD flag defines -DSETUP_NO_MANUAL_SECTION
+  # Unitex/GramLab Manual directory (Unitex/App/manual)
+  # -DANONYMOUS_BUILD flag defines -DSETUP_NO_MANUAL_SECTION
   !ifndef SETUP_NO_MANUAL_SECTION
     ${CheckIfDirExist}  "${INPUT_MANDIR}"
   !endif  # SETUP_NO_MANUAL_SECTION
@@ -2176,13 +2176,10 @@ SectionGroup "User Manual"                    ManSection
 
     SetOutPath "$INSTDIR\${APP_DIRNAME}\manual\en"
 
-    # FIXME (martinec) actually UnitexManual_EN_utf8.pdf doesn't currently exist
-    # in the ${INPUT_MANDIR} folder
-
     # Files added here should be removed by the uninstaller
     # (see section "Uninstall")
     #     /oname=UnitexManual${VER_MAJOR}.${VER_MINOR}.pdf
-    File "/oname=UnitexManual.pdf" "${INPUT_MANDIR}/UnitexManual_EN_utf8.pdf"
+    File "/oname=UnitexManual.pdf" "${INPUT_MANDIR}/en/UnitexManual.pdf"
 
     # Store manual (Manual_en.last) Last Changed Date info
     # FIXME(martinec) Actually Manual_en.last doesn't currently exist in the
@@ -2197,13 +2194,11 @@ SectionGroup "User Manual"                    ManSection
     SetDetailsPrint listonly
 
     SetOutPath "$INSTDIR\${APP_DIRNAME}\manual\fr"
-
-    # FIXME (martinec) actually UnitexManual_FR_utf8.pdf doesn't currently exist
-    # in ${INPUT_MANDIR} folder
+    
     # Files added here should be removed by the uninstaller
     # (see section "Uninstall")
     #    "/oname=ManuelUnitex${VER_MAJOR}.${VER_MINOR}.pdf"
-    File "/oname=ManuelUnitex.pdf" "${INPUT_MANDIR}/UnitexManual_FR_utf8.pdf"
+    File "/oname=ManuelUnitex.pdf" "${INPUT_MANDIR}/fr/UnitexManual.pdf"
 
     # Store manual (Manual_fr.last) Last Changed Date info
     # FIXME(martinec) Actually Manual_fr.last doesn't currently exist in the
