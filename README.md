@@ -80,7 +80,6 @@ command line parameters. Some common options are:
  - [ ] Support for a web installation mode. 
  - [ ] Check for updates.
  - [ ] User interface i18n.
- - [ ] Include support for creating pure 64-bit Windows installers.
 
 ### Contributing
 
