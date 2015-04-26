@@ -40,7 +40,7 @@ parameters and further information about the makensis command, type
    **Unitex3.0**      `VER_MAJOR=3 VER_MINOR=0 VER_SUFFIX=""`  
    **Unitex3.1beta**  `VER_MAJOR=3 VER_MINOR=1 VER_SUFFIX="beta"`
 4. Take notice of the parent folder name, i.e. the directory where the  
-   main Unitex directory is placed. This directory will be your `${INPUT_BASEDIR}` path.
+   main Unitex directory is placed. This directory will be your `${INPUT_BASEDIR}` location.
 5. Create the final setup installer typing:  
    `makensis -DANONYMOUS_BUILD  -DINPUT_BASEDIR=path -DVER_MAJOR=number -DVER_MINOR=number -DVER_SUFFIX=suffix unitex.nsi`  
    For example:  
