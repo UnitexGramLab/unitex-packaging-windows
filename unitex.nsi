@@ -1645,7 +1645,7 @@ ${MementoSection} "Core Components (required)" CoreSection
 
   # Readme
   setOutPath "$INSTDIR"
-  file "${INPUT_UNITEXDIR}/README.TXT"
+  file "${INPUT_UNITEXDIR}/README.txt"
 ${MementoSectionEnd} #  CoreSection
 
 # =============================================================================
@@ -3022,7 +3022,7 @@ Function un.CleanFiles
   DetailPrint "Deleting Core Files..."
   SetDetailsPrint listonly
 
-  delete "$INSTDIR\README.TXT"
+  delete "$INSTDIR\README.txt"
   delete "$INSTDIR\${APP_DIRNAME}\Apache-1.1.txt"
   delete "$INSTDIR\${APP_DIRNAME}\BSD_tre.txt"
   delete "$INSTDIR\${APP_DIRNAME}\Disclaimer.txt"
