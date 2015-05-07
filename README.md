@@ -32,15 +32,15 @@ parameters and further information about the makensis command, type
 > of the `!system` command thats runs with /bin/sh. There aren't any plans for
 > a Windows support at the moment.
 
-1. Download the [bundle zip](http://www-igm.univ-mlv.fr/~unitex/zips/Unitex3.1beta.zip)
+1. Download the [Unitex/GramLab package source](http://unitex.univ-mlv.fr/releases/latest-beta/source)
    containing the Unitex/GramLab distribution from the [Unitex/GramLab][unitex] homepage.
 2. Unzip all files in a folder at one time.
 3. Take notice of the main folder name:  
-   `Unitex${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}`, e.g.  
-   **Unitex3.0**      `VER_MAJOR=3 VER_MINOR=0 VER_SUFFIX=""`  
-   **Unitex3.1beta**  `VER_MAJOR=3 VER_MINOR=1 VER_SUFFIX="beta"`
+   `Unitex-GramLab-${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}`, e.g.  
+   **Unitex-GramLab-3.0**      `VER_MAJOR=3 VER_MINOR=0 VER_SUFFIX=""`  
+   **Unitex-GramLab-3.1beta**  `VER_MAJOR=3 VER_MINOR=1 VER_SUFFIX="beta"`
 4. Take notice of the parent folder name, i.e. the directory where the  
-   main Unitex directory is placed. This directory will be your `${INPUT_BASEDIR}` location.
+   Unitex/GramLab distribution directory is placed. This directory will be your `${INPUT_BASEDIR}` location.
 5. Create the final setup installer typing:  
    `makensis -DANONYMOUS_BUILD  -DINPUT_BASEDIR=path -DVER_MAJOR=number -DVER_MINOR=number -DVER_SUFFIX=suffix unitex.nsi`  
    For example:  
