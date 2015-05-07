@@ -68,9 +68,9 @@
 #  Step 2. Unzip all files in a folder at one time.
 #
 #  Step 3. Take notice of the main folder name:  
-#          `Unitex${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}`, e.g.  
-#          Unitex3.0      `VER_MAJOR=3 VER_MINOR=0 VER_SUFFIX=""`  
-#          Unitex3.1beta  `VER_MAJOR=3 VER_MINOR=1 VER_SUFFIX="beta"`
+#          `Unitex-GramLab-${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}`, e.g.  
+#          Unitex-GramLab-3.0      `VER_MAJOR=3 VER_MINOR=0 VER_SUFFIX=""`  
+#          Unitex-GramLab-3.1beta  `VER_MAJOR=3 VER_MINOR=1 VER_SUFFIX="beta"`
 #
 #  Step 4. Take notice of the parent folder name, i.e. the directory where the
 #          main Unitex directory is placed. This directory will be your
@@ -155,7 +155,7 @@
 #
 # ${INPUT_BASEDIR}
 # ├───/timestamp   (*)
-# └───/Unitex${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}
+# └───/Unitex-GramLab-${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}
 #     ├───/App
 #     ├───/Src
 #     ├───/Users
@@ -506,7 +506,7 @@ ManifestSupportedOS all
 # =============================================================================
 # ${INPUT_BASEDIR}
 # ├───/timestamp   (*)
-# └───/Unitex${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}
+# └───/Unitex-GramLab-{VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}
 #     ├───/App
 #     ├───/Src
 #     ├───/Users
@@ -525,10 +525,10 @@ ManifestSupportedOS all
 !define /ifndef INPUT_TIMESTAMPDIR  "${INPUT_BASEDIR}/${TIMESTAMP_DIRNAME}/\
                                      ${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}"
                                     
-# Unitex/GramLab root directory
+# Unitex/GramLab distribution directory
 # This is the folder where /App, /Src, /Users /XAlign
 # and the language resources directories are located
-!define /ifndef INPUT_UNITEXDIR     "${INPUT_BASEDIR}/Unitex\
+!define /ifndef INPUT_UNITEXDIR     "${INPUT_BASEDIR}/Unitex-GramLab-\
                                      ${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}"
 
 # Unitex/GramLab /App path
@@ -580,7 +580,7 @@ ManifestSupportedOS all
 !ifndef SETUP_NO_COMPILE_CHECKS
   # Check if Unitex/GramLab directories exists before continue
 
-  # /Unitex${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX} directory
+  # /Unitex-GramLab-${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX} directory
   ${CheckIfDirExist}    "${INPUT_UNITEXDIR}"
 
   # Application (Unitex/App) directory
