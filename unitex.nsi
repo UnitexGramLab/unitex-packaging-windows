@@ -324,7 +324,6 @@ ManifestSupportedOS all
     Options:${NEW_LINE}  \
    -DANONYMOUS_BUILD${NEW_LINE}${OPTIONS_SPACE}\
    -DDEBUG_MODE${NEW_LINE}${OPTIONS_SPACE}\
-   -DFINALIZE_UPDATE_LATEST_LINK${NEW_LINE}${OPTIONS_SPACE}\
    -DFORCE_JRE_SILENT_INSTALL${NEW_LINE}${OPTIONS_SPACE}\
    -DFORCE_JRE_UPDATE_INSTALLER_LINK${NEW_LINE}${OPTIONS_SPACE}\
    -DINPUT_BASEDIR=path${NEW_LINE}${OPTIONS_SPACE}\
@@ -3165,26 +3164,6 @@ FunctionEnd
   !verbose 4
   !echo '[info] Output moved to $\"${OUTPUT_SETUP_FILE}$\"'
   !verbose pop
-
-  # Update the /release/latest(-${VER_SUFFIX}) symbolic links
-  # Allows this using makensis -DFINALIZE_UPDATE_LATEST_LINK unitex.nsi
-  !ifdef FINALIZE_UPDATE_LATEST_LINK
-    !if "${VER_SUFFIX}" == ""
-      !define LATEST_SYMBOLIC_LINK_DIR '${OUTPUT_RELEASES_DIR}/latest'
-    !else
-      !define LATEST_SYMBOLIC_LINK_DIR '${OUTPUT_RELEASES_DIR}/latest-${VER_SUFFIX}'
-    !endif
-
-    # Notice that ${LATEST_SYMBOLIC_LINK_DIR} is a symbolic link file, not a directory.
-    !finalize 'rm  -f "${LATEST_SYMBOLIC_LINK_DIR}"'
-    !finalize 'ln -sf "${OUTPUT_THIS_RELEASE_DIR}" "${LATEST_SYMBOLIC_LINK_DIR}"'
-
-    !verbose push
-    !verbose 4
-    !echo '[info] Directory "${LATEST_SYMBOLIC_LINK_DIR}" is now symbolically \
-           mapped to "${OUTPUT_THIS_RELEASE_DIR}"'
-    !verbose pop
-  !endif # FINALIZE_UPDATE_LATEST_LINK
 !endif  # "${OUTPUT_SETUP_DIR}" != "."
 
 !ifndef SETUP_NO_TIMESTAMP_INFO
