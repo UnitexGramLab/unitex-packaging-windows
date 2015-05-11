@@ -198,7 +198,7 @@
 # - Anonymous or svn builds compilation.
 # - Automatic detection of new languages directories.
 # - Automatic updated the JRE download link.
-# - MD5 and SHA1 installer signature file generation.
+# - SHA1 installer signature file generation.
 # - More, type `makensis unitex.nsi` [return] for a full list of compiler flags.
 #
 # =============================================================================
@@ -274,9 +274,6 @@ ManifestSupportedOS all
   # Write the final installer in the current directory
   !define /ifndef OUTPUT_SETUP_DIR   "."
 
-  # Don't calculate the MD5 signature of the final installer
-  !define /ifndef FINALIZE_NO_MD5SUM_FILE
-
   # Don't calculate the SHA1 signature of the final installer
   !define /ifndef FINALIZE_NO_SHA1SUM_FILE
 
@@ -331,7 +328,6 @@ ManifestSupportedOS all
     Options:${NEW_LINE}  \
    -DANONYMOUS_BUILD${NEW_LINE}${OPTIONS_SPACE}\
    -DDEBUG_MODE${NEW_LINE}${OPTIONS_SPACE}\
-   -DFINALIZE_NO_MD5SUM_FILE${NEW_LINE}${OPTIONS_SPACE}\
    -DFINALIZE_UPDATE_LATEST_LINK${NEW_LINE}${OPTIONS_SPACE}\
    -DFINALIZE_SHA1SUM_FILE${NEW_LINE}${OPTIONS_SPACE}\
    -DFORCE_JRE_SILENT_INSTALL${NEW_LINE}${OPTIONS_SPACE}\
@@ -3195,18 +3191,6 @@ FunctionEnd
     !verbose pop
   !endif # FINALIZE_UPDATE_LATEST_LINK
 !endif  # "${OUTPUT_SETUP_DIR}" != "."
-
-# Calculate the MD5 signature of the binary installer
-# avoid this using makensis -DFINALIZE_NO_MD5SUM_FILE unitex.nsi
-!ifndef FINALIZE_NO_MD5SUM_FILE
-  !finalize  'md5sum "${OUTPUT_SETUP_FILE}" |\
-              sed -e $\'s:${OUTPUT_SETUP_DIR}/::$\' \
-              > "${OUTPUT_SETUP_DIR}/${OUTPUT_SETUP_NAME}.md5"'
-  !verbose push
-  !verbose 4
-  !echo '[info] MD5 signature file saved to $\"${OUTPUT_SETUP_DIR}/${OUTPUT_SETUP_NAME}.md5$\"'
-  !verbose pop
-!endif
 
 # Calculate the SHA1 signature of the binary installer
 # Allow this using makensis -DFINALIZE_SHA1SUM_FILE unitex.nsi
