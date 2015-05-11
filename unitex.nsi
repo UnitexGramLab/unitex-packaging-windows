@@ -614,20 +614,20 @@ ManifestSupportedOS all
 # Setup installer output directory
 # =============================================================================
 !ifndef ANONYMOUS_BUILD
-  # ./releases
-  !define /ifndef OUTPUT_RELEASES_DIR     "${INPUT_BASEDIR}/releases"
+  # ./packages
+  !define /ifndef OUTPUT_PACKAGES_DIR     "${INPUT_BASEDIR}/packages"
 
-  # ./releases/3.0/
-  # ./releases/3.1beta/
-  !define /ifndef OUTPUT_THIS_RELEASE_DIR "${OUTPUT_RELEASES_DIR}/${VER_MAJOR}.\
+  # ./packages/3.0/
+  # ./packages/3.1beta/
+  !define /ifndef OUTPUT_THIS_RELEASE_DIR "${OUTPUT_PACKAGES_DIR}/${VER_MAJOR}.\
                                            ${VER_MINOR}${VER_SUFFIX}"
-  # ./releases/3.0/win32
-  # ./releases/3.1beta/win32
+  # ./packages/3.0/win32
+  # ./packages/3.1beta/win32
   !define /ifndef OUTPUT_SETUP_DIR        "${OUTPUT_THIS_RELEASE_DIR}/win${BITS}"
 !else
   # ./
-  !define /ifndef OUTPUT_RELEASES_DIR     "."
-  !define /ifndef OUTPUT_THIS_RELEASE_DIR "${OUTPUT_RELEASES_DIR}"
+  !define /ifndef OUTPUT_PACKAGES_DIR     "."
+  !define /ifndef OUTPUT_THIS_RELEASE_DIR "${OUTPUT_PACKAGES_DIR}"
   !define /ifndef OUTPUT_SETUP_DIR        "${OUTPUT_THIS_RELEASE_DIR}"
 !endif  # ANONYMOUS_BUILD
 
@@ -3156,8 +3156,8 @@ FunctionEnd
   # has been generated.
 
   # Move the final setup installer to ${OUTPUT_SETUP_DIR}
-  # ./releases/3.0/win32/Unitex-GramLab-3.0_win32-setup.exe
-  # ./releases/3.1beta/win32/Unitex-GramLab-3.1beta_win32-setup.exe
+  # ./packages/3.0/win32/Unitex-GramLab-3.0_win32-setup.exe
+  # ./packages/3.1beta/win32/Unitex-GramLab-3.1beta_win32-setup.exe
   !finalize 'mv -f "${OUTPUT_SETUP_NAME}" "${OUTPUT_SETUP_FILE}"'
 
   !verbose push
