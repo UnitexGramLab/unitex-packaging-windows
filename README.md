@@ -32,8 +32,8 @@ parameters and further information about the makensis command, type
 > of the `!system` command thats runs with /bin/sh. There aren't any plans for
 > a Windows support at the moment.
 
-1. Download the [Unitex/GramLab package source](http://unitex.univ-mlv.fr/releases/latest-beta/source)
-   containing the Unitex/GramLab distribution from the [Unitex/GramLab][unitex] homepage.
+1. Download the [Unitex/GramLab package source](http://unitex.univ-mlv.fr/releases/latest-beta/source/Unitex-GramLab-3.1beta-source-distribution.zip)
+   containing the Unitex/GramLab source distribution.
 2. Unzip all files in a folder at one time.
 3. Take notice of the main folder name:  
    `Unitex-GramLab-${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}`, e.g.  
