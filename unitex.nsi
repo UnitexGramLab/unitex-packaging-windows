@@ -1621,7 +1621,7 @@ ${MementoSection} "Core Components (required)" CoreSection
   # licenses
   file "${INPUT_APPDIR}/${LGPL_FILE}"
   file "${INPUT_APPDIR}/${LGPLLR_FILE}"
-  file "${INPUT_APPDIR}/Apache-1.1.txt"
+  file "${INPUT_APPDIR}/Apache-2.0.txt"
   file "${INPUT_APPDIR}/BSD_tre.txt"
 
   # disclaimer
@@ -3013,7 +3013,7 @@ Function un.CleanFiles
   SetDetailsPrint listonly
 
   delete "$INSTDIR\README.txt"
-  delete "$INSTDIR\${APP_DIRNAME}\Apache-1.1.txt"
+  delete "$INSTDIR\${APP_DIRNAME}\Apache-2.0.txt"
   delete "$INSTDIR\${APP_DIRNAME}\BSD_tre.txt"
   delete "$INSTDIR\${APP_DIRNAME}\Disclaimer.txt"
   delete "$INSTDIR\${APP_DIRNAME}\Disclaimer-Gramlab.txt"
