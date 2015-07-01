@@ -529,6 +529,10 @@ ManifestSupportedOS all
 !define  MAN_DIRNAME                "manual"
 !define /ifndef INPUT_MANDIR        "${INPUT_APPDIR}/${MAN_DIRNAME}"
 
+# Unitex/GramLab Platform directory
+!define  PLATFORM_DIRNAME           "platform"
+!define /ifndef INPUT_PLATFORMDIR   "${INPUT_APPDIR}/${PLATFORM_DIRNAME}"
+
 # Unitex/GramLab /Src path
 !define  SRC_DIRNAME                "Src"
 !define /ifndef INPUT_SRCDIR        "${INPUT_UNITEXDIR}/${SRC_DIRNAME}"
@@ -1607,11 +1611,11 @@ ${MementoSection} "Core Components (required)" CoreSection
   # Create Users directory
   CreateDirectory "$INSTDIR\${USR_DIRNAME}"
 
-	# Sets the output path ($OUTDIR) and creates it (recursively if necessary),
-  # if it does not exist.
-	setOutPath "$INSTDIR\${APP_DIRNAME}"
+  # Sets the output path ($OUTDIR) and creates it (recursively if necessary),
+  # if it does not exist.
+  setOutPath "$INSTDIR\${APP_DIRNAME}"
 
-	# Files added here should be removed by the uninstaller
+  # Files added here should be removed by the uninstaller
   # (see section "uninstall")
 
   # icons
@@ -1628,7 +1632,10 @@ ${MementoSection} "Core Components (required)" CoreSection
   file "${INPUT_APPDIR}/Disclaimer.txt"
 
   # UnitexToolLogger
-  file "${INPUT_APPDIR}/UnitexToolLogger.exe"
+  # recursive install "App/platform/win{BITS}/" directory contents
+  # /r    : files and directories recursively searched
+  # /x .* : exclude hide (files and directories)
+  file /r /x .* "${INPUT_PLATFORMDIR}/win${BITS}/*.*"
 
   # Store core components (C++.last) Last Changed Date info
   ${WriteRegLastChangedInfo} "C++" "${APP_CORE_KEY}"
