@@ -533,6 +533,14 @@ ManifestSupportedOS all
 !define  PLATFORM_DIRNAME           "platform"
 !define /ifndef INPUT_PLATFORMDIR   "${INPUT_APPDIR}/${PLATFORM_DIRNAME}"
 
+# Unitex/GramLab Licenses directory
+!define  LICENSES_DIRNAME           "licenses"
+!define /ifndef INPUT_LICENSESDIR   "${INPUT_APPDIR}/${LICENSES_DIRNAME}"
+
+# Unitex/GramLab Disclaimers directory
+!define  DISCLAIMERS_DIRNAME         "disclaimers"
+!define /ifndef INPUT_DISCLAIMERSDIR "${INPUT_APPDIR}/${DISCLAIMERS_DIRNAME}"
+
 # Unitex/GramLab /Src path
 !define  SRC_DIRNAME                "Src"
 !define /ifndef INPUT_SRCDIR        "${INPUT_UNITEXDIR}/${SRC_DIRNAME}"
@@ -683,8 +691,8 @@ ManifestSupportedOS all
 !define ICON_FILE          "Unitex.ico"  # Unitex/GramLab icon file
 !define UNITEX_JAVA_FILE   "Unitex.jar"  # Unitex Java IDE executable
 !define GRAMLAB_JAVA_FILE  "Gramlab.jar" # GramLab Java IDE executable
-!define LGPL_FILE          "LGPL.txt"    # Lesser General Public License (LGPL)
-!define LGPLLR_FILE        "LGPLLR.txt"  # LGPL for Linguistic Resources (LGPL-LR)
+!define LGPL_FILE          "licenses/LGPL.txt"   # Lesser General Public License
+!define LGPLLR_FILE        "licenses/LGPLLR.txt" # LGPL for Linguistic Resources
 
 # Check Unitex/GramLab setup files. Other Files included with the 'File'
 # command are automatically tested at compile time, this is why there are
@@ -1621,28 +1629,30 @@ ${MementoSection} "Core Components (required)" CoreSection
   # icons
   file "${INPUT_APPDIR}/${ICON_FILE}"
   file "${INPUT_APPDIR}/Unitex1.ico"
-
-  # licenses
-  file "${INPUT_APPDIR}/${LGPL_FILE}"
-  file "${INPUT_APPDIR}/${LGPLLR_FILE}"
-  file "${INPUT_APPDIR}/Apache-2.0.txt"
-  file "${INPUT_APPDIR}/BSD_tre.txt"
-
+ 
   # disclaimer
-  file "${INPUT_APPDIR}/Disclaimer.txt"
+  file "${INPUT_APPDIR}/disclaimers/Unitex.txt"
 
   # UnitexToolLogger
   # recursive install "App/platform/win{BITS}/" directory contents
   # /r    : files and directories recursively searched
   # /x .* : exclude hide (files and directories)
   file /r /x .* "${INPUT_PLATFORMDIR}/win${BITS}/*.*"
+  
+  # licenses
+  SetOutPath "$INSTDIR\${APP_DIRNAME}\${LICENSES_DIRNAME}"
 
-  # Store core components (C++.last) Last Changed Date info
-  ${WriteRegLastChangedInfo} "C++" "${APP_CORE_KEY}"
+  # recursive install "licences" directory contents
+  # /r    : files and directories recursively searched
+  # /x .* : exclude hide (files and directories)
+  File /r /x .* "${INPUT_APPDIR}/${LICENSES_DIRNAME}/*.*"
 
   # Readme
   setOutPath "$INSTDIR"
   file "${INPUT_UNITEXDIR}/README.txt"
+  
+  # Store core components (C++.last) Last Changed Date info
+  ${WriteRegLastChangedInfo} "C++" "${APP_CORE_KEY}"  
 ${MementoSectionEnd} #  CoreSection
 
 # =============================================================================
@@ -1719,7 +1729,7 @@ SectionGroup "Visual Integrated Environments"   IDESection
     file /nonfatal "${INPUT_APPDIR}/gramlab_revision.date"
 
     # disclaimer
-    file "${INPUT_APPDIR}/Disclaimer-Gramlab.txt"
+    file "${INPUT_APPDIR}/disclaimers/GramLab.txt"
 
     # gramlab-super-pom
     file "${INPUT_APPDIR}/pom.xml"
@@ -3020,14 +3030,8 @@ Function un.CleanFiles
   SetDetailsPrint listonly
 
   delete "$INSTDIR\README.txt"
-  delete "$INSTDIR\${APP_DIRNAME}\Apache-2.0.txt"
-  delete "$INSTDIR\${APP_DIRNAME}\BSD_tre.txt"
-  delete "$INSTDIR\${APP_DIRNAME}\Disclaimer.txt"
-  delete "$INSTDIR\${APP_DIRNAME}\Disclaimer-Gramlab.txt"
   delete "$INSTDIR\${APP_DIRNAME}\${GRAMLAB_JAVA_FILE}"
   delete "$INSTDIR\${APP_DIRNAME}\gramlab_revision.date"
-  delete "$INSTDIR\${APP_DIRNAME}\${LGPL_FILE}"
-  delete "$INSTDIR\${APP_DIRNAME}\${LGPLLR_FILE}"
   delete "$INSTDIR\${APP_DIRNAME}\pom.xml"
   delete "$INSTDIR\${APP_DIRNAME}\revision.date"
   delete "$INSTDIR\${APP_DIRNAME}\svnkitclient.jar"
@@ -3113,6 +3117,18 @@ Function un.CleanDirectories
     SetDetailsPrint listonly
     rmDir /r "$INSTDIR\${APP_DIRNAME}\manual"
   !endif  # SETUP_NO_MANUAL_SECTION
+
+  # recursive (/r) remove the \App\licenses directory
+  SetDetailsPrint textonly
+  DetailPrint "Deleting directories | \${APP_DIRNAME}\licenses..."
+  SetDetailsPrint listonly
+  rmDir /r "$INSTDIR\${APP_DIRNAME}\licenses"
+  
+  # recursive (/r) remove the \App\disclaimers directory
+  SetDetailsPrint textonly
+  DetailPrint "Deleting directories | \${APP_DIRNAME}\disclaimers..."
+  SetDetailsPrint listonly
+  rmDir /r "$INSTDIR\${APP_DIRNAME}\disclaimers"  
 
   # recursive (/r) remove the \App\assembly directory
   SetDetailsPrint textonly
