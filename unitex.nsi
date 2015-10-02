@@ -1630,14 +1630,15 @@ ${MementoSection} "Core Components (required)" CoreSection
   file "${INPUT_APPDIR}/${ICON_FILE}"
   file "${INPUT_APPDIR}/Unitex1.ico"
  
-  # disclaimer
-  file "${INPUT_APPDIR}/disclaimers/Unitex.txt"
-
   # UnitexToolLogger
   # recursive install "App/platform/win{BITS}/" directory contents
   # /r    : files and directories recursively searched
   # /x .* : exclude hide (files and directories)
   file /r /x .* "${INPUT_PLATFORMDIR}/win${BITS}/*.*"
+ 
+  # disclaimer
+  SetOutPath "$INSTDIR\${APP_DIRNAME}\${DISCLAIMERS_DIRNAME}"
+  file "${INPUT_APPDIR}/disclaimers/Unitex.txt"
   
   # licenses
   SetOutPath "$INSTDIR\${APP_DIRNAME}\${LICENSES_DIRNAME}"
@@ -1728,11 +1729,12 @@ SectionGroup "Visual Integrated Environments"   IDESection
     # issued instead of an error.
     file /nonfatal "${INPUT_APPDIR}/gramlab_revision.date"
 
-    # disclaimer
-    file "${INPUT_APPDIR}/disclaimers/GramLab.txt"
-
     # gramlab-super-pom
     file "${INPUT_APPDIR}/pom.xml"
+    
+    # disclaimer
+    SetOutPath "$INSTDIR\${APP_DIRNAME}\${DISCLAIMERS_DIRNAME}"
+    file "${INPUT_APPDIR}/disclaimers/GramLab.txt"    
 
     # maven assembly files
     SetOutPath "$INSTDIR\${APP_DIRNAME}\assembly"
