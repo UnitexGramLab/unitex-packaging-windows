@@ -1727,6 +1727,12 @@ SectionGroup "Visual Integrated Environments"   IDESection
 
     # Files added here should be removed by the uninstaller
     # (see section "Uninstall")
+
+    # GramLab Java IDE depends upon Unitex.jar
+    file "${INPUT_APPDIR}/${UNITEX_JAVA_FILE}"
+    file /nonfatal "${INPUT_APPDIR}/revision.date"
+
+    # GramLab.jar
     file "${INPUT_APPDIR}/${GRAMLAB_JAVA_FILE}"
 
     # revision date
