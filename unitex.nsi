@@ -1009,6 +1009,11 @@ BrandingText "${COMPANYNAME}"
 # Unitex-GramLab-3.1beta_anonymous_win32-setup.exe
 OutFile "${OUTPUT_SETUP_NAME}"
 
+# Controls whether or not installs are enabled to the root directory 
+# of a drive. We set to true and manually handle it at the .onVerifyInstDir 
+# function. This is to allow users to create a workspace folder at the root
+AllowRootDirInstall true
+
 # Enabled the cyclic redundancy check (CRC)
 CRCCheck on
 
@@ -1851,6 +1856,60 @@ Function isEmptyDir
 FunctionEnd
 
 # =============================================================================
+# Function IsRoot
+# Check whether path results in root
+# @source http://nsis.sourceforge.net/IsRoot_-_check_whether_path_results_in_root
+# =============================================================================
+Function isRoot
+  Exch $0
+ 
+  # get rid of leading/trailing spaces
+  Push $1
+  _loop_left:
+    StrCpy $1 "$0" 1
+    StrCmp "$1" " " _left
+    goto _loop_right
+  _left:
+    StrCpy $0 "$0" "" 1
+    goto _loop_left
+ 
+  _loop_right:
+    StrCpy $1 "$0" 1 -1
+    StrCmp "$1" " " _right
+    goto _loop_end
+  _right:
+    StrCpy $0 "$0" -1
+    goto _loop_right
+ 
+  _loop_end:
+  Pop $1
+ 
+  # check whether the path is (now) an empty string
+  StrCmp $0 "" _root
+ 
+  # get rid of any trailing backslashes.  If the path were "c:\", it'll now be "c:"
+  Push $0
+    Exch $EXEDIR
+    Exch $EXEDIR
+  Pop $0
+ 
+  # check whether the last char is a colon.  If it is, then we're looking at a root dir.
+  StrCpy $0 $0 1 -1
+  StrCmp $0 ":" _root _not_root
+ 
+  _root:
+    StrCpy $0 "true"
+    goto _end
+ 
+  _not_root:
+    StrCpy $0 "false"
+    goto _end
+ 
+  _end:
+    Exch $0
+FunctionEnd
+
+# =============================================================================
 # Page components Leave Function
 # =============================================================================
 Function MUI_PAGE_DIRECTORY_Workspace_LeaveFunction
@@ -2671,6 +2730,16 @@ functionEnd
 #  MessageBox MB_OK "Better luck next time."
 # FunctionEnd
 
+# Allow users to create a workspace at the disk root
+# while still testing that $INSTDIR is not at root level
+Function .onVerifyInstDir
+  Push $INSTDIR
+  Call isRoot
+  Pop $0
+  StrCmp $0 "true" 0 _continue
+  Abort
+ _continue:
+FunctionEnd
 # =============================================================================
 # MUI_PAGE_FINISH_ShowFunction
 # =============================================================================
