@@ -2124,7 +2124,7 @@ SectionGroup "Language Resources" LangResSection
 
   # Include English language resources
   # ${AddLangResSection} 'LANGUAGE NAME' 'SECTION_NAME' 'DEFAULT_RESLANG_INSTTYPEIDX'
-  ${AddLangResSection} 'English'              'English'   '1 2 3 RO'
+  ${AddLangResSection} 'English'              'English'   '1 2'
 
   # Dynamically include all other language resources
 
