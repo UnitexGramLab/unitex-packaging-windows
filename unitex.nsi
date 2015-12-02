@@ -1641,9 +1641,13 @@ ${MementoSection} "Core Components (required)" CoreSection
   # /x .* : exclude hide (files and directories)
   file /r /x .* "${INPUT_PLATFORMDIR}/win${BITS}/*.*"
  
-  # disclaimer
+  # disclaimers
   SetOutPath "$INSTDIR\${APP_DIRNAME}\${DISCLAIMERS_DIRNAME}"
-  file "${INPUT_APPDIR}/disclaimers/Unitex.txt"
+  
+  # recursive install "disclaimers" directory contents
+  # /r    : files and directories recursively searched
+  # /x .* : exclude hide (files and directories)
+  File /r /x .* "${INPUT_APPDIR}/${DISCLAIMERS_DIRNAME}/*.*"
   
   # licenses
   SetOutPath "$INSTDIR\${APP_DIRNAME}\${LICENSES_DIRNAME}"
@@ -1744,10 +1748,6 @@ SectionGroup "Visual Integrated Environments"   IDESection
     # gramlab-super-pom
     file "${INPUT_APPDIR}/pom.xml"
     
-    # disclaimer
-    SetOutPath "$INSTDIR\${APP_DIRNAME}\${DISCLAIMERS_DIRNAME}"
-    file "${INPUT_APPDIR}/disclaimers/GramLab.txt"    
-
     # maven assembly files
     SetOutPath "$INSTDIR\${APP_DIRNAME}\assembly"
 
