@@ -1685,11 +1685,11 @@ section -ThirdParty_XAlignSection
   # (see section "Uninstall")
   # *.jar
   setOutPath "$INSTDIR\${APP_DIRNAME}"
-  file "${INPUT_APPDIR}/XAlign.jar"
+  file /nonfatal "${INPUT_APPDIR}/XAlign.jar"
   
   SetOutPath "$INSTDIR\${APP_DIRNAME}\${LIBRARY_DIRNAME}"
-  file "${INPUT_LIBRARYDIR}/xercesImpl.jar"
-  file "${INPUT_LIBRARYDIR}/xml-apis.jar"
+  file /nonfatal "${INPUT_LIBRARYDIR}/xercesImpl.jar"
+  file /nonfatal "${INPUT_LIBRARYDIR}/xml-apis.jar"
 
   # XAlign Unitex folder
   setOutPath "$INSTDIR\${XALIGN_DIRNAME}"
@@ -2023,7 +2023,7 @@ section -ThirdPartySVNKitSection
 
     # Files added here should be removed by the uninstaller
     # (see section "Uninstall")
-    file "${INPUT_LIBRARYDIR}/svnkitclient.jar"
+    file /nonfatal "${INPUT_LIBRARYDIR}/svnkitclient.jar"
 
     # FIXME(martinec) Actually SVNKit.last doesn't exist in the /timestamp folder.
     # Store SVNKit (SVNKit.last) Last Changed Date info
