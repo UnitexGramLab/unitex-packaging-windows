@@ -541,6 +541,10 @@ ManifestSupportedOS all
 !define  DISCLAIMERS_DIRNAME         "disclaimers"
 !define /ifndef INPUT_DISCLAIMERSDIR "${INPUT_APPDIR}/${DISCLAIMERS_DIRNAME}"
 
+# Unitex/GramLab Lib directory
+!define  LIBRARY_DIRNAME             "lib"
+!define /ifndef INPUT_LIBRARYDIR     "${INPUT_APPDIR}/${LIBRARY_DIRNAME}"
+
 # Unitex/GramLab /Src path
 !define  SRC_DIRNAME                "Src"
 !define /ifndef INPUT_SRCDIR        "${INPUT_UNITEXDIR}/${SRC_DIRNAME}"
@@ -1647,7 +1651,7 @@ ${MementoSection} "Core Components (required)" CoreSection
   # recursive install "disclaimers" directory contents
   # /r    : files and directories recursively searched
   # /x .* : exclude hide (files and directories)
-  File /r /x .* "${INPUT_APPDIR}/${DISCLAIMERS_DIRNAME}/*.*"
+  File /r /x .* "${INPUT_DISCLAIMERSDIR}/*.*"
   
   # licenses
   SetOutPath "$INSTDIR\${APP_DIRNAME}\${LICENSES_DIRNAME}"
@@ -1655,7 +1659,7 @@ ${MementoSection} "Core Components (required)" CoreSection
   # recursive install "licences" directory contents
   # /r    : files and directories recursively searched
   # /x .* : exclude hide (files and directories)
-  File /r /x .* "${INPUT_APPDIR}/${LICENSES_DIRNAME}/*.*"
+  File /r /x .* "${INPUT_LICENSESDIR}/*.*"
 
   # Readme
   setOutPath "$INSTDIR"
@@ -1682,8 +1686,10 @@ section -ThirdParty_XAlignSection
   # *.jar
   setOutPath "$INSTDIR\${APP_DIRNAME}"
   file "${INPUT_APPDIR}/XAlign.jar"
-  file "${INPUT_APPDIR}/xercesImpl.jar"
-  file "${INPUT_APPDIR}/xml-apis.jar"
+  
+  SetOutPath "$INSTDIR\${APP_DIRNAME}\${LIBRARY_DIRNAME}"
+  file "${INPUT_LIBRARYDIR}/xercesImpl.jar"
+  file "${INPUT_LIBRARYDIR}/xml-apis.jar"
 
   # XAlign Unitex folder
   setOutPath "$INSTDIR\${XALIGN_DIRNAME}"
@@ -2013,11 +2019,11 @@ section -ThirdPartySVNKitSection
   # Only if at least one IDE section was selected
   ${If}   ${SectionIsSelected} ${IDESectionUnitex}
   ${OrIf} ${SectionIsSelected} ${IDESectionGramLab}
-    setOutPath "$INSTDIR\${APP_DIRNAME}"
+    setOutPath "$INSTDIR\${APP_DIRNAME}\${LIBRARY_DIRNAME}"
 
     # Files added here should be removed by the uninstaller
     # (see section "Uninstall")
-    file "${INPUT_APPDIR}/svnkitclient.jar"
+    file "${INPUT_LIBRARYDIR}/svnkitclient.jar"
 
     # FIXME(martinec) Actually SVNKit.last doesn't exist in the /timestamp folder.
     # Store SVNKit (SVNKit.last) Last Changed Date info
@@ -3113,14 +3119,14 @@ Function un.CleanFiles
   delete "$INSTDIR\${APP_DIRNAME}\gramlab_revision.date"
   delete "$INSTDIR\${APP_DIRNAME}\pom.xml"
   delete "$INSTDIR\${APP_DIRNAME}\revision.date"
-  delete "$INSTDIR\${APP_DIRNAME}\svnkitclient.jar"
   delete "$INSTDIR\${APP_DIRNAME}\${ICON_FILE}"
   delete "$INSTDIR\${APP_DIRNAME}\${UNITEX_JAVA_FILE}"
   delete "$INSTDIR\${APP_DIRNAME}\Unitex1.ico"
   delete "$INSTDIR\${APP_DIRNAME}\UnitexToolLogger.exe"
   delete "$INSTDIR\${APP_DIRNAME}\XAlign.jar"
-  delete "$INSTDIR\${APP_DIRNAME}\xercesImpl.jar"
-  delete "$INSTDIR\${APP_DIRNAME}\xml-apis.jar"
+  delete "$INSTDIR\${APP_DIRNAME}\${LIBRARY_DIRNAME}\svnkitclient.jar"
+  delete "$INSTDIR\${APP_DIRNAME}\${LIBRARY_DIRNAME}\xercesImpl.jar"
+  delete "$INSTDIR\${APP_DIRNAME}\${LIBRARY_DIRNAME}\xml-apis.jar"
 
   # Remove Language Resources
   Call un.CleanLangResFiles
