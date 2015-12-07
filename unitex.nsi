@@ -1663,7 +1663,7 @@ ${MementoSection} "Core Components (required)" CoreSection
 
   # Readme
   setOutPath "$INSTDIR"
-  file /nonfatal "${INPUT_UNITEXDIR}/README.txt"
+  file /nonfatal "${INPUT_UNITEXDIR}/README.md"
   file /nonfatal "${INPUT_UNITEXDIR}/LICENSE"
   
   # Store core components (C++.last) Last Changed Date info
@@ -3113,7 +3113,7 @@ Function un.CleanFiles
   DetailPrint "Deleting Core Files..."
   SetDetailsPrint listonly
 
-  delete "$INSTDIR\README.txt"
+  delete "$INSTDIR\README.md"
   delete "$INSTDIR\LICENSE"
   delete "$INSTDIR\${APP_DIRNAME}\${GRAMLAB_JAVA_FILE}"
   delete "$INSTDIR\${APP_DIRNAME}\gramlab_revision.date"
