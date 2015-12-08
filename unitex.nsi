@@ -1357,27 +1357,27 @@ ReserveFile /plugin "*.dll"
 # =============================================================================
 !define CreateWebShortCut "!insertmacro CreateWebShortCut"
 !macro  CreateWebShortCut ShortCutFile TargetURL
-	Push $0
-	Push $1
-	StrCpy $0 "${ShortCutFile}"
-	StrCpy $1 "${TargetURL}"
-	Call _CreateWebShortCut
-	Pop $1
-	Pop $0
+  Push $0
+  Push $1
+  StrCpy $0 "${ShortCutFile}"
+  StrCpy $1 "${TargetURL}"
+  Call _CreateWebShortCut
+  Pop $1
+  Pop $0
 !macroend
 
 Function _CreateWebShortCut
-	FlushINI          "$0"
-	SetFileAttributes "$0" FILE_ATTRIBUTE_NORMAL
-	DeleteINISec      "$0" "DEFAULT"
-	DeleteINISec      "$0" "InternetShortcut"
-	WriteINIStr       "$0" "DEFAULT" "BASEURL" "$1"
-	WriteINIStr       "$0" "InternetShortcut" "ORIGURL" "$1"
-	WriteINIStr       "$0" "InternetShortcut" "URL" "$1"
-	WriteINIStr       "$0" "InternetShortcut" "IconFile" "$SYSDIR\SHELL32.dll"
-	WriteINIStr       "$0" "InternetShortcut" "IconIndex" "135"
-	FlushINI          "$0"
-	SetFileAttributes "$0" FILE_ATTRIBUTE_READONLY
+  FlushINI          "$0"
+  SetFileAttributes "$0" FILE_ATTRIBUTE_NORMAL
+  DeleteINISec      "$0" "DEFAULT"
+  DeleteINISec      "$0" "InternetShortcut"
+  WriteINIStr       "$0" "DEFAULT" "BASEURL" "$1"
+  WriteINIStr       "$0" "InternetShortcut" "ORIGURL" "$1"
+  WriteINIStr       "$0" "InternetShortcut" "URL" "$1"
+  WriteINIStr       "$0" "InternetShortcut" "IconFile" "$SYSDIR\SHELL32.dll"
+  WriteINIStr       "$0" "InternetShortcut" "IconIndex" "135"
+  FlushINI          "$0"
+  SetFileAttributes "$0" FILE_ATTRIBUTE_READONLY
 FunctionEnd
 
 # =============================================================================
@@ -1410,8 +1410,8 @@ FunctionEnd
 # See also SetLocaleOptions function
 # =============================================================================
 function GetLocaleLanguageName
-	Push $0
-	Push $1
+  Push $0
+  Push $1
 
   System::Call 'kernel32::GetSystemDefaultLangID() i .r0'
 
@@ -1594,8 +1594,8 @@ function GetLocaleLanguageName
   ${EndIf}
 
   ClearErrors
-	Pop $1
-	Pop $0
+  Pop $1
+  Pop $0
 functionEnd
 
 # =============================================================================
@@ -2042,8 +2042,8 @@ section -InstallJRE
     # Verify JRE Installation and save JRE executable path
     Push "${JRE_VERSION}"
     call DetectJRE
-    Pop $0	# Get return value from stack
-    Pop $1	# get JRE path (or error message)
+    Pop $0  # Get return value from stack
+    Pop $1  # get JRE path (or error message)
     StrCmp $0 "OK" 0 continue_without_jre
      IfFileExists "$1\bin\javaw.exe" 0 continue_without_jre
       # Store the path where javaw executable is installed
@@ -2144,7 +2144,7 @@ SectionGroup "Language Resources" LangResSection
   # /App, /English, /Src, /Users, /XAlign and hidden files. Then create a list
   # with each 'DIRECTORY NAME' having the next form
   # ${AddLangResSection} 'DIRECTORY NAME'   'DIRECTORY_NAME'   '1 2'
-	# try to don't use simple quote (') characters, escape it with $\'
+  # try to don't use simple quote (') characters, escape it with $\'
   !define SHELL_SCRIPT_GET_LANG_NAMES '                             \
    find -L "${INPUT_UNITEXDIR}" -maxdepth 1                         \
     -not -path "${INPUT_UNITEXDIR}/English"                         \
@@ -2173,7 +2173,7 @@ SectionGroup "Language Resources" LangResSection
   !endif
   !delfile '${_SHELL_SCRIPT_TEMP_FILE}'
   !undef  SHELL_SCRIPT_GET_LANG_NAMES
-	!undef _SHELL_SCRIPT_TEMP_FILE
+  !undef _SHELL_SCRIPT_TEMP_FILE
 SectionGroupEnd  # LangResSection
 
 # =============================================================================
@@ -2312,9 +2312,9 @@ Section -PostFileInstallation
 
   SetOutPath $INSTDIR
 
-	# Write uninstaller
+  # Write uninstaller
   # See function un.onInit and section "Uninstall" for configuration
-	writeUninstaller "$INSTDIR\${UNINSTALLER_FILE}"
+  writeUninstaller "$INSTDIR\${UNINSTALLER_FILE}"
 
   #
   ${MementoSectionSave}
@@ -2338,21 +2338,21 @@ SectionEnd  # LastSectionIndex
 # @see http://nsis.sourceforge.net/Add_uninstall_information_to_Add/Remove_Programs
 # =============================================================================
 Function GetInstalledSize
-	Push $0
-	Push $1
-	StrCpy $GetInstalledSize.total 0
-	${ForEach} $1 0 ${LastSectionIndex} + 1
-		${if} ${SectionIsSelected} $1
-			SectionGetSize $1 $0
-			IntOp $GetInstalledSize.total $GetInstalledSize.total + $0
-		${Endif}
-	${Next}
+  Push $0
+  Push $1
+  StrCpy $GetInstalledSize.total 0
+  ${ForEach} $1 0 ${LastSectionIndex} + 1
+    ${if} ${SectionIsSelected} $1
+      SectionGetSize $1 $0
+      IntOp $GetInstalledSize.total $GetInstalledSize.total + $0
+    ${Endif}
+  ${Next}
 
-	ClearErrors
-	Pop $1
-	Pop $0
-	IntFmt $GetInstalledSize.total "0x%08X" $GetInstalledSize.total
-	Push $GetInstalledSize.total
+  ClearErrors
+  Pop $1
+  Pop $0
+  IntFmt $GetInstalledSize.total "0x%08X" $GetInstalledSize.total
+  Push $GetInstalledSize.total
 FunctionEnd  # GetInstalledSize
 
 # =============================================================================
@@ -2553,8 +2553,8 @@ Function CreateRegistryKeys
 !endif
 
   # There is no option for modifying or repairing the install
-	WriteRegDWORD SHCTX "${UNINSTALL_SETTINGS_KEY}" "NoModify"           1
-	WriteRegDWORD SHCTX "${UNINSTALL_SETTINGS_KEY}" "NoRepair"           1
+  WriteRegDWORD SHCTX "${UNINSTALL_SETTINGS_KEY}" "NoModify"           1
+  WriteRegDWORD SHCTX "${UNINSTALL_SETTINGS_KEY}" "NoRepair"           1
 
   # Set the  Computing EstimatedSize constant so Add/Remove Programs can
   # accurately report the size
@@ -2764,19 +2764,19 @@ function MUI_PAGE_FINISH_ShowFunction
 
   # Add a radio button to launch the Unitex Classic IDE
   ${If}   ${SectionIsSelected} ${IDESectionUnitex}
-  	${NSD_CreateRadioButton} 180 110u 70% 12u "Launch the ${UNITEX_JAVA_NAME}"
-  	Pop $RunUnitexRadioButton
+    ${NSD_CreateRadioButton} 180 110u 70% 12u "Launch the ${UNITEX_JAVA_NAME}"
+    Pop $RunUnitexRadioButton
     SetCtlColors $RunUnitexRadioButton "" "${MUI_BGCOLOR}"
-  	${NSD_Check} $RunUnitexRadioButton
+    ${NSD_Check} $RunUnitexRadioButton
   ${endif}
 
   # Add a radio button to launch the Unitex GramLab IDE
   ${If}   ${SectionIsSelected} ${IDESectionGramLab}
-  	${NSD_CreateRadioButton} 180 125u 70% 12u "Launch the ${GRAMLAB_JAVA_NAME}"
-  	Pop $RunGramLabRadioButton
+    ${NSD_CreateRadioButton} 180 125u 70% 12u "Launch the ${GRAMLAB_JAVA_NAME}"
+    Pop $RunGramLabRadioButton
     SetCtlColors $RunGramLabRadioButton "" "${MUI_BGCOLOR}"
     ${IfNot}   ${SectionIsSelected} ${IDESectionUnitex}
-  	 ${NSD_Check} $RunGramLabRadioButton
+     ${NSD_Check} $RunGramLabRadioButton
     ${endif} 
   ${endif}
 functionEnd
@@ -2812,10 +2812,10 @@ ${StrLoc}
 # is French, French Language Resources will be default checked in all modes.
 # =============================================================================
 function SetLocaleOptions
-	Push $0
-	Push $1
+  Push $0
+  Push $1
 
-	${ForEach} $0 0 ${LastSectionIndex} + 1
+  ${ForEach} $0 0 ${LastSectionIndex} + 1
     SectionGetText $0 $1
     ${StrLoc} $1 "$1" "$locale_language_name" "<"
     ${If} $1 != ""
@@ -2830,11 +2830,11 @@ function SetLocaleOptions
       # i.e. 00000111 in binary or 7 in decimal .
       SectionSetInstTypes $0 7
     ${EndIf}
-	${Next}
+  ${Next}
 
   ClearErrors
-	Pop $1
-	Pop $0
+  Pop $1
+  Pop $0
 functionEnd
 
 # =============================================================================
@@ -2968,7 +2968,7 @@ Section "Uninstall"
   SetDetailsPrint textonly
   DetailPrint "Deleting uninstaller..."
   SetDetailsPrint listonly
-	delete "$INSTDIR\${UNINSTALLER_FILE}"
+  delete "$INSTDIR\${UNINSTALLER_FILE}"
 
   # Try to remove the install directory, this will only happen if it is empty
   # Never never set /r flag, this is extremely unsafe !
@@ -3011,12 +3011,12 @@ function un.onInit
   # Get the stored language preference
   !insertmacro MUI_UNGETLANGUAGE
 
-	# Sets the context of $SMPROGRAMS to the 'all users' shell folder.
+  # Sets the context of $SMPROGRAMS to the 'all users' shell folder.
   # Only admins have full access rights to the all users area.
   # Multiuser
   # SetShellVarContext all
 
-	# Last chance to back out
+  # Last chance to back out
   MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Are you sure you want to \
      completely remove ${PRETTYAPPCAPTION} and all of its components?" IDYES +2
   Abort
@@ -3039,7 +3039,7 @@ Function un.CleanShortCuts
   delete "$DESKTOP\${UNITEX_JAVA_NAME}.lnk"
 
   delete "$SMPROGRAMS\${STARTMENUFOLDER}\${GRAMLAB_JAVA_NAME}.lnk"
-	delete "$DESKTOP\${GRAMLAB_JAVA_NAME}.lnk"
+  delete "$DESKTOP\${GRAMLAB_JAVA_NAME}.lnk"
 
   # Remove all .lnk manual shortcuts
   !ifndef SETUP_NO_MANUAL_SECTION
@@ -3060,7 +3060,7 @@ Function un.CleanShortCuts
 
   # Finally, try to remove the Start Menu folder
   # this will only happen if it is empty
-	rmDir "$SMPROGRAMS\${STARTMENUFOLDER}"
+  rmDir "$SMPROGRAMS\${STARTMENUFOLDER}"
 
 NoStartmenuFolder:
 FunctionEnd
@@ -3101,7 +3101,7 @@ Function un.CleanRegistryKeys
   DeleteRegKey /ifempty SHCTX ${APP_REGISTRY_KEY}
 
   # Remove uninstaller information from the registry
-	DeleteRegKey SHCTX ${UNINSTALL_SETTINGS_KEY}
+  DeleteRegKey SHCTX ${UNINSTALL_SETTINGS_KEY}
 FunctionEnd
 
 # =============================================================================
@@ -3226,7 +3226,7 @@ Function un.CleanDirectories
   SetDetailsPrint textonly
   DetailPrint "Deleting directories | \${APP_DIRNAME} (only if empty)..."
   SetDetailsPrint listonly
-	rmDir "$INSTDIR\${APP_DIRNAME}"
+  rmDir "$INSTDIR\${APP_DIRNAME}"
 
   # recursive (/r) remove the \Src directory
   !ifndef SETUP_NO_SOURCES_SECTION
