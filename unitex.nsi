@@ -2762,22 +2762,25 @@ function MUI_PAGE_FINISH_ShowFunction
   # Hide the run application checkbox
   ShowWindow  $mui.FinishPage.Run 0
 
-  # Add a radio button to launch the Unitex Classic IDE
-  ${If}   ${SectionIsSelected} ${IDESectionUnitex}
-    ${NSD_CreateRadioButton} 180 110u 70% 12u "Launch the ${UNITEX_JAVA_NAME}"
-    Pop $RunUnitexRadioButton
-    SetCtlColors $RunUnitexRadioButton "" "${MUI_BGCOLOR}"
-    ${NSD_Check} $RunUnitexRadioButton
-  ${endif}
-
-  # Add a radio button to launch the Unitex GramLab IDE
-  ${If}   ${SectionIsSelected} ${IDESectionGramLab}
-    ${NSD_CreateRadioButton} 180 125u 70% 12u "Launch the ${GRAMLAB_JAVA_NAME}"
-    Pop $RunGramLabRadioButton
-    SetCtlColors $RunGramLabRadioButton "" "${MUI_BGCOLOR}"
-    ${IfNot}   ${SectionIsSelected} ${IDESectionUnitex}
-     ${NSD_Check} $RunGramLabRadioButton
-    ${endif} 
+  # Only when java is avalaible
+  ${If} ${FileExists} "$java_bin_path"
+    # Add a radio button to launch the Unitex Classic IDE
+    ${If}   ${SectionIsSelected} ${IDESectionUnitex}
+      ${NSD_CreateRadioButton} 180 110u 70% 12u "Launch the ${UNITEX_JAVA_NAME}"
+      Pop $RunUnitexRadioButton
+      SetCtlColors $RunUnitexRadioButton "" "${MUI_BGCOLOR}"
+      ${NSD_Check} $RunUnitexRadioButton
+    ${endif}
+  
+    # Add a radio button to launch the Unitex GramLab IDE
+    ${If}   ${SectionIsSelected} ${IDESectionGramLab}
+      ${NSD_CreateRadioButton} 180 125u 70% 12u "Launch the ${GRAMLAB_JAVA_NAME}"
+      Pop $RunGramLabRadioButton
+      SetCtlColors $RunGramLabRadioButton "" "${MUI_BGCOLOR}"
+      ${IfNot}   ${SectionIsSelected} ${IDESectionUnitex}
+       ${NSD_Check} $RunGramLabRadioButton
+      ${endif} 
+    ${endif}
   ${endif}
 functionEnd
 
@@ -2785,16 +2788,30 @@ functionEnd
 # Function
 # =============================================================================
 Function RunUnitexGramLab
-  # Check if a user asks to run the Unitex Classic IDE
-  ${NSD_GetState} $RunUnitexRadioButton  $R0
-  ${If} $R0 == ${BST_CHECKED}
-    ExecShell "" "$SMPROGRAMS\${STARTMENUFOLDER}\${UNITEX_JAVA_NAME}.lnk"
-  ${endif}
-
-  # Check if a user asks to run the Unitex GramLab IDE
-  ${NSD_GetState} $RunGramLabRadioButton $R0
-  ${If} $R0 == ${BST_CHECKED}
-    ExecShell "" "$SMPROGRAMS\${STARTMENUFOLDER}\${GRAMLAB_JAVA_NAME}.lnk"
+  ${If} ${FileExists} "$java_bin_path"
+    # Check if a user asks to run the Unitex Classic IDE
+    ${NSD_GetState} $RunUnitexRadioButton  $R0
+    ${If} $R0 == ${BST_CHECKED}
+      ${If} ${FileExists} "$SMPROGRAMS\${STARTMENUFOLDER}\${UNITEX_JAVA_NAME}.lnk"
+        ExecShell "" "$SMPROGRAMS\${STARTMENUFOLDER}\${UNITEX_JAVA_NAME}.lnk"
+      ${Else}
+        ExecShell "open" "$java_bin_path"                                         \
+                         "-jar $\"$INSTDIR\${APP_DIRNAME}\${UNITEX_JAVA_FILE}$\"  \
+                          $\"$INSTDIR\${APP_DIRNAME}$\""
+      ${EndIf}
+    ${endif}
+  
+    # Check if a user asks to run the Unitex GramLab IDE
+    ${NSD_GetState} $RunGramLabRadioButton $R0
+    ${If} $R0 == ${BST_CHECKED}
+      ${If} ${FileExists} "$SMPROGRAMS\${STARTMENUFOLDER}\${GRAMLAB_JAVA_NAME}.lnk"
+        ExecShell "" "$SMPROGRAMS\${STARTMENUFOLDER}\${GRAMLAB_JAVA_NAME}.lnk"
+      ${Else}
+        ExecShell "open" "$java_bin_path"                                         \
+                         "-jar $\"$INSTDIR\${APP_DIRNAME}\${GRAMLAB_JAVA_FILE}$\" \
+                          $\"$INSTDIR\${APP_DIRNAME}$\""
+      ${EndIf}
+    ${endif}
   ${endif}
 FunctionEnd
 
