@@ -1719,11 +1719,6 @@ SectionGroup "Visual Integrated Environments"   IDESection
     # (see section "uninstall")
     file "${INPUT_APPDIR}/${UNITEX_JAVA_FILE}"
 
-    # revision date
-    # If the /nonfatal switch is used and no files are found, a warning will be
-    # issued instead of an error.
-    file /nonfatal "${INPUT_APPDIR}/revision.date"
-
     # Store Unitex Java IDE (Java.last) Last Changed Date info
     ${WriteRegLastChangedInfo} "Java" "${APP_IDE_KEY}\UnitexJavaIDE"
   ${MementoSectionEnd}  # IDESectionUnitex
@@ -1741,15 +1736,9 @@ SectionGroup "Visual Integrated Environments"   IDESection
 
     # GramLab Java IDE depends upon Unitex.jar
     file "${INPUT_APPDIR}/${UNITEX_JAVA_FILE}"
-    file /nonfatal "${INPUT_APPDIR}/revision.date"
 
     # GramLab.jar
     file "${INPUT_APPDIR}/${GRAMLAB_JAVA_FILE}"
-
-    # revision date
-    # If the /nonfatal switch is used and no files are found, a warning will be
-    # issued instead of an error.
-    file /nonfatal "${INPUT_APPDIR}/gramlab_revision.date"
 
     # gramlab-super-pom
     file "${INPUT_APPDIR}/pom.xml"
@@ -3133,9 +3122,7 @@ Function un.CleanFiles
   delete "$INSTDIR\README.md"
   delete "$INSTDIR\LICENSE"
   delete "$INSTDIR\${APP_DIRNAME}\${GRAMLAB_JAVA_FILE}"
-  delete "$INSTDIR\${APP_DIRNAME}\gramlab_revision.date"
   delete "$INSTDIR\${APP_DIRNAME}\pom.xml"
-  delete "$INSTDIR\${APP_DIRNAME}\revision.date"
   delete "$INSTDIR\${APP_DIRNAME}\${ICON_FILE}"
   delete "$INSTDIR\${APP_DIRNAME}\${UNITEX_JAVA_FILE}"
   delete "$INSTDIR\${APP_DIRNAME}\Unitex1.ico"
