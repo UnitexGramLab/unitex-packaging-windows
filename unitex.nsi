@@ -1751,8 +1751,8 @@ SectionGroup "Visual Integrated Environments"   IDESection
     # /x .* : exclude hide (files and directories)
     File /r /x .* "${INPUT_APPDIR}/assembly/*.*"
 
-    # Store GramLab Java IDE (Gramlab.last) Last Changed Date info
-    ${WriteRegLastChangedInfo} "Gramlab" "${APP_IDE_KEY}\GramLabJavaIDE"
+    # Store GramLab Java IDE (GramLab.last) Last Changed Date info
+    ${WriteRegLastChangedInfo} "GramLab" "${APP_IDE_KEY}\GramLabJavaIDE"
   ${MementoSectionEnd}  # IDESectionGramLab
 SectionGroupEnd  # IDESection
 
