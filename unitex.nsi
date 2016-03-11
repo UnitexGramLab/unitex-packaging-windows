@@ -1950,7 +1950,8 @@ Function MUI_PAGE_DIRECTORY_Workspace_LeaveFunction
   Pop $0
   ${If} $0 <> 1
     MessageBox MB_ICONINFORMATION|MB_YESNO "Your workspace folder: $WORKSPACE_DIR \
-    already exists and is not empty. Continue anyway ?" IDYES +2
+    already exists and is not empty. Continue anyway? Note that this action does not \
+    overwrite any existing file in your folder" IDYES +2
      Abort
   ${EndIf}
 
@@ -3024,7 +3025,9 @@ function un.onInit
 
   # Last chance to back out
   MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Are you sure you want to \
-     completely remove ${PRETTYAPPCAPTION} and all of its components?" IDYES +2
+     completely remove ${PRETTYAPPCAPTION} and all of its components? Notice that \
+     this will not delete your personal workspace folder or its content from your \
+     computer." IDYES +2
   Abort
 functionEnd
 
