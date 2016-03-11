@@ -1245,6 +1245,9 @@ Var WORKSPACE_DIR
 # =============================================================================
 # Uninstaller Files Page
 # =============================================================================
+# Replaces the default text strings for the four buttons (< Back, Next >,
+# Cancel and Close). If parameters are omitted, the defaults are used
+MiscButtonText "" "" "" "&Continue"
 # Insert the Uninstaller Files Page
 !insertmacro MUI_UNPAGE_INSTFILES
 
