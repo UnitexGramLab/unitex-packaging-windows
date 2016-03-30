@@ -13,9 +13,6 @@ git:
 
 env:
   matrix:
-    # if a rows in the build matrix fails, set
-    # the build to finish as soon as possible
-    fast_finish: true
 #   - VER_RELEASE='latest-alpha'  VER_MAJOR='3' VER_MINOR='2' VER_SUFFIX='alpha'    
     - VER_RELEASE='latest-stable' VER_MAJOR='3' VER_MINOR='1' VER_SUFFIX=''     
     - VER_RELEASE='latest-rc'     VER_MAJOR='3' VER_MINOR='1' VER_SUFFIX='rc'
