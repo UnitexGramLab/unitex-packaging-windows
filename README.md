@@ -19,8 +19,8 @@ please visit the [nsis website][nsis].
 
 ## Script compilation
 
-  Usage:  
-   `makensis -DVER_MAJOR=# -DVER_MINOR=# -DVER_REVISION=# [OPTIONS] unitex.nsi`
+    Usage:
+    makensis -DVER_MAJOR=# -DVER_MINOR=# -DVER_REVISION=# [OPTIONS] unitex.nsi
 
 For a full list of compiler flags supported by this program, just type
 `makensis unitex.nsi` [return] at the command line. For a full list of
