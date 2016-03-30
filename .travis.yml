@@ -29,7 +29,7 @@ notifications:
 
 before_install:
   - sudo apt-get -qq update
-  - sudo apt-get install -y nsis nsis-common
+  - sudo apt-get install -y nsis nsis-common nsis-pluginapi
 
 install:
  - wget http://unitex.univ-mlv.fr/releases/${VER_RELEASE}/source/Unitex-GramLab-${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}-source-distribution.zip && unzip Unitex-GramLab-${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}-source-distribution.zip
