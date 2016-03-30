@@ -1,0 +1,41 @@
+os: linux
+dist: trusty
+
+# sudo: false instructs Travis to build our project in a docker VM (faster)
+sudo: required
+
+# language: instructs travis what compilers && environment to set up in build matrix
+language: bash
+
+# Travis CI clones repositories to a depth of 50 commits
+git:
+  depth: 3
+
+env:
+  matrix:
+    # if a rows in the build matrix fails, set
+    # the build to finish as soon as possible
+    fast_finish: true
+#   - VER_RELEASE='latest-alpha'  VER_MAJOR='3' VER_MINOR='2' VER_SUFFIX='alpha'    
+    - VER_RELEASE='latest-stable' VER_MAJOR='3' VER_MINOR='1' VER_SUFFIX=''     
+    - VER_RELEASE='latest-rc'     VER_MAJOR='3' VER_MINOR='1' VER_SUFFIX='rc'
+    - VER_RELEASE='latest-beta'   VER_MAJOR='3' VER_MINOR='1' VER_SUFFIX='beta'
+
+notifications:
+  email:
+    recipients:
+      - unitex-devel@univ-mlv.fr
+    on_success: change
+    on_failure: always
+  slack:
+    secure: Zrtl2NF6+dd4e7boH5JICVhQWfWFTqx/o3qr/Wa8/Fai8TYalFdWOujvE/8KH7j3G31iZueZ7z2ZsAPh8/rIIMNfdIxJ87sU0Ke0PYQKy1rMs8SaI7jh+f/+/w5Iki046bAJWQZzyIEcW4VqrkL7m6Aq5cf72FkgikK7wtDEgqryTn4P6l7tE81U4JLew0+pmOnPOrmqVbgwW6ABQrqvlz2pssAvpJ+RqDBnKbnFovPhV66BCyvYGrIlnzjHjsKYYNQA0ZTdHTdz4uSohkG/qHKypMhmX1jusgIEVCrpgbRr9Xhm12WthgbUsp2Nq0F5V4ddnusWhjh6ncyMKON1qTTlA9rn0P/YaKnjIMHYFKQjonHzQJVVZiIuSnQ/Gp5JynSP0BVYnvewyxpV66kNIqA/ZHE4a2zFGA/YSDPYpIhtgCEJ4od1/BIJGvN0EhGBaPZKzacquugh43IdqARnwwXvWE7lkct0qZbvSJUrelhqolkuVdkgp3JRza4Oe+XZ61PcyvktdkE+px2JVxuVIEpeM+GrH9QC5N3cuwJAlHVwhyo2fQ9Ghazd/DILONBeR2yQs/yYVCgakhFtGP3ymmt5SRhj3uJ3wXMQ4iKdIa6UKflXKeaOsNZpZz3F65yhfcAHPsvhLmMQpCvcoxLuZLSi+kEJSsmo+/9guOQFiVs=
+
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y nsis nsis-common
+
+install:
+ - wget http://unitex.univ-mlv.fr/releases/${VER_RELEASE}/source/Unitex-GramLab-${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}-source-distribution.zip && unzip Unitex-GramLab-${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}-source-distribution.zip
+
+script:
+  - makensis -DANONYMOUS_BUILD -DVER_MAJOR=${VER_MAJOR} -DVER_MINOR=${VER_MINOR} -DVER_SUFFIX=${VER_SUFFIX} -DINPUT_BASEDIR=. unitex.nsi
