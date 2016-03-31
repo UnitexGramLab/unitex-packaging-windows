@@ -15,17 +15,38 @@ cache:
 git:
   depth: 3
 
-env:
-  matrix:
-#   - VER_RELEASE='latest-alpha'  VER_MAJOR='3' VER_MINOR='2' VER_SUFFIX='alpha'    
-    - VER_RELEASE='latest-stable' VER_MAJOR='3' VER_MINOR='1' VER_SUFFIX=''     
-    - VER_RELEASE='latest-rc'     VER_MAJOR='3' VER_MINOR='1' VER_SUFFIX='rc'
-    - VER_RELEASE='latest-beta'   VER_MAJOR='3' VER_MINOR='1' VER_SUFFIX='beta'
-
-addons:
-  apt:
-    sources: [ 'ubuntu-toolchain-r-test' ]
-    packages: [ 'g++-4.8', 'gcc-4.8', 'scons', 'zlib1g-dev', 'libcppunit-dev' ]
+# Save common build configurations as shortcuts, so we can reference them later.
+addons_shortcuts:
+  addons_gcc48: &gcc48
+    apt:
+      sources: [ 'ubuntu-toolchain-r-test' ]
+      packages: [ 'g++-4.8', 'gcc-4.8', 'scons', 'zlib1g-dev', 'libcppunit-dev' ]
+      
+matrix:
+  # if a rows in the build matrix fails, set
+  # the build to finish as soon as possible
+  fast_finish: true
+  include:
+    - os: linux
+      dist: trusty
+      compiler: "gcc"
+      env: CXX=g++-4.8 VER_RELEASE='latest-stable' VER_MAJOR='3' VER_MINOR='1' VER_SUFFIX=''
+      addons: *gcc48
+    - os: linux
+      dist: trusty
+      compiler: "gcc"
+      env: CXX=g++-4.8 VER_RELEASE='latest-rc'     VER_MAJOR='3' VER_MINOR='1' VER_SUFFIX='rc'
+      addons: *gcc48
+    - os: linux
+      dist: trusty
+      compiler: "gcc"
+      env: CXX=g++-4.8 VER_RELEASE='latest-beta'   VER_MAJOR='3' VER_MINOR='1' VER_SUFFIX='beta'
+      addons: *gcc48
+    #- os: linux
+      #dist: trusty
+      #compiler: "gcc"
+      #env: CXX=g++-4.8 VER_RELEASE='latest-alpha'  VER_MAJOR='3' VER_MINOR='2' VER_SUFFIX='alpha'    
+      #addons: *gcc48
 
 notifications:
   email:
