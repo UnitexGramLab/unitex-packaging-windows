@@ -17,7 +17,7 @@ diff a/nsis-3.0a2-src-patch/Source/winchar.cpp b/nsis-3.0a2-src/Source/winchar.c
    unsigned int v = 0, base = 10, top = '9';
    int sign = 1;
    if (*s == _T('-')) ++s, sign = -1;
--  for ( unsigned int c;; )   
+-  for ( unsigned int c;; )
 +  for ( unsigned short int c;; )
    {
      if ((c = *s++) >= '0' && c <= top) c -= '0'; else break;
@@ -29,7 +29,7 @@ diff a/nsis-3.0a2-src-patch/Source/writer.cpp b/nsis-3.0a2-src/Source/writer.cpp
    if (m_build_unicode)
    {
      bool strEnd = false;
--    TCHAR ch;     
+-    TCHAR ch;
 +    TCHAR ch = _T('\0');
      for (; size ; size--)
      {
@@ -51,3 +51,4 @@ cd "$NSIS_SOURCE"
 scons SKIPSTUBS=all SKIPPLUGINS=all SKIPUTILS=all SKIPMISC=all NSIS_CONFIG_CONST_DATA=no PREFIX="$NSISDIR"  install-compiler
 
 export NSIS_BIN="$NSISDIR/bin/makensis"
+chmod +x "$NSIS_BIN"
