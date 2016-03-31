@@ -36,6 +36,7 @@ notifications:
 
 before_install:
   - sudo apt-get -qq update
+  - sudo apt-get install -y docbook5-xml docbook-xsl-ns html2text libcppunit-dev mingw-w64 scons xsltproc
   - "./nsis-install.sh"
 
 install:
