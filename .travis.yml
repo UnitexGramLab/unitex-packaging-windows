@@ -1,5 +1,5 @@
 os: linux
-dist: trusty
+#dist: trusty
 
 # sudo: false instructs Travis to build our project in a docker VM (faster)
 sudo: required
