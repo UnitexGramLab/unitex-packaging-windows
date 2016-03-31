@@ -12,8 +12,6 @@ git:
   depth: 3
 
 env:
-  global:
-    - NSIS_BIN="makensis"
   matrix:
 #   - VER_RELEASE='latest-alpha'  VER_MAJOR='3' VER_MINOR='2' VER_SUFFIX='alpha'    
     - VER_RELEASE='latest-stable' VER_MAJOR='3' VER_MINOR='1' VER_SUFFIX=''     
@@ -45,5 +43,5 @@ install:
  - wget http://unitex.univ-mlv.fr/releases/${VER_RELEASE}/source/Unitex-GramLab-${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}-source-distribution.zip && unzip Unitex-GramLab-${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}-source-distribution.zip
 
 script:
-  - ${NSIS_BIN} -VERSION
-  - ${NSIS_BIN} -DANONYMOUS_BUILD -DVER_MAJOR=${VER_MAJOR} -DVER_MINOR=${VER_MINOR} -DVER_SUFFIX=${VER_SUFFIX} -DINPUT_BASEDIR=. unitex.nsi
+  - makensis -VERSION
+  - makensis -DANONYMOUS_BUILD -DVER_MAJOR=${VER_MAJOR} -DVER_MINOR=${VER_MINOR} -DVER_SUFFIX=${VER_SUFFIX} -DINPUT_BASEDIR=. unitex.nsi
