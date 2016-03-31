@@ -23,7 +23,7 @@ if [ "$NSIS_VERSION" == "3.0a2" ]; then
 fi
 
 cd "$NSIS_SOURCE"
-scons CXX=${CXX} APPEND_CCFLAGS=-fpermissive SKIPSTUBS=all SKIPPLUGINS=all SKIPUTILS=all SKIPMISC=all NSIS_CONFIG_CONST_DATA=no PREFIX="$NSISDIR"  install-compiler
+scons APPEND_CCFLAGS=-fpermissive SKIPSTUBS=all SKIPPLUGINS=all SKIPUTILS=all SKIPMISC=all NSIS_CONFIG_CONST_DATA=no PREFIX="$NSISDIR"  install-compiler
 
 export NSIS_BIN="$NSISDIR/bin/makensis"
 chmod +x "$NSIS_BIN"
