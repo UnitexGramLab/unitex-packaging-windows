@@ -36,7 +36,7 @@ notifications:
 
 before_install:
   - sudo apt-get -qq update
-  - sudo apt-get install -y docbook5-xml docbook-xsl-ns html2text libcppunit-dev mingw-w64 scons xsltproc debhelper
+  - sudo apt-get install -y docbook5-xml docbook-xsl-ns html2text libcppunit-dev mingw-w64 scons xsltproc zlib1g-dev
   - "./nsis-install.sh"
 
 install:
@@ -44,5 +44,5 @@ install:
 
 script:
   - ldd $(command -v makensis)
-  - makensis -VERSION
-  - makensis -DSETUP_NO_UNICODE -DANONYMOUS_BUILD -DVER_MAJOR=${VER_MAJOR} -DVER_MINOR=${VER_MINOR} -DVER_SUFFIX=${VER_SUFFIX} -DINPUT_BASEDIR=. unitex.nsi
+  - $NSIS_BIN -VERSION
+  - $NSIS_BIN -DANONYMOUS_BUILD -DVER_MAJOR=${VER_MAJOR} -DVER_MINOR=${VER_MINOR} -DVER_SUFFIX=${VER_SUFFIX} -DINPUT_BASEDIR=. unitex.nsi
