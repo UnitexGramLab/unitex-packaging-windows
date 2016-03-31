@@ -58,3 +58,8 @@ export NSIS_BIN="$NSISDIR/bin/makensis"
 chmod +x "$NSIS_BIN"
 sudo mkdir -p "/usr/local/bin"
 sudo ln -s "$NSIS_BIN" "/usr/local/bin/makensis"
+
+mkdir -p "$NSISDIR/share"
+pushd "$NSISDIR/share"
+ln -s "$NSISDIR" "$NSIS_NAME"
+popd
