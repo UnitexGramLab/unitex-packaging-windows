@@ -1,5 +1,7 @@
 #!/bin/bash
 # martinec
+
+#  ensure if any command fails the entire build script fails
 set -eo pipefail
 
 NSIS_VERSION="3.0a2"

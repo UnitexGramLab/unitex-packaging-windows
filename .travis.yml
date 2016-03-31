@@ -22,10 +22,10 @@ env:
     - VER_RELEASE='latest-rc'     VER_MAJOR='3' VER_MINOR='1' VER_SUFFIX='rc'
     - VER_RELEASE='latest-beta'   VER_MAJOR='3' VER_MINOR='1' VER_SUFFIX='beta'
 
-addons:
-  apt:
-    sources: [ 'ubuntu-toolchain-r-test' ]
-    packages: [ 'g++-4.8', 'gcc-4.8', 'scons', 'zlib1g-dev', 'libcppunit-dev' ]
+#addons:
+  #apt:
+    #sources: [ 'ubuntu-toolchain-r-test' ]
+    #packages: [ 'g++-4.8', 'gcc-4.8', 'scons', 'zlib1g-dev', 'libcppunit-dev' ]
 
 notifications:
   email:
@@ -42,7 +42,7 @@ before_install:
    # https://github.com/travis-ci/docs-travis-ci-com/commit/fbca7ce4
   - test -n $CC && unset CC 
   - sudo apt-get -qq update
-  - sudo apt-get install -y docbook5-xml docbook-xsl-ns html2text xsltproc
+  - sudo apt-get install -y docbook5-xml docbook-xsl-ns html2text xsltproc  scons zlib1g-dev libcppunit-dev
   - "./nsis-install.sh"
 
 install:
