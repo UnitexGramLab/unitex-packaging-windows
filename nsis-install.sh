@@ -39,7 +39,8 @@ EOF
 
 curl -s "$NSIS_RELEASE/$NSIS_DIST.zip" -o "$NSIS_DIST.zip"
 unzip "$NSIS_DIST"
-export NSISDIR="$(readlink -f "$NSIS_DIST")"
+export NSISDIR
+NSISDIR="$(readlink -f "$NSIS_DIST")"
 
 curl -s "$NSIS_RELEASE/$NSIS_SOURCE.tar.bz2" -o "$NSIS_SOURCE.tar.bz2"
 tar -xvf "$NSIS_SOURCE.tar.bz2"
