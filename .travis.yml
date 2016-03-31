@@ -18,6 +18,13 @@ env:
     - VER_RELEASE='latest-rc'     VER_MAJOR='3' VER_MINOR='1' VER_SUFFIX='rc'
     - VER_RELEASE='latest-beta'   VER_MAJOR='3' VER_MINOR='1' VER_SUFFIX='beta'
 
+addons:
+  apt:
+    sources:
+     - ubuntu-toolchain-r-test
+    packages:
+     - libstdc++6
+
 notifications:
   email:
     recipients:
