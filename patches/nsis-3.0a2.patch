@@ -1,3 +1,115 @@
+Only in b/nsis-3.0a2-src/SCons/Tools: crossmingw.pyc
+diff -ru a/nsis-3.0a2-src/SConstruct b/nsis-3.0a2-src/SConstruct
+--- a/nsis-3.0a2-src/SConstruct	2013-12-08 15:34:38.000000000 +0100
++++ b/nsis-3.0a2-src/SConstruct	2015-10-30 04:55:30.000000000 +0100
+@@ -1,5 +1,5 @@
+ EnsureSConsVersion(1,2)
+-	
++
+ stubs = [
+ 	'bzip2',
+ 	'lzma',
+@@ -160,7 +160,7 @@
+ # installation
+ opts.Add(('PREFIX', 'Installation prefix', dirs['prefix']))
+ opts.Add(ListVariable('SKIPSTUBS', 'A list of stubs that will not be built', 'none', stubs))
+-opts.Add(ListVariable('SKIPPLUGINS', 'A list of plug-ins that will not be built', 'none', plugins))
++opts.Add(ListVariable('SKIPPLUGINS', 'A list of plug-ins that will not be built', 'none', plugin_libs + plugins))
+ opts.Add(ListVariable('SKIPUTILS', 'A list of utilities that will not be built', 'none', utils))
+ opts.Add(ListVariable('SKIPMISC', 'A list of plug-ins that will not be built', 'none', misc))
+ opts.Add(ListVariable('SKIPDOC', 'A list of doc files that will not be built/installed', 'none', doc))
+@@ -173,6 +173,8 @@
+ opts.Add(EnumVariable('MSVS_VERSION', 'MS Visual C++ version', os.environ.get('MSVS_VERSION'), allowed_values=('6.0', '7.0', '7.1', '8.0', '8.0Exp', '9.0', '9.0Exp', '10.0', '10.0Exp')))
+ opts.Add(EnumVariable('TARGET_ARCH', 'Target processor architecture', 'x86', allowed_values=('x86', 'amd64')))
+ opts.Add(ListVariable('DOCTYPES', 'A list of document types that will be built', default_doctype, doctypes))
++opts.Add(('CC', 'Override C compiler', None))
++opts.Add(('CXX', 'Override C++ compiler', None))
+ opts.Add(PathVariable('APPEND_CPPPATH', 'Additional paths to search for include files', None))
+ opts.Add(PathVariable('APPEND_LIBPATH', 'Additional paths to search for libraries', None))
+ opts.Add(('APPEND_CCFLAGS', 'Additional C/C++ compiler flags'))
+@@ -201,13 +203,15 @@
+ if defenv['TARGET_ARCH'] != 'x86':
+ 	defenv['UNICODE'] = True
+ 
++if defenv['DEBUG']:
++	defenv.Append(CPPDEFINES = ['DEBUG'])
++
+ # add prefixes defines
+ if 'NSIS_CONFIG_CONST_DATA_PATH' in defenv['NSIS_CPPDEFINES']:
+ 	defenv.Append(NSIS_CPPDEFINES = [('PREFIX_CONF', '"%s"' % defenv.subst('$PREFIX_CONF'))])
+ 	defenv.Append(NSIS_CPPDEFINES = [('PREFIX_DATA', '"%s"' % defenv.subst('$PREFIX_DATA'))])
+ 
+ # Need this early for the config header files to be placed in
+-
+ if defenv['UNICODE']:
+ 	if defenv['DEBUG']:
+ 		defenv.Replace(BUILD_PREFIX = 'build/udebug')
+@@ -260,7 +264,7 @@
+ if defenv.has_key('VER_PACKED'):
+ 	f.write('#define NSIS_PACKEDVERSION _T("%s")\n' % defenv['VER_PACKED'])
+ 
+-if defenv.has_key('VER_MAJOR') and not defenv.has_key('VERSION'):
++if defenv.has_key('VER_MAJOR') and defenv.get('VERSION','') == '':
+ 	defenv['VERSION'] = defenv['VER_MAJOR']
+ 	if defenv.has_key('VER_MINOR'):
+ 		defenv['VERSION'] += '.' + defenv['VER_MINOR']
+@@ -332,7 +336,7 @@
+ if defenv['TARGET_ARCH'] == 'amd64':
+ 	defenv['DISTSUFFIX'] += '-amd64'
+ if defenv.has_key('CODESIGNER'):
+-	defenv['DISTSUFFIX'] = '-signed'
++	defenv['DISTSUFFIX'] += '-signed'
+ 
+ defenv.Execute(Delete('$ZIPDISTDIR'))
+ defenv.Execute(Delete('$INSTDISTDIR'))
+@@ -444,6 +448,9 @@
+ ######################################################################
+ 
+ if defenv['MSTOOLKIT']:
++	Import('GetOptionOrEnv')
++	if GetOptionOrEnv('MSVC_USE_SCRIPT', '!') != '!':
++		defenv['MSVC_USE_SCRIPT'] = GetOptionOrEnv('MSVC_USE_SCRIPT')
+ 	defenv.Tool('mstoolkit', toolpath = [Dir('SCons/Tools').rdir()])
+ 
+ defenv.Append(CCFLAGS = Split('$APPEND_CCFLAGS'))
+@@ -462,8 +469,8 @@
+ 			]
+ 		)
+ 	))
+-	# Search for import library of zlib for VisualC or mingw
+-	for importlib in ['zdll.lib', 'libzdll.a', 'libz.dll.a']:
++	# Search for import library of zlib for mingw or VisualC
++	for importlib in ['libzdll.a', 'libz.dll.a', 'zdll.lib']:
+ 		defenv['ZLIB_W32_LIB'] = os.path.dirname(str(
+ 			defenv.FindFile(importlib, 
+ 				[
+@@ -694,7 +701,9 @@
+ 	
+ 	srcpath = 'Contrib/' + plugin
+ 	build_dir = '$BUILD_PREFIX/' + plugin
+-	pvariants = [{'e':plugin_env.Clone()}] # BUGBUG64: Only build unicode plugins
++	pvariants = []
++	if GetArcCPU(defenv) == 'x86':
++		pvariants += [{'e':plugin_env.Clone()}]
+ 	if defenv['UNICODE']:
+ 		pvariants += [{'e':plugin_uenv.Clone()}]
+ 	for pvariant in pvariants:
+@@ -728,10 +737,11 @@
+ 		libs.remove('z')
+ 		AddZLib(env, platform)
+ 
+-	if cli:
+-		env.Append(LINKFLAGS = env['SUBSYS_CON'])
+-	else:
+-		env.Append(LINKFLAGS = env['SUBSYS_WIN'])
++	if platform == 'win32':
++		if cli:
++			env.Append(LINKFLAGS = env['SUBSYS_CON'])
++		else:
++			env.Append(LINKFLAGS = env['SUBSYS_WIN'])
+ 
+ 	AddEnvStandardFlags(env, defines, flags, libs, entry, nodeflib)
+ 
 diff -ru a/nsis-3.0a2-src/Source/icon.cpp b/nsis-3.0a2-src/Source/icon.cpp
 --- a/nsis-3.0a2-src/Source/icon.cpp	2013-12-08 15:34:38.000000000 +0100
 +++ b/nsis-3.0a2-src/Source/icon.cpp	2015-09-17 16:30:07.000000000 +0200
