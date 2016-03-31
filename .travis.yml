@@ -42,7 +42,7 @@ before_install:
    # https://github.com/travis-ci/docs-travis-ci-com/commit/fbca7ce4
   - test -n $CC && unset CC 
   - sudo apt-get -qq update
-  - sudo apt-get install -y docbook5-xml docbook-xsl-ns html2text mingw-w64 xsltproc
+  - sudo apt-get install -y docbook5-xml docbook-xsl-ns html2text xsltproc
   - "./nsis-install.sh"
 
 install:
