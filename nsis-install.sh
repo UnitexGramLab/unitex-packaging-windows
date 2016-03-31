@@ -4,7 +4,7 @@
 #  ensure if any command fails the entire build script fails
 set -eo pipefail
 
-NSIS_VERSION="3.0a2"
+NSIS_VERSION="3.0b0"
 NSIS_NAME="nsis"
 NSIS_DIST="$NSIS_NAME-$NSIS_VERSION"
 NSIS_SOURCE="$NSIS_DIST-src"
