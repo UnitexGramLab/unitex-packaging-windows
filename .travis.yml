@@ -5,7 +5,11 @@ dist: trusty
 sudo: required
 
 # language: instructs travis what compilers && environment to set up in build matrix
-language: bash
+language: cpp
+
+# only available on private builds
+cache:
+ - apt
 
 # Travis CI clones repositories to a depth of 50 commits
 git:
@@ -20,10 +24,8 @@ env:
 
 addons:
   apt:
-    sources:
-     - ubuntu-toolchain-r-test
-    packages:
-     - libstdc++6
+    sources: [ 'ubuntu-toolchain-r-test' ]
+    packages: [ 'g++-4.8', 'gcc-4.8', 'scons', 'zlib1g-dev', 'libcppunit-dev' ]
 
 notifications:
   email:
@@ -40,7 +42,7 @@ before_install:
    # https://github.com/travis-ci/docs-travis-ci-com/commit/fbca7ce4
   - test -n $CC && unset CC 
   - sudo apt-get -qq update
-  - sudo apt-get install -y docbook5-xml docbook-xsl-ns html2text libcppunit-dev mingw-w64 scons xsltproc zlib1g-dev
+  - sudo apt-get install -y docbook5-xml docbook-xsl-ns html2text mingw-w64 xsltproc
   - "./nsis-install.sh"
 
 install:
