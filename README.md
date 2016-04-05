@@ -1,6 +1,6 @@
 # Unitex/GramLab Setup Installer for Windows  [![Build Status](https://travis-ci.org/UnitexGramLab/unitex-packaging-windows.svg?branch=master)](https://travis-ci.org/UnitexGramLab/unitex-packaging-windows)
 
-> [Unitex/GramLab][unitex] is an open source, cross-platform, multilingual, lexicon- and grammar-based corpus processing suite.
+> [Unitex/GramLab][unitexgramlab] is an open source, cross-platform, multilingual, lexicon- and grammar-based corpus processing suite.
 
 This NSIS script is used to create the [Unitex/GramLab][unitexgramlab] setup installers
 for Windows ([32-bit][installer32] and [64-bit][installer64]) on POSIX compliant
@@ -138,7 +138,7 @@ Contact unitex-devel@univ-mlv.fr for further inquiries.
 
 Copyright (C) 2016 Université Paris-Est Marne-la-Vallée
 
-[nsis]:        http://nsis.sourceforge.net
-[unitexgramlab]:      http://unitexgramlab.org
+[nsis]: http://nsis.sourceforge.net
+[unitexgramlab]: http://unitexgramlab.org
 [installer32]: http://unitex.univ-mlv.fr/releases/latest-stable/win32/
 [installer64]: http://unitex.univ-mlv.fr/releases/latest-stable/win32/
