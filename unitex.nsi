@@ -1640,7 +1640,6 @@ ${MementoSection} "Core Components (required)" CoreSection
 
   # icons
   file "${INPUT_APPDIR}/${ICON_FILE}"
-  file "${INPUT_APPDIR}/Unitex1.ico"
  
   # UnitexToolLogger
   # recursive install "App/platform/win{BITS}/" directory contents
@@ -3131,7 +3130,6 @@ Function un.CleanFiles
   delete "$INSTDIR\${APP_DIRNAME}\pom.xml"
   delete "$INSTDIR\${APP_DIRNAME}\${ICON_FILE}"
   delete "$INSTDIR\${APP_DIRNAME}\${UNITEX_JAVA_FILE}"
-  delete "$INSTDIR\${APP_DIRNAME}\Unitex1.ico"
   delete "$INSTDIR\${APP_DIRNAME}\UnitexToolLogger.exe"
   delete "$INSTDIR\${APP_DIRNAME}\XAlign.jar"
   delete "$INSTDIR\${APP_DIRNAME}\${LIBRARY_DIRNAME}\svnkitclient.jar"
