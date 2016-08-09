@@ -595,7 +595,7 @@ ManifestSupportedOS all
   # Users workspace (Unitex/Users) directory
   ${CheckIfDirExist}    "${INPUT_USRDIR}"
 
-  # Code Source (Unitex/Src) directory for Core Components (C++),
+  # Code Source (Unitex/Src) directory for Core Components (unitex-core),
   # Unitex Java IDE and GramLab Java IDE
   !ifndef SETUP_NO_SOURCES_SECTION
     ${CheckIfDirExist}  "${INPUT_SRCDIR}"
@@ -941,35 +941,6 @@ Var locale_language_id
 # Include the JRE Dynamic Installer header file
 !include "jre_setup.nsh"
 # =============================================================================
-
-# =============================================================================
-# WriteRegLastChangedInfo FIRST_ARGUMENT SECOND_ARGUMENT
-# In a non anonymous build this compile-time macro read the file located at
-# 'timestamp/FIRST_ARGUMENT.last' and stores its contents to SECOND_ARGUMENT
-# registry key. e.g.
-# !insertmacro WriteRegLastChangedInfo "C++" "${APP_CORE_KEY}"
-# read timestamp/C++.last and stores its contents in ${APP_CORE_KEY} registry key
-# =============================================================================
-!define WriteRegLastChangedInfo "!insertmacro _WriteRegLastChangedInfo"
-!macro _WriteRegLastChangedInfo _APP_TMS_FILENAME _APP_TMS_REGISTRY_KEY
-  !ifndef SETUP_NO_TIMESTAMP_INFO
-    SetDetailsPrint textonly
-    DetailPrint "Creating Build Date Registry Key| ${_APP_TMS_FILENAME}"
-    SetDetailsPrint listonly
-    # Read 'timestamp/FIRST_ARGUMENT.last' file and stuffed into
-    # 'LastChanged_FIRST_ARGUMENT' global flag
-    !define /file "LastChanged_${_APP_TMS_FILENAME}" \
-                  "${INPUT_TIMESTAMPDIR}/${_APP_TMS_FILENAME}.last"
-    !if "${LastChanged_${_APP_TMS_FILENAME}}" != ""
-      # Store Last Changed Date (%Y-%m-%d %H:%M:%S) read from
-      # 'timestamp/FIRST_ARGUMENT.last' into SECOND_ARGUMENT registry key
-      WriteRegStr SHCTX "${_APP_TMS_REGISTRY_KEY}"                 \
-                        "${INSTALL_BUILD_DATE_REGISTRY_VALUENAME}" \
-                        "${LastChanged_${_APP_TMS_FILENAME}}"
-    !endif
-    !undef "LastChanged_${_APP_TMS_FILENAME}"
-  !endif # SETUP_NO_TIMESTAMP_INFO
-!macroend
 
 # =============================================================================
 # !packhdr is a useful compile time directive which allows modifications to the
@@ -1667,9 +1638,6 @@ ${MementoSection} "Core Components (required)" CoreSection
   setOutPath "$INSTDIR"
   file /nonfatal "${INPUT_UNITEXDIR}/README.md"
   file /nonfatal "${INPUT_UNITEXDIR}/LICENSE"
-  
-  # Store core components (C++.last) Last Changed Date info
-  ${WriteRegLastChangedInfo} "C++" "${APP_CORE_KEY}"  
 ${MementoSectionEnd} #  CoreSection
 
 # =============================================================================
@@ -1700,9 +1668,6 @@ section -ThirdParty_XAlignSection
   # /r    : files and directories recursively searched
   # /x .* : exclude hide (files and directories)
   File /r /x .* "${INPUT_XALIGNDIR}/*.*"
-
-  # Store XAlign (XAlign.last) Last Changed Date info
-  ${WriteRegLastChangedInfo} "XAlign" "${APP_THIRDPARTY_KEY}\XAlign"
 sectionEnd  #  -ThirdParty_XAlignSection
 
 # =============================================================================
@@ -1720,9 +1685,6 @@ SectionGroup "Visual Integrated Environments"   IDESection
     # Files added here should be removed by the uninstaller
     # (see section "uninstall")
     file "${INPUT_APPDIR}/${UNITEX_JAVA_FILE}"
-
-    # Store Unitex Java IDE (Java.last) Last Changed Date info
-    ${WriteRegLastChangedInfo} "Java" "${APP_IDE_KEY}\UnitexJavaIDE"
   ${MementoSectionEnd}  # IDESectionUnitex
 
   ${MementoSection} "GramLab Java IDE"  IDESectionGramLab
@@ -1752,9 +1714,6 @@ SectionGroup "Visual Integrated Environments"   IDESection
     # /r    : files and directories recursively searched
     # /x .* : exclude hide (files and directories)
     File /r /x .* "${INPUT_APPDIR}/assembly/*.*"
-
-    # Store GramLab Java IDE (GramLab.last) Last Changed Date info
-    ${WriteRegLastChangedInfo} "GramLab" "${APP_IDE_KEY}\GramLabJavaIDE"
   ${MementoSectionEnd}  # IDESectionGramLab
 SectionGroupEnd  # IDESection
 
@@ -2016,10 +1975,6 @@ section -ThirdPartySVNKitSection
     # Files added here should be removed by the uninstaller
     # (see section "Uninstall")
     file /nonfatal "${INPUT_LIBRARYDIR}/svnkitclient.jar"
-
-    # FIXME(martinec) Actually SVNKit.last doesn't exist in the /timestamp folder.
-    # Store SVNKit (SVNKit.last) Last Changed Date info
-    # ${WriteRegLastChangedInfo} "SVNKit" "${APP_THIRDPARTY_KEY}\SVNKit"
   ${endif}
 sectionEnd  # -ThirdPartySVNKitSection
 
@@ -2109,10 +2064,6 @@ sectionEnd  # -InstallJRE
 
     # Restore overwrite
     SetOverwrite on
-
-    # Store language resource (LangName.last) Last Changed Date info
-    ${WriteRegLastChangedInfo} "${LangName}" "${APP_LANGRES_KEY}\${LangName}"
-
   ${MementoSectionEnd}  # LangResSection${SectionName}
 !macroend #  _AddLangResSection
 
@@ -2181,15 +2132,14 @@ SectionGroup "Source Code"                            SrcSection
     SetDetailsPrint listonly
 
     # Core Components source
-    # TODO(martinec) Why not deliver a single C++.zip file as with Java.zip?
-    # TODO(martinec) Perhaps a better name would be "Core" and not "C++"
+    # TODO(martinec) Perhaps a better name would be "Core" and not "unitex-core"
     # /r : recursive, /x exclude
-    setOutPath "$INSTDIR\${SRC_DIRNAME}\C++"
-    File /r /x .* "${INPUT_SRCDIR}/C++/*.*"
+    setOutPath "$INSTDIR\${SRC_DIRNAME}\unitex-core"
+    File /r /x .* "${INPUT_SRCDIR}/unitex-core/*.*"
 
-    # Core Components SVN Log
+    # Core Components GIT Log
     setOutPath "$INSTDIR\${SRC_DIRNAME}"
-    file /nonfatal "${INPUT_SRCDIR}/log_svn_C++.txt"
+    file /nonfatal "${INPUT_SRCDIR}/unitex-core.txt"
   ${MementoSectionEnd}
 
   ${MementoSection}  "Unitex Java IDE" SrcSectionUnitex
@@ -2200,11 +2150,11 @@ SectionGroup "Source Code"                            SrcSection
 
     # Unitex Java IDE source
     setOutPath "$INSTDIR\${SRC_DIRNAME}"
-    File "${INPUT_SRCDIR}/Java.zip"
+    File "${INPUT_SRCDIR}/gramlab-ide.zip"
 
-    # Unitex Java IDE SVN Log
+    # Unitex Java IDE GIT Log
     setOutPath "$INSTDIR\${SRC_DIRNAME}"
-    file /nonfatal "${INPUT_SRCDIR}/log_svn_Java.txt"
+    file /nonfatal "${INPUT_SRCDIR}/gramlab-ide.txt"
   ${MementoSectionEnd}
 
   # FIXME(martinec) currently GramLab source code is not available in the main
@@ -2220,9 +2170,9 @@ SectionGroup "Source Code"                            SrcSection
     ;# FIXME(martinec) currently this file is not available
     ;;File "${INPUT_SRCDIR}/GramLab.zip"
 
-    ;# GramLab Java IDE SVN Log
+    ;# GramLab Java IDE GIT Log
     ;setOutPath "$INSTDIR\${SRC_DIRNAME}"
-    ;file /nonfatal "${INPUT_SRCDIR}/log_svn_Gramlab.txt"
+    ;file /nonfatal "${INPUT_SRCDIR}/gramlab-ide.txt"
   ;${MementoSectionEnd}
 SectionGroupEnd  # SrcSection
 !else   # -DSETUP_NO_SOURCES_SECTION
@@ -2251,11 +2201,6 @@ SectionGroup "User Manual"                    ManSection
     # (see section "Uninstall")
     #     /oname=UnitexManual${VER_MAJOR}.${VER_MINOR}.pdf
     File "/oname=UnitexManual.pdf" "${INPUT_MANDIR}/en/UnitexManual.pdf"
-
-    # Store manual (Manual_en.last) Last Changed Date info
-    # FIXME(martinec) Actually Manual_en.last doesn't currently exist in the
-    # /timestamp folder
-    ;${WriteRegLastChangedInfo} "Manual_en" "${APP_MAN_KEY}\en"
   ${MementoSectionEnd}
 
   ${MementoSection}  "French"                 ManSectionFR
@@ -2270,11 +2215,6 @@ SectionGroup "User Manual"                    ManSection
     # (see section "Uninstall")
     #    "/oname=ManuelUnitex${VER_MAJOR}.${VER_MINOR}.pdf"
     File "/oname=ManuelUnitex.pdf" "${INPUT_MANDIR}/fr/ManuelUnitex.pdf"
-
-    # Store manual (Manual_fr.last) Last Changed Date info
-    # FIXME(martinec) Actually Manual_fr.last doesn't currently exist in the
-    # /timestamp folder
-    ;${WriteRegLastChangedInfo} "Manual_fr" "${APP_MAN_KEY}\fr"
   ${MementoSectionEnd}
 SectionGroupEnd  # ManSection
 !else   # -DSETUP_NO_MANUAL_SECTION
