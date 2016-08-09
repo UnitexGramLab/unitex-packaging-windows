@@ -4,12 +4,12 @@
 #  ensure if any command fails the entire build script fails
 set -eo pipefail
 
-NSIS_VERSION="3.0b0"
+NSIS_VERSION="3.0"
 NSIS_NAME="nsis"
 NSIS_DIST="$NSIS_NAME-$NSIS_VERSION"
 NSIS_SOURCE="$NSIS_DIST-src"
-NSIS_MIRROR="http://iweb.dl.sourceforge.net/project/$NSIS_NAME"
-NSIS_RELEASE="$NSIS_MIRROR/NSIS%203%20Pre-release/$NSIS_VERSION"
+NSIS_MIRROR="http://heanet.dl.sourceforge.net/project/$NSIS_NAME"
+NSIS_RELEASE="$NSIS_MIRROR/NSIS%203/$NSIS_VERSION"
 
 curl -s "$NSIS_RELEASE/$NSIS_DIST.zip" -o "$NSIS_DIST.zip"
 unzip "$NSIS_DIST"
