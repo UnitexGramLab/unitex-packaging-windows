@@ -2132,10 +2132,14 @@ SectionGroup "Source Code"                            SrcSection
     SetDetailsPrint listonly
 
     # Core Components source
-    # TODO(martinec) Perhaps a better name would be "Core" and not "unitex-core"
-    # /r : recursive, /x exclude
     setOutPath "$INSTDIR\${SRC_DIRNAME}\unitex-core"
-    File /r /x .* "${INPUT_SRCDIR}/unitex-core/*.*"
+    # /r : recursive, /x exclude
+    File /nonfatal /r /x .* "${INPUT_SRCDIR}/unitex-core/*.*"
+
+    # Backward compatibility with Unitex/GramLab 3.1    
+    setOutPath "$INSTDIR\${SRC_DIRNAME}\C++"
+    # /r : recursive, /x exclude
+    File /nonfatal /r /x .* "${INPUT_SRCDIR}/C++/*.*"
 
     # Core Components GIT Log
     setOutPath "$INSTDIR\${SRC_DIRNAME}"
@@ -2150,8 +2154,11 @@ SectionGroup "Source Code"                            SrcSection
 
     # Unitex Java IDE source
     setOutPath "$INSTDIR\${SRC_DIRNAME}"
-    File "${INPUT_SRCDIR}/gramlab-ide.zip"
-
+    File /nonfatal "${INPUT_SRCDIR}/gramlab-ide.zip"
+    
+    # Backward compatibility with Unitex/GramLab 3.1    
+    File /nonfatal "${INPUT_SRCDIR}/Java.zip"
+    
     # Unitex Java IDE GIT Log
     setOutPath "$INSTDIR\${SRC_DIRNAME}"
     file /nonfatal "${INPUT_SRCDIR}/gramlab-ide.txt"
