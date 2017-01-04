@@ -136,7 +136,7 @@ Contact unitex-devel@univ-mlv.fr for further inquiries.
 
 --
 
-Copyright (C) 2016 Université Paris-Est Marne-la-Vallée
+Copyright (C) 2017 Université Paris-Est Marne-la-Vallée
 
 [nsis]: http://nsis.sourceforge.net
 [unitexgramlab]: http://unitexgramlab.org
