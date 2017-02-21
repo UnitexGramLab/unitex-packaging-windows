@@ -25,7 +25,8 @@ env:
 notifications:
   email:
     recipients:
-      - unitex-devel@univ-mlv.fr
+      # travis encrypt "ci@example.org" --add notifications.email.recipients
+      secure: VNLhC/BISjjwYQsd8xjdgitfgHvfRMrxkNYE3WQbOKcBUpYYUe2DH7toRsD2GdB2SjrKB6Iov+fp4Um+xhOQfNRStb5M73UsIUJetQwvkz9bNVERafq9Nng8b03LcXynV5XjGov1sxKS7xF1j5CYWIrQpKkQ15WOgUKrAI0kNIbxhApuZ409OEGA2NwKACRKXE9l8MA0WZlYB/D+t2o1i/6AeLpodxLqUVHhMjaxwFmNUMkz4Kv91RULG5iAvut8rquetkPVm6xU3lgkc/AnyDKeQSBdzVvtjUGzivZ5EWFse22d2hWwd3m5tWTDevr0+kQ37snpVRQANJGTtMZDxbVKr+aDC5Lm+CcVQaqES1EqWKYZypHlYDGjzb/zPQBkK3gFvuDeGLlYoVSjSXsmxN/Mrpik2S/kQlnDgeNbGohFW2+zNLOm5/Sp/7yiDt4ffFzz6X0wHQf49jX9wSA/x7PolWGCJJVY0vX+aWgKPpIPKjZe0JT89NUbtp1YR/8Hhjvv9aJ+F1NF6Uc12CxEdw1X/xqbJHTWzZgKm30b4bdCK+l2xcCj+7+QKP4CRFcuQxGE5s3WNfzRjqbdlhT6Yu73HfP9UQCAA6W8eh6G3h1a8NbvBZcWPWn6Bkz8a5fI6v1oBC2wu8Qx9uGa3DRql9HEvLszT/tHdiYeAgADMZ8=
     on_success: change
     on_failure: always
   slack:
