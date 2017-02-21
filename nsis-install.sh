@@ -1,23 +1,23 @@
-#!/bin/bash
+#!/bin/bash -x
 # martinec
 
 #  ensure if any command fails the entire build script fails
 set -eo pipefail
 
-NSIS_VERSION="3.0"
+NSIS_VERSION="3.01"
 NSIS_NAME="nsis"
 NSIS_DIST="$NSIS_NAME-$NSIS_VERSION"
 NSIS_SOURCE="$NSIS_DIST-src"
-NSIS_MIRROR="http://heanet.dl.sourceforge.net/project/$NSIS_NAME"
+NSIS_MIRROR="http://downloads.sourceforge.net/project/$NSIS_NAME"
 NSIS_RELEASE="$NSIS_MIRROR/NSIS%203/$NSIS_VERSION"
 
-curl -s "$NSIS_RELEASE/$NSIS_DIST.zip" -o "$NSIS_DIST.zip"
+curl -L -s "$NSIS_RELEASE/$NSIS_DIST.zip" -o "$NSIS_DIST.zip"
 unzip "$NSIS_DIST"
 mv "$NSIS_DIST" "$NSIS_NAME"
 export NSISDIR
 NSISDIR="$(readlink -f "$NSIS_NAME")"
 
-curl -s "$NSIS_RELEASE/$NSIS_SOURCE.tar.bz2" -o "$NSIS_SOURCE.tar.bz2"
+curl -L -s "$NSIS_RELEASE/$NSIS_SOURCE.tar.bz2" -o "$NSIS_SOURCE.tar.bz2"
 tar -xvf "$NSIS_SOURCE.tar.bz2"
 
 if [ "$NSIS_VERSION" == "3.0a2" ]; then
