@@ -42,7 +42,7 @@ before_install:
   - "./nsis-install.sh"
 
 install:
- - wget http://unitex.univ-mlv.fr/releases/${VER_RELEASE}/source/Unitex-GramLab-${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}-source-distribution.zip && unzip Unitex-GramLab-${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}-source-distribution.zip
+ - wget http://unitexgramlab.org/releases/${VER_RELEASE}/source/Unitex-GramLab-${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}-source-distribution.zip && unzip Unitex-GramLab-${VER_MAJOR}.${VER_MINOR}${VER_SUFFIX}-source-distribution.zip
 
 script:
   - makensis -VERSION
