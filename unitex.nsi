@@ -718,10 +718,10 @@ ManifestSupportedOS all
 # Unitex/GramLab related URLs
 # =============================================================================
 !define HOMEPAGE_URL  "http://unitexgramlab.org"
-!define ABOUT_URL     "${HOMEPAGE_URL}/index.php?page=1"
-!define UPDATE_URL    "${HOMEPAGE_URL}/index.php?page=3"
-!define BUG_URL       "${HOMEPAGE_URL}/index.php?page=6"
-!define LGPLLR_URL    "https://spdx.org/licenses/LGPLLR.html"
+!define ABOUT_URL     "${HOMEPAGE_URL}/#about"
+!define UPDATE_URL    "${HOMEPAGE_URL}/#downloads"
+!define BUG_URL       "${HOMEPAGE_URL}/how-to-report-a-bug"
+!define LGPLLR_URL    "${HOMEPAGE_URL}/lgpllr"
 !define LGPL_URL      "http://www.gnu.org/licenses/lgpl.html"
 !define FORUM_URL     "http://forum.unitexgramlab.org"
 
