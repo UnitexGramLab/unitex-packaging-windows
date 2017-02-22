@@ -340,7 +340,7 @@ ManifestSupportedOS all
    -DSETUP_NO_INSTTYPES${NEW_LINE}${OPTIONS_SPACE}\
    -DSETUP_NO_SOURCES_SECTION${NEW_LINE}${OPTIONS_SPACE}\
    -DSETUP_NO_UNICODE${NEW_LINE}${OPTIONS_SPACE}\
-   -DSETUP_SHOW_SPLASH_SCREEN${NEW_LINE}${OPTIONS_SPACE}\
+   -DSETUP_NO_SPLASH_SCREEN${NEW_LINE}${OPTIONS_SPACE}\
    -DVER_ANONYMOUS_SUFFIX=suffix${NEW_LINE}${OPTIONS_SPACE}\
    -DVER_ARCH_64${NEW_LINE}${OPTIONS_SPACE}\
    -DVER_CURRENTYEAR=value${NEW_LINE}${OPTIONS_SPACE}\
@@ -1266,6 +1266,7 @@ ReserveFile "theme/install.ico"
 ReserveFile "theme/uninstall.ico"
 ReserveFile "theme/wizard_install.bmp"
 ReserveFile "theme/wizard_uninstall.bmp"
+ReserveFile "theme/splash.bmp"
 ReserveFile "${INPUT_APPDIR}/${LGPL_FILE}"
 ReserveFile "${INPUT_APPDIR}/${LGPLLR_FILE}"
 ReserveFile /plugin "*.dll"
@@ -1358,19 +1359,19 @@ FunctionEnd
 # SplashScreen
 # @source Splash Screen example from NSIS distribution (Splash/Example.nsi)
 # =============================================================================
-!ifdef SETUP_SHOW_SPLASH_SCREEN
+!ifndef SETUP_NO_SPLASH_SCREEN
   function SplashScreen
     # The plugins dir is automatically deleted when the installer finish
     InitPluginsDir
     # TODO(martinec) create splash.bmp
     File /oname=$PLUGINSDIR\splash.bmp "theme/splash.bmp"
 
-    splash::show 1000 $PLUGINSDIR\splash
+    splash::show 2000 $PLUGINSDIR\splash
 
     Pop $0 ; '1' splash screen closed early,
            ; '0' closed normally, and '-1' if some error occurred.
   functionEnd
-!endif  # !ifdef SETUP_SHOW_SPLASH_SCREEN
+!endif  # !ifndef SETUP_NO_SPLASH_SCREEN
 
 # =============================================================================
 # GetLocaleLanguageName
@@ -2815,7 +2816,7 @@ function .onInit
   !insertmacro MULTIUSER_INIT
 
   # Show setup installer Splash Screen
-  !ifdef SETUP_SHOW_SPLASH_SCREEN
+  !ifndef SETUP_NO_SPLASH_SCREEN
     call SplashScreen
   !endif
 
