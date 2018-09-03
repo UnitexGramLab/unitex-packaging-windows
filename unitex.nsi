@@ -1559,6 +1559,13 @@ function GetLocaleLanguageName
     !ifdef  ${LANG_THAI}
     StrCpy  $locale_language_id                      ${LANG_THAI}
     !endif
+  # Chinese
+  ${ElseIf} $1   == 0x04
+    StrCpy  $locale_language_code                    "zh"
+    StrCpy  $locale_language_name                    "Chinese"
+    !ifdef  ${LANG_CHINESE}
+    StrCpy  $locale_language_id                      ${LANG_CHINESE}
+    !endif
   # Force English by default
   ${Else}
     StrCpy  $locale_language_code                    "en"
