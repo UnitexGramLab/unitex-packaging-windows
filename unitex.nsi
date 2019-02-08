@@ -1,7 +1,7 @@
 # =============================================================================
 # Unitex/GramLab Setup Installer for Windows
 # =============================================================================
-# Copyright (C) 2014-2017 Université Paris-Est Marne-la-Vallée <unitex@univ-mlv.fr>
+# Copyright (C) 2014-2019 Université Paris-Est Marne-la-Vallée <unitex@univ-mlv.fr>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
