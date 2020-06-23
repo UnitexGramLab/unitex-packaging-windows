@@ -136,9 +136,9 @@ Contact unitex-devel@univ-mlv.fr for further inquiries.
 
 --
 
-Copyright (C) 2019 Université Paris-Est Marne-la-Vallée
+Copyright (C) 2020 Université Paris-Est Marne-la-Vallée
 
 [nsis]: http://nsis.sourceforge.net
-[unitexgramlab]: http://unitexgramlab.org
+[unitexgramlab]: https://unitexgramlab.org
 [installer32]: http://unitex.univ-mlv.fr/releases/latest-stable/win32/
 [installer64]: http://unitex.univ-mlv.fr/releases/latest-stable/win32/
