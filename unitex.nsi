@@ -1713,7 +1713,7 @@ SectionGroup "Visual Integrated Environments"   IDESection
     file "${INPUT_APPDIR}/${GRAMLAB_JAVA_FILE}"
 
     # gramlab-super-pom
-    file "${INPUT_APPDIR}/pom.xml"
+    file /nonfatal "${INPUT_APPDIR}/pom.xml"
     
     # maven assembly files
     SetOutPath "$INSTDIR\${APP_DIRNAME}\assembly"
@@ -1721,7 +1721,7 @@ SectionGroup "Visual Integrated Environments"   IDESection
     # recursive install "assembly" directory contents
     # /r    : files and directories recursively searched
     # /x .* : exclude hide (files and directories)
-    File /r /x .* "${INPUT_APPDIR}/assembly/*.*"
+    File /nonfatal /r /x .* "${INPUT_APPDIR}/assembly/*.*"
   ${MementoSectionEnd}  # IDESectionGramLab
 SectionGroupEnd  # IDESection
 
