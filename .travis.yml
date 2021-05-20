@@ -17,8 +17,8 @@ git:
 
 env:
   matrix:
-    - VER_RELEASE='latest-alpha'  VER_MAJOR='3' VER_MINOR='2' VER_SUFFIX='alpha'
-    - VER_RELEASE='latest-beta'   VER_MAJOR='3' VER_MINOR='2' VER_SUFFIX='beta'
+    - VER_RELEASE='latest-alpha'  VER_MAJOR='3' VER_MINOR='3' VER_SUFFIX='alpha'
+    - VER_RELEASE='latest-beta'   VER_MAJOR='3' VER_MINOR='3' VER_SUFFIX='beta'
     - VER_RELEASE='latest-rc'     VER_MAJOR='3' VER_MINOR='2' VER_SUFFIX='rc'    
     - VER_RELEASE='latest-stable' VER_MAJOR='3' VER_MINOR='2' VER_SUFFIX=''     
 
