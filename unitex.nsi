@@ -525,6 +525,10 @@ ManifestSupportedOS all
 !define  APP_DIRNAME                "App"
 !define /ifndef INPUT_APPDIR        "${INPUT_UNITEXDIR}/${APP_DIRNAME}"
 
+# Unitex/GramLab ELG extensions directory
+!define  ELG_DIRNAME                "elg"
+!define /ifndef INPUT_ELGDIR        "${INPUT_APPDIR}/${ELG_DIRNAME}"
+
 # Unitex/GramLab Manual directory
 !define  MAN_DIRNAME                "manual"
 !define /ifndef INPUT_MANDIR        "${INPUT_APPDIR}/${MAN_DIRNAME}"
@@ -1625,6 +1629,14 @@ ${MementoSection} "Core Components (required)" CoreSection
   # /r    : files and directories recursively searched
   # /x .* : exclude hide (files and directories)
   file /r /x .* "${INPUT_PLATFORMDIR}/win${BITS}/*.*"
+
+  # elg extensions
+  SetOutPath "$INSTDIR\${APP_DIRNAME}\${ELG_DIRNAME}"
+
+  # recursive install "elg" directory contents
+  # /r    : files and directories recursively searched
+  # /x .* : exclude hide (files and directories)
+  File /nonfatal /r /x .* "${INPUT_ELGDIR}/*.*"
  
   # disclaimers
   SetOutPath "$INSTDIR\${APP_DIRNAME}\${DISCLAIMERS_DIRNAME}"
@@ -3149,6 +3161,12 @@ Function un.CleanDirectories
   DetailPrint "Deleting directories | \${XALIGN_DIRNAME}..."
   SetDetailsPrint listonly
   rmDir /r "$INSTDIR\${XALIGN_DIRNAME}"
+
+  # recursive (/r) remove the \App\elg directory
+  SetDetailsPrint textonly
+  DetailPrint "Deleting directories | \${APP_DIRNAME}\elg..."
+  SetDetailsPrint listonly
+  rmDir /r "$INSTDIR\${APP_DIRNAME}\elg"
 
   # recursive (/r) remove the \App\manual directory
   !ifndef SETUP_NO_MANUAL_SECTION
