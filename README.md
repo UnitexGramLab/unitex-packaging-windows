@@ -1,4 +1,4 @@
-# Unitex/GramLab Setup Installer for Windows  [![Build Status](https://travis-ci.org/UnitexGramLab/unitex-packaging-windows.svg?branch=master)](https://travis-ci.org/UnitexGramLab/unitex-packaging-windows)
+# Unitex/GramLab Setup Installer for Windows  [![Build Status](https://api.travis-ci.com/UnitexGramLab/unitex-packaging-windows.svg?branch=master)](https://app.travis-ci.com/UnitexGramLab/unitex-packaging-windows)
 
 > [Unitex/GramLab][unitexgramlab] is an open source, cross-platform, multilingual, lexicon- and grammar-based corpus processing suite.
 
