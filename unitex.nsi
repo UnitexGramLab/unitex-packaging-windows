@@ -875,7 +875,7 @@ Var locale_language_id
 !define JRE_DOWNLOAD      "http://www.java.com/getjava"
 
 # JRE bundles URL prefix
-!define /ifndef JRE_INSTALLER_URL_PREFIX "http://javadl.sun.com/webapps/\
+!define /ifndef JRE_INSTALLER_URL_PREFIX "https://javadl.oracle.com/webapps/\
                                           download/AutoDL?BundleId"
 
 # =============================================================================
@@ -922,7 +922,7 @@ Var locale_language_id
 
 # Fallback when JRE_INSTALLER is not defined
 !ifndef JRE_INSTALLER
-  !define /ifndef  JRE_INSTALLER_BUNDLEID "83383"
+  !define /ifndef  JRE_INSTALLER_BUNDLEID "245058_d3c52aa6bfa54d3ca74e617f18309292"
   !define JRE_INSTALLER "${JRE_INSTALLER_URL_PREFIX}=${JRE_INSTALLER_BUNDLEID}"
 !endif
 
