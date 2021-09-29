@@ -869,7 +869,7 @@ Var locale_language_name
 Var locale_language_id
 
 # Minimal JRE version requested
-!define JRE_VERSION       "1.7"
+!define JRE_VERSION       "1.8"
 
 # URL to manually download the JRE
 !define JRE_DOWNLOAD      "http://www.java.com/getjava"
