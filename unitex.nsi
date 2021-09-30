@@ -1,7 +1,7 @@
 # =============================================================================
 # Unitex/GramLab Setup Installer for Windows
 # =============================================================================
-# Copyright (C) 2014-2021 Université Paris-Est Marne-la-Vallée <unitex@univ-mlv.fr>
+# Copyright (C) 2014-2021 Université Gustave Eiffel <unitex@univ-mlv.fr>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -444,10 +444,10 @@ ManifestSupportedOS all
 # =============================================================================
 !define APPNAME          "Unitex-GramLab"
 !define PRETTYAPPNAME    "Unitex/GramLab"
-!define COMPANYNAME      "Université Paris-Est Marne-la-Vallée"
+!define COMPANYNAME      "Université Gustave Eiffel"
 !define SHORTDESCRIPTION "corpus processing suite"
 !define DESCRIPTION      "the next-generation, open source, cross-platform, \
-                          multilingual, lexicon- and grammar-based ${SHORTDESCRIPTION}"
+                          multilingual, lexicon- and extended grammar-based ${SHORTDESCRIPTION}"
 
 # Customize pretty version and pretty caption strings
 !ifdef VER_UNSTABLE
