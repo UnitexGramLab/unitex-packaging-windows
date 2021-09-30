@@ -1637,6 +1637,14 @@ ${MementoSection} "Core Components (required)" CoreSection
   # /r    : files and directories recursively searched
   # /x .* : exclude hide (files and directories)
   File /nonfatal /r /x .* "${INPUT_ELGDIR}/*.*"
+
+  # libraries
+  SetOutPath "$INSTDIR\${APP_DIRNAME}\${LIBRARY_DIRNAME}"
+
+  # recursive install "lib" directory contents
+  # /r    : files and directories recursively searched
+  # /x .* : exclude hide (files and directories)
+  File /r /x .* "${INPUT_LIBRARYDIR}/*.*"
  
   # disclaimers
   SetOutPath "$INSTDIR\${APP_DIRNAME}\${DISCLAIMERS_DIRNAME}"
@@ -1677,10 +1685,6 @@ section -ThirdParty_XAlignSection
   setOutPath "$INSTDIR\${APP_DIRNAME}"
   file /nonfatal "${INPUT_APPDIR}/XAlign.jar"
   
-  SetOutPath "$INSTDIR\${APP_DIRNAME}\${LIBRARY_DIRNAME}"
-  file /nonfatal "${INPUT_LIBRARYDIR}/xercesImpl.jar"
-  file /nonfatal "${INPUT_LIBRARYDIR}/xml-apis.jar"
-
   # XAlign Unitex folder
   setOutPath "$INSTDIR\${XALIGN_DIRNAME}"
 
@@ -1979,24 +1983,6 @@ FunctionEnd  # MUI_PAGE_DIRECTORY_Workspace_LeaveFunction
 # =============================================================================
 # Third Party Visual IDEs Components
 # =============================================================================
-
-# =============================================================================
-# SVNKit
-# =============================================================================
-# SVNKit is an Open Source pure Java Subversion library
-# For additional information, see http://svnkit.com/
-# =============================================================================
-section -ThirdPartySVNKitSection
-  # Only if at least one IDE section was selected
-  ${If}   ${SectionIsSelected} ${IDESectionUnitex}
-  ${OrIf} ${SectionIsSelected} ${IDESectionGramLab}
-    setOutPath "$INSTDIR\${APP_DIRNAME}\${LIBRARY_DIRNAME}"
-
-    # Files added here should be removed by the uninstaller
-    # (see section "Uninstall")
-    file /nonfatal "${INPUT_LIBRARYDIR}/svnkitclient.jar"
-  ${endif}
-sectionEnd  # -ThirdPartySVNKitSection
 
 # =============================================================================
 # JRE Installation
@@ -3091,9 +3077,6 @@ Function un.CleanFiles
   delete "$INSTDIR\${APP_DIRNAME}\${UNITEX_JAVA_FILE}"
   delete "$INSTDIR\${APP_DIRNAME}\UnitexToolLogger.exe"
   delete "$INSTDIR\${APP_DIRNAME}\XAlign.jar"
-  delete "$INSTDIR\${APP_DIRNAME}\${LIBRARY_DIRNAME}\svnkitclient.jar"
-  delete "$INSTDIR\${APP_DIRNAME}\${LIBRARY_DIRNAME}\xercesImpl.jar"
-  delete "$INSTDIR\${APP_DIRNAME}\${LIBRARY_DIRNAME}\xml-apis.jar"
 
   # Remove Language Resources
   Call un.CleanLangResFiles
@@ -3167,6 +3150,12 @@ Function un.CleanDirectories
   DetailPrint "Deleting directories | \${APP_DIRNAME}\elg..."
   SetDetailsPrint listonly
   rmDir /r "$INSTDIR\${APP_DIRNAME}\elg"
+
+  # recursive (/r) remove the \App\lib directory
+  SetDetailsPrint textonly
+  DetailPrint "Deleting directories | \${APP_DIRNAME}\lib..."
+  SetDetailsPrint listonly
+  rmDir /r "$INSTDIR\${APP_DIRNAME}\lib"
 
   # recursive (/r) remove the \App\manual directory
   !ifndef SETUP_NO_MANUAL_SECTION
