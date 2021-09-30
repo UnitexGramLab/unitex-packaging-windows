@@ -109,7 +109,6 @@
 # =============================================================================
 # Setup installer command line parameters
 # =============================================================================
-# TODO(laporte) Append this to the Unitex/GramLab Manual
 # The produced Unitex/GramLab Windows setup installer accepts several
 # command line parameters. Some common options are :
 #
@@ -130,8 +129,7 @@
 # Setup installer features
 # =============================================================================
 # - User selection of Unitex/GramLab installation components (Core Components,
-#   Visual IDEs, Language Resources, Source Code, User Manual, Start Menu
-#   and Desktop Shortcuts).
+#   Visual IDEs, Language Resources, Source Code, Start Menu and Desktop Shortcuts).
 # - Several installation types : Full, Standard, Minimal and Custom.
 # - Automatic JRE (Java Runtime Edition) detection. If the JRE isn't installed,
 #   a dialog allows the user to choose between a manual or automatic install.
@@ -203,8 +201,7 @@
 # =============================================================================
 # When this script should be modified or updated ?
 # =============================================================================
-# New Core files              (/App)          ? Yes. (see 'CoreSection')
-# New Manual translation      (/App/manual)   ? Yes. (see 'ManSection')
+# New Core files              (/App)          ? No.  (automatically updated)
 # New Source files            (/Src)          ? No.  (automatically updated)
 # New directory language      (/LANG_NAME)    ? No.  (automatically detected)
 # New language resources      (/LANG_NAME/*)  ? No.  (automatically added)
@@ -249,9 +246,6 @@ ManifestSupportedOS all
   # Omit the Sources Section
   !define /ifndef SETUP_NO_SOURCES_SECTION
 
-  # Omit the Manual Section
-  !define /ifndef SETUP_NO_MANUAL_SECTION
-
   # set the StrFunc library verbosity to  4 (all)
   !define /ifndef  STRFUNC_VERBOSITY   4
 
@@ -272,9 +266,6 @@ ManifestSupportedOS all
 !ifdef ANONYMOUS_BUILD
   # Write the final installer in the current directory
   !define /ifndef OUTPUT_SETUP_DIR   "."
-
-  # Always omit the Manual Section
-  !define /ifndef SETUP_NO_MANUAL_SECTION
 
   # Always omit to store in the registry the Last Changed Date information
   # available in the timestamp directory (timestamp/*.last)
@@ -525,30 +516,6 @@ ManifestSupportedOS all
 !define  APP_DIRNAME                "App"
 !define /ifndef INPUT_APPDIR        "${INPUT_UNITEXDIR}/${APP_DIRNAME}"
 
-# Unitex/GramLab ELG extensions directory
-!define  ELG_DIRNAME                "elg"
-!define /ifndef INPUT_ELGDIR        "${INPUT_APPDIR}/${ELG_DIRNAME}"
-
-# Unitex/GramLab Manual directory
-!define  MAN_DIRNAME                "manual"
-!define /ifndef INPUT_MANDIR        "${INPUT_APPDIR}/${MAN_DIRNAME}"
-
-# Unitex/GramLab Platform directory
-!define  PLATFORM_DIRNAME           "platform"
-!define /ifndef INPUT_PLATFORMDIR   "${INPUT_APPDIR}/${PLATFORM_DIRNAME}"
-
-# Unitex/GramLab Licenses directory
-!define  LICENSES_DIRNAME           "licenses"
-!define /ifndef INPUT_LICENSESDIR   "${INPUT_APPDIR}/${LICENSES_DIRNAME}"
-
-# Unitex/GramLab Disclaimers directory
-!define  DISCLAIMERS_DIRNAME         "disclaimers"
-!define /ifndef INPUT_DISCLAIMERSDIR "${INPUT_APPDIR}/${DISCLAIMERS_DIRNAME}"
-
-# Unitex/GramLab Lib directory
-!define  LIBRARY_DIRNAME             "lib"
-!define /ifndef INPUT_LIBRARYDIR     "${INPUT_APPDIR}/${LIBRARY_DIRNAME}"
-
 # Unitex/GramLab /Src path
 !define  SRC_DIRNAME                "Src"
 !define /ifndef INPUT_SRCDIR        "${INPUT_UNITEXDIR}/${SRC_DIRNAME}"
@@ -612,12 +579,6 @@ ManifestSupportedOS all
   # other resources are automatically detected and further checked
   # and processed
   ${CheckIfDirExist}    "${INPUT_UNITEXDIR}/English"
-
-  # Unitex/GramLab Manual directory (Unitex/App/manual)
-  # -DANONYMOUS_BUILD flag defines -DSETUP_NO_MANUAL_SECTION
-  !ifndef SETUP_NO_MANUAL_SECTION
-    ${CheckIfDirExist}  "${INPUT_MANDIR}"
-  !endif  # SETUP_NO_MANUAL_SECTION
 
   # Unitex/GramLab timestamp directory (./timestamp) contains timestamp
   # .last-files with the Last Changed Date of an Unitex/GramLab component.
@@ -764,11 +725,11 @@ ManifestSupportedOS all
 !define APP_MAN_KEY           "${APP_REGISTRY_KEY}\UserManuals"
 
 # Visual IDEs sub-key
-# Software\Unitex-GramLab\VisualIntegratedEnvironments
-!define APP_IDE_KEY           "${APP_REGISTRY_KEY}\VisualIntegratedEnvironments"
+# Software\Unitex-GramLab\VisualIDE
+!define APP_IDE_KEY           "${APP_REGISTRY_KEY}\VisualIDE"
 
 # Windows unistall key UUID
-!define UNINSTALL_KEY_UUID    "{E55EFA6F-09C4-4780-BFAB-B190984B4EEA}"
+!define UNINSTALL_KEY_UUID    "{BA5DCC60-2192-11EC-9621-0242AC130002}"
 
 # Windows unistall key
 !define UNINSTALL_SETTINGS_KEY "Software\Microsoft\Windows\CurrentVersion\\
@@ -1589,7 +1550,7 @@ functionEnd
 # =============================================================================
 # - Core Components
 # - Third Party Core Components (hide)
-# - Visual Integrated Environments
+# - Visual IDEs
 # - Third Party Visual IDEs Components (hide)
 # - JRE installation (hide)
 # - Language Resources
@@ -1618,49 +1579,16 @@ ${MementoSection} "Core Components (required)" CoreSection
   # if it does not exist.
   setOutPath "$INSTDIR\${APP_DIRNAME}"
 
-  # Files added here should be removed by the uninstaller
-  # (see section "uninstall")
-
-  # icons
-  file "${INPUT_APPDIR}/${ICON_FILE}"
+  # recursive install "App" directory contents
+  # /r    : files and directories recursively searched
+  # /x .* : exclude hide (files and directories)
+  File /r /x .* "${INPUT_APPDIR}/*.*"
  
-  # UnitexToolLogger
+  # UnitexToolLogger.exe
   # recursive install "App/platform/win{BITS}/" directory contents
   # /r    : files and directories recursively searched
   # /x .* : exclude hide (files and directories)
-  file /r /x .* "${INPUT_PLATFORMDIR}/win${BITS}/*.*"
-
-  # elg extensions
-  SetOutPath "$INSTDIR\${APP_DIRNAME}\${ELG_DIRNAME}"
-
-  # recursive install "elg" directory contents
-  # /r    : files and directories recursively searched
-  # /x .* : exclude hide (files and directories)
-  File /nonfatal /r /x .* "${INPUT_ELGDIR}/*.*"
-
-  # libraries
-  SetOutPath "$INSTDIR\${APP_DIRNAME}\${LIBRARY_DIRNAME}"
-
-  # recursive install "lib" directory contents
-  # /r    : files and directories recursively searched
-  # /x .* : exclude hide (files and directories)
-  File /r /x .* "${INPUT_LIBRARYDIR}/*.*"
- 
-  # disclaimers
-  SetOutPath "$INSTDIR\${APP_DIRNAME}\${DISCLAIMERS_DIRNAME}"
-  
-  # recursive install "disclaimers" directory contents
-  # /r    : files and directories recursively searched
-  # /x .* : exclude hide (files and directories)
-  File /r /x .* "${INPUT_DISCLAIMERSDIR}/*.*"
-  
-  # licenses
-  SetOutPath "$INSTDIR\${APP_DIRNAME}\${LICENSES_DIRNAME}"
-
-  # recursive install "licences" directory contents
-  # /r    : files and directories recursively searched
-  # /x .* : exclude hide (files and directories)
-  File /r /x .* "${INPUT_LICENSESDIR}/*.*"
+  file /r /x .* "${INPUT_APPDIR}/platform/win${BITS}/*.*"
 
   # Readme
   setOutPath "$INSTDIR"
@@ -1681,10 +1609,7 @@ ${MementoSectionEnd} #  CoreSection
 section -ThirdParty_XAlignSection
   # Files added here should be removed by the uninstaller
   # (see section "Uninstall")
-  # *.jar
-  setOutPath "$INSTDIR\${APP_DIRNAME}"
-  file /nonfatal "${INPUT_APPDIR}/XAlign.jar"
-  
+
   # XAlign Unitex folder
   setOutPath "$INSTDIR\${XALIGN_DIRNAME}"
 
@@ -1695,51 +1620,19 @@ section -ThirdParty_XAlignSection
 sectionEnd  #  -ThirdParty_XAlignSection
 
 # =============================================================================
-# Visual Integrated Environments
+# Visual IDEs
 # =============================================================================
-SectionGroup "Visual Integrated Environments"   IDESection
-  ${MementoSection}  "Unitex Java IDE"          IDESectionUnitex
-    SectionIn 1 2 3
-    SetDetailsPrint textonly
-    DetailPrint "Installing Visual Integrated Environment | Unitex Java IDE..."
-    SetDetailsPrint listonly
+${MementoSection}  "Visual IDE (required)"  IDESection
+  SectionIn 1 2 3 RO
+  SetDetailsPrint textonly
+  DetailPrint "Installing ${PRETTYAPPNAME} Visual IDE..."
+  SetDetailsPrint listonly
 
-    setOutPath "$INSTDIR\${APP_DIRNAME}"
+  setOutPath "$INSTDIR\${APP_DIRNAME}"
 
-    # Files added here should be removed by the uninstaller
-    # (see section "uninstall")
-    file "${INPUT_APPDIR}/${UNITEX_JAVA_FILE}"
-  ${MementoSectionEnd}  # IDESectionUnitex
-
-  ${MementoSection} "GramLab Java IDE"  IDESectionGramLab
-    SectionIn 1 2 3
-    SetDetailsPrint textonly
-    DetailPrint "Installing Visual Integrated Environment | GramLab Java IDE..."
-    SetDetailsPrint listonly
-
-    setOutPath "$INSTDIR\${APP_DIRNAME}"
-
-    # Files added here should be removed by the uninstaller
-    # (see section "Uninstall")
-
-    # GramLab Java IDE depends upon Unitex.jar
-    file "${INPUT_APPDIR}/${UNITEX_JAVA_FILE}"
-
-    # GramLab.jar
-    file "${INPUT_APPDIR}/${GRAMLAB_JAVA_FILE}"
-
-    # gramlab-super-pom
-    file /nonfatal "${INPUT_APPDIR}/pom.xml"
-    
-    # maven assembly files
-    SetOutPath "$INSTDIR\${APP_DIRNAME}\assembly"
-
-    # recursive install "assembly" directory contents
-    # /r    : files and directories recursively searched
-    # /x .* : exclude hide (files and directories)
-    File /nonfatal /r /x .* "${INPUT_APPDIR}/assembly/*.*"
-  ${MementoSectionEnd}  # IDESectionGramLab
-SectionGroupEnd  # IDESection
+  # Files added here should be removed by the uninstaller
+  # (see section "Uninstall")
+${MementoSectionEnd}  # IDESection
 
 # =============================================================================
 # Page components Leave Function
@@ -1754,19 +1647,13 @@ Function MUI_PAGE_COMPONENTS_LeaveFunction
   ; By default setup wizard will show the JRE installation page
   IntOp  $JRE_SETUP_HIDE_INFO_PAGE $JRE_SETUP_HIDE_INFO_PAGE & 0
 
-  ; Check if Unitex Java IDE was selected
-  SectionGetFlags ${IDESectionUnitex} $0
+  ; Check if the Visual IDE is selected
+  SectionGetFlags ${IDESection} $0
   IntOp $0 $0 & ${SF_SELECTED}
-  ; If Unitex Java IDE was select goto exit
+  ; If the Visual IDE was select goto exit
   IntCmp $0 ${SF_SELECTED} exit
 
-  ; Check if GramLab Java IDE was selected
-  SectionGetFlags ${IDESectionGramLab} $0
-  IntOp $0 $0 & ${SF_SELECTED}
-  ; If Unitex GramLab IDE was select goto exit
-  IntCmp $0 ${SF_SELECTED} exit
-
-  ; Both Unitex and GramLab IDEs were not selected
+  ; The IDE were not selected
   ; Hide Java Setup even if the JRE isn't installed
   IntOp  $JRE_SETUP_HIDE_INFO_PAGE $JRE_SETUP_HIDE_INFO_PAGE | 1
 exit:
@@ -1793,9 +1680,8 @@ FunctionEnd  # MUI_PAGE_COMPONENTS_LeaveFunction
 # Page components Pre Function
 # =============================================================================
 Function MUI_PAGE_DIRECTORY_Workspace_PreFunction
-  # Workspace page will be showed only if at least one IDE section was selected
-  ${IfNot}   ${SectionIsSelected} ${IDESectionUnitex}
-  ${OrIfNot} ${SectionIsSelected} ${IDESectionGramLab}
+  # Workspace page will be showed only if the IDE section was selected
+  ${IfNot}   ${SectionIsSelected} ${IDESection}
     Abort
   ${EndIf}
   # TODO(martinec) Check if workspace configuration files are already created
@@ -1941,7 +1827,7 @@ Function MUI_PAGE_DIRECTORY_Workspace_LeaveFunction
   ${EndIf}
 
   # Unitex workspace
-  ${If} ${SectionIsSelected} ${IDESectionUnitex}
+  ${If} ${SectionIsSelected} ${IDESection}
     # Create the Unitex workspace directory
     CreateDirectory "$WORKSPACE_DIR\${UNITEX_WORKSPACE_NAME}"
 
@@ -1956,10 +1842,10 @@ Function MUI_PAGE_DIRECTORY_Workspace_LeaveFunction
     FileOpen  $R0 "$PROFILE\${UNITEX_WORKSPACE_FILE}" w
     FileWrite $R0 "$WORKSPACE_DIR\${UNITEX_WORKSPACE_NAME}"
     FileClose $R0
-  ${EndIf}  # ${SectionIsSelected} ${IDESectionUnitex}
+  ${EndIf}  # ${SectionIsSelected} ${IDESection}
 
   # GramLab workspace
-  ${If} ${SectionIsSelected} ${IDESectionGramLab}
+  ${If} ${SectionIsSelected} ${IDESection}
     # Create the GramLab workspace directory
     CreateDirectory "$WORKSPACE_DIR\${GRAMLAB_WORKSPACE_NAME}"
 
@@ -1976,7 +1862,7 @@ Function MUI_PAGE_DIRECTORY_Workspace_LeaveFunction
     FileWrite $R0 "$WORKSPACE_DIR\${GRAMLAB_WORKSPACE_NAME}"
     FileWrite $R0 "$\r$\n"
     FileClose $R0
-  ${EndIf} #  ${SectionIsSelected} ${IDESectionGramLab}
+  ${EndIf} #  ${SectionIsSelected} ${IDESection}
 
 FunctionEnd  # MUI_PAGE_DIRECTORY_Workspace_LeaveFunction
 
@@ -1988,8 +1874,7 @@ FunctionEnd  # MUI_PAGE_DIRECTORY_Workspace_LeaveFunction
 # JRE Installation
 # =============================================================================
 section -InstallJRE
-  ${If}   ${SectionIsSelected} ${IDESectionUnitex}
-  ${OrIf} ${SectionIsSelected} ${IDESectionGramLab}
+  ${If}   ${SectionIsSelected} ${IDESection}
     call DownloadAndInstallJREIfNecessary
 
     # Verify JRE Installation and save JRE executable path
@@ -2080,7 +1965,7 @@ SectionGroup "Language Resources" LangResSection
 
   # Include English language resources
   # ${AddLangResSection} 'LANGUAGE NAME' 'SECTION_NAME' 'DEFAULT_RESLANG_INSTTYPEIDX'
-  ${AddLangResSection} 'English'              'English'   '1 2'
+  ${AddLangResSection} 'English'              'English'   '1 2 RO'
 
   # Dynamically include all other language resources
 
@@ -2140,45 +2025,27 @@ SectionGroup "Source Code"                            SrcSection
     # Core Components source
     setOutPath "$INSTDIR\${SRC_DIRNAME}\unitex-core"
     # /r : recursive, /x exclude
-    File /nonfatal /r /x .* "${INPUT_SRCDIR}/unitex-core/*.*"
+    File /nonfatal /r "${INPUT_SRCDIR}/unitex-core/*.*"
 
     # Core Components GIT Log
     setOutPath "$INSTDIR\${SRC_DIRNAME}"
     file /nonfatal "${INPUT_SRCDIR}/unitex-core.txt"
   ${MementoSectionEnd}
 
-  ${MementoSection}  "Unitex Java IDE" SrcSectionUnitex
+  ${MementoSection}  "Visual IDE" SrcSectionIDE
     SectionIn 1
     SetDetailsPrint textonly
-    DetailPrint "Installing Source Code | Unitex Java IDE..."
+    DetailPrint "Installing Source Code | Visual IDE..."
     SetDetailsPrint listonly
 
-    # Unitex Java IDE source
+    # IDE source
     setOutPath "$INSTDIR\${SRC_DIRNAME}"
     File /nonfatal "${INPUT_SRCDIR}/gramlab-ide.zip"
     
-    # Unitex Java IDE GIT Log
+    # IDE GIT Log
     setOutPath "$INSTDIR\${SRC_DIRNAME}"
     file /nonfatal "${INPUT_SRCDIR}/gramlab-ide.txt"
   ${MementoSectionEnd}
-
-  # FIXME(martinec) currently GramLab source code is not available in the main
-  # Unitex SVN Repository
-  ;${MementoSection}  "GramLab Java IDE" SrcSectionGramLab
-    ;SectionIn 1
-    ;SetDetailsPrint textonly
-    ;DetailPrint "Installing Source Code | GramLab Java IDE..."
-    ;SetDetailsPrint listonly
-
-    ;# GramLab Java IDE source
-    ;setOutPath "$INSTDIR\${SRC_DIRNAME}"
-    ;# FIXME(martinec) currently this file is not available
-    ;;File "${INPUT_SRCDIR}/GramLab.zip"
-
-    ;# GramLab Java IDE GIT Log
-    ;setOutPath "$INSTDIR\${SRC_DIRNAME}"
-    ;file /nonfatal "${INPUT_SRCDIR}/gramlab-ide.txt"
-  ;${MementoSectionEnd}
 SectionGroupEnd  # SrcSection
 !else   # -DSETUP_NO_SOURCES_SECTION
   # This is a workaround to preserve the installation indices returned by
@@ -2187,48 +2054,6 @@ SectionGroupEnd  # SrcSection
       SectionIn 1
   SectionEnd  # -HideSrcSection
 !endif  # SETUP_NO_SOURCES_SECTION
-
-# =============================================================================
-# User Manual
-# Remove this section from the final build passing -DSETUP_NO_MANUAL_SECTION
-# =============================================================================
-!ifndef SETUP_NO_MANUAL_SECTION
-SectionGroup "User Manual"                    ManSection
-  ${MementoSection}  "English"                ManSectionEN
-    SectionIn 1 2 3
-    SetDetailsPrint textonly
-    DetailPrint "Installing User Manual | English version..."
-    SetDetailsPrint listonly
-
-    SetOutPath "$INSTDIR\${APP_DIRNAME}\manual\en"
-
-    # Files added here should be removed by the uninstaller
-    # (see section "Uninstall")
-    #     /oname=UnitexManual${VER_MAJOR}.${VER_MINOR}.pdf
-    File "/oname=UnitexManual.pdf" "${INPUT_MANDIR}/en/UnitexManual.pdf"
-  ${MementoSectionEnd}
-
-  ${MementoSection}  "French"                 ManSectionFR
-    SectionIn 1
-    SetDetailsPrint textonly
-    DetailPrint "Installing User Manual | French version..."
-    SetDetailsPrint listonly
-
-    SetOutPath "$INSTDIR\${APP_DIRNAME}\manual\fr"
-    
-    # Files added here should be removed by the uninstaller
-    # (see section "Uninstall")
-    #    "/oname=ManuelUnitex${VER_MAJOR}.${VER_MINOR}.pdf"
-    File "/oname=ManuelUnitex.pdf" "${INPUT_MANDIR}/fr/ManuelUnitex.pdf"
-  ${MementoSectionEnd}
-SectionGroupEnd  # ManSection
-!else   # -DSETUP_NO_MANUAL_SECTION
-  # This is a workaround to preserve the installation indices returned by
-  # GetCurInstType
-  Section -HideManSection
-      SectionIn 1 2 3
-  SectionEnd  # -HideManSection
-!endif  # SETUP_NO_MANUAL_SECTION
 
 # =============================================================================
 # Start Menu and Desktop Shortcuts
@@ -2306,8 +2131,7 @@ Function CreateShortcuts
 
     # Only if at least one IDE section was selected
     # we need to check if jre_bin_path is defined
-    ${If}   ${SectionIsSelected} ${IDESectionUnitex}
-    ${OrIf} ${SectionIsSelected} ${IDESectionGramLab}
+    ${If}   ${SectionIsSelected} ${IDESection}
       # StrCmp str1 str2 jump_if_equal [jump_if_not_equal]
       StrCmp $java_bin_path "" 0 jre_bin_path_is_already_defined
         StrCpy $java_bin_path "javaw.exe"
@@ -2316,7 +2140,7 @@ Function CreateShortcuts
 
     # Unitex.jar shortcut
     # This shortcut should be removed by the uninstaller (see section "Uninstall")
-    ${If} ${SectionIsSelected} ${IDESectionUnitex}
+    ${If} ${SectionIsSelected} ${IDESection}
       # Start Menu Shortcut
       SetOutPath     "$SMPROGRAMS\${STARTMENUFOLDER}"
       CreateShortCut "$SMPROGRAMS\${STARTMENUFOLDER}\${UNITEX_JAVA_NAME}.lnk"    \
@@ -2334,11 +2158,11 @@ Function CreateShortcuts
                       $\"$INSTDIR\${APP_DIRNAME}$\""                             \
                      "$INSTDIR\${APP_DIRNAME}\${ICON_FILE}"                      \
                      0
-    ${EndIf}   # IDESectionUnitex
+    ${EndIf}   # IDESection
 
     # GramLab.jar shortcut
     # This shortcut should be removed by the uninstaller (see section "Uninstall")
-    ${If} ${SectionIsSelected} ${IDESectionGramLab}
+    ${If} ${SectionIsSelected} ${IDESection}
       # Start Menu Shortcut
       SetOutPath     "$SMPROGRAMS\${STARTMENUFOLDER}"
       CreateShortCut "$SMPROGRAMS\${STARTMENUFOLDER}\${GRAMLAB_JAVA_NAME}.lnk"    \
@@ -2355,27 +2179,25 @@ Function CreateShortcuts
                       $\"$INSTDIR\${APP_DIRNAME}$\""                              \
                      "$INSTDIR\${APP_DIRNAME}\${ICON_FILE}"                       \
                      0
-    ${EndIf}  # IDESectionGramLab
+    ${EndIf}  # IDESection
 
     # Manual Shortcuts
     # All shortcuts added here will be automatically removed by the uninstaller
-    !ifndef SETUP_NO_MANUAL_SECTION
-      # English manual shortcut
-      ${If} ${SectionIsSelected} ${ManSectionEN}
-        SetOutPath      "$SMPROGRAMS\${STARTMENUFOLDER}\Manual"
-        CreateShortCut  "$SMPROGRAMS\${STARTMENUFOLDER}\Manual\Unitex Manual \
-                         (english version).lnk"                              \
-                        "$INSTDIR\${APP_DIRNAME}\manual\en\UnitexManual.pdf"
-      ${EndIf}  # ManSectionEN
+    # English manual shortcut
+    ${If} ${FileExists} "$INSTDIR\${APP_DIRNAME}\manual\en\UnitexManual.pdf"
+      SetOutPath      "$SMPROGRAMS\${STARTMENUFOLDER}\Manual"
+      CreateShortCut  "$SMPROGRAMS\${STARTMENUFOLDER}\Manual\Unitex Manual \
+                       (english version).lnk"                              \
+                      "$INSTDIR\${APP_DIRNAME}\manual\en\UnitexManual.pdf"
+    ${EndIf}  # FileExists
 
-      # French manual shortcut
-      ${If} ${SectionIsSelected} ${ManSectionFR}
-        SetOutPath      "$SMPROGRAMS\${STARTMENUFOLDER}\Manual"
-        CreateShortCut  "$SMPROGRAMS\${STARTMENUFOLDER}\Manual\Manuel Unitex \
-                         (french version).lnk"                               \
-                        "$INSTDIR\${APP_DIRNAME}\manual\fr\ManuelUnitex.pdf"
-      ${EndIf}  # ManSectionFR
-    !endif  # SETUP_NO_MANUAL_SECTION
+    # French manual shortcut
+    ${If} ${FileExists} "$INSTDIR\${APP_DIRNAME}\manual\fr\ManuelUnitex.pdf"
+      SetOutPath      "$SMPROGRAMS\${STARTMENUFOLDER}\Manual"
+      CreateShortCut  "$SMPROGRAMS\${STARTMENUFOLDER}\Manual\Manuel Unitex \
+                       (french version).lnk"                               \
+                      "$INSTDIR\${APP_DIRNAME}\manual\fr\ManuelUnitex.pdf"
+    ${EndIf}  # FileExists
 
     # Links Shortcuts
     # All .url shortcuts added here will be automatically removed by the uninstaller
@@ -2663,8 +2485,7 @@ FunctionEnd
 !endif # VER_MAJOR & VER_MINOR & VER_REVISION
 
 function MUI_PAGE_INSTFILES_PreFunction
-  ${If}   ${SectionIsSelected} ${IDESectionUnitex}
-  ${OrIf} ${SectionIsSelected} ${IDESectionGramLab}
+  ${If}   ${SectionIsSelected} ${IDESection}
   #check internet connection
   ${endif}
 functionEnd
@@ -2702,7 +2523,7 @@ function MUI_PAGE_FINISH_ShowFunction
   # Only when java is avalaible
   ${If} ${FileExists} "$java_bin_path"
     # Add a radio button to launch the Unitex Classic IDE
-    ${If}   ${SectionIsSelected} ${IDESectionUnitex}
+    ${If}   ${SectionIsSelected} ${IDESection}
       ${NSD_CreateRadioButton} 180 110u 70% 12u "Launch the ${UNITEX_JAVA_NAME}"
       Pop $RunUnitexRadioButton
       SetCtlColors $RunUnitexRadioButton "" "${MUI_BGCOLOR}"
@@ -2710,13 +2531,10 @@ function MUI_PAGE_FINISH_ShowFunction
     ${endif}
   
     # Add a radio button to launch the Unitex GramLab IDE
-    ${If}   ${SectionIsSelected} ${IDESectionGramLab}
+    ${If}   ${SectionIsSelected} ${IDESection}
       ${NSD_CreateRadioButton} 180 125u 70% 12u "Launch the ${GRAMLAB_JAVA_NAME}"
       Pop $RunGramLabRadioButton
       SetCtlColors $RunGramLabRadioButton "" "${MUI_BGCOLOR}"
-      ${IfNot}   ${SectionIsSelected} ${IDESectionUnitex}
-       ${NSD_Check} $RunGramLabRadioButton
-      ${endif} 
     ${endif}
   ${endif}
 functionEnd
@@ -2844,7 +2662,7 @@ LangString DESC_CoreSection     ${LANG_ENGLISH} \
 
 # IDE Section
 LangString DESC_IDESection      ${LANG_ENGLISH} \
- "${PRETTYAPPNAME} Visual Integrated Environments."
+ "${PRETTYAPPNAME} Visual Integrated Development Environment (IDE)"
 
 # Language Resources Section
 LangString DESC_LangResSection  ${LANG_ENGLISH} \
@@ -2855,12 +2673,6 @@ LangString DESC_LangResSection  ${LANG_ENGLISH} \
 LangString DESC_SrcSection      ${LANG_ENGLISH} \
  "${PRETTYAPPNAME} Code Source."
 !endif  # SETUP_NO_SOURCES_SECTION
-
-# Manuals Section
-!ifndef SETUP_NO_MANUAL_SECTION
-  LangString DESC_ManSection    ${LANG_ENGLISH} \
- "${PRETTYAPPNAME} localized Manuals."
-!endif  # SETUP_NO_MANUAL_SECTION
 
 # Shortcuts Section
 LangString DESC_LnkSection      ${LANG_ENGLISH} \
@@ -2878,10 +2690,6 @@ LangString DESC_LnkSection      ${LANG_ENGLISH} \
   !ifndef SETUP_NO_SOURCES_SECTION
     !insertmacro MUI_DESCRIPTION_TEXT ${SrcSection}       $(DESC_SrcSection)
   !endif  # SETUP_NO_SOURCES_SECTION
-  # Manuals Section
-  !ifndef SETUP_NO_MANUAL_SECTION
-    !insertmacro MUI_DESCRIPTION_TEXT ${ManSection}       $(DESC_ManSection)
-  !endif  # SETUP_NO_MANUAL_SECTION
   # Shortcuts Section
   !insertmacro MUI_DESCRIPTION_TEXT   ${LnkSection}       $(DESC_LnkSection)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
@@ -2998,12 +2806,10 @@ Function un.CleanShortCuts
   delete "$DESKTOP\${GRAMLAB_JAVA_NAME}.lnk"
 
   # Remove all .lnk manual shortcuts
-  !ifndef SETUP_NO_MANUAL_SECTION
-   delete "$SMPROGRAMS\${STARTMENUFOLDER}\Manual\*.lnk"
-   # try to remove the Start Menu Manual folder
-   # this will only happen if it is empty
-   rmDir  "$SMPROGRAMS\${STARTMENUFOLDER}\Manual"
-  !endif  # SETUP_NO_MANUAL_SECTION
+  delete "$SMPROGRAMS\${STARTMENUFOLDER}\Manual\*.lnk"
+  # try to remove the Start Menu Manual folder
+  # this will only happen if it is empty
+  rmDir  "$SMPROGRAMS\${STARTMENUFOLDER}\Manual"
 
   # Remove all .url web shortcuts
   delete "$SMPROGRAMS\${STARTMENUFOLDER}\Links\*.url"
@@ -3031,9 +2837,7 @@ Function un.CleanRegistryKeys
   SetDetailsPrint listonly
 
   # Remove
-  !ifndef SETUP_NO_MANUAL_SECTION
-   DeleteRegKey SHCTX ${APP_MAN_KEY}
-  !endif  # SETUP_NO_MANUAL_SECTION
+  DeleteRegKey SHCTX ${APP_MAN_KEY}
 
   # Remove
   DeleteRegKey SHCTX ${APP_LANGRES_KEY}
@@ -3071,12 +2875,6 @@ Function un.CleanFiles
 
   delete "$INSTDIR\README.md"
   delete "$INSTDIR\LICENSE"
-  delete "$INSTDIR\${APP_DIRNAME}\${GRAMLAB_JAVA_FILE}"
-  delete "$INSTDIR\${APP_DIRNAME}\pom.xml"
-  delete "$INSTDIR\${APP_DIRNAME}\${ICON_FILE}"
-  delete "$INSTDIR\${APP_DIRNAME}\${UNITEX_JAVA_FILE}"
-  delete "$INSTDIR\${APP_DIRNAME}\UnitexToolLogger.exe"
-  delete "$INSTDIR\${APP_DIRNAME}\XAlign.jar"
 
   # Remove Language Resources
   Call un.CleanLangResFiles
@@ -3145,50 +2943,11 @@ Function un.CleanDirectories
   SetDetailsPrint listonly
   rmDir /r "$INSTDIR\${XALIGN_DIRNAME}"
 
-  # recursive (/r) remove the \App\elg directory
+  # recursive (/r) remove the \App directory
   SetDetailsPrint textonly
-  DetailPrint "Deleting directories | \${APP_DIRNAME}\elg..."
+  DetailPrint "Deleting directories | \${APP_DIRNAME}..."
   SetDetailsPrint listonly
-  rmDir /r "$INSTDIR\${APP_DIRNAME}\elg"
-
-  # recursive (/r) remove the \App\lib directory
-  SetDetailsPrint textonly
-  DetailPrint "Deleting directories | \${APP_DIRNAME}\lib..."
-  SetDetailsPrint listonly
-  rmDir /r "$INSTDIR\${APP_DIRNAME}\lib"
-
-  # recursive (/r) remove the \App\manual directory
-  !ifndef SETUP_NO_MANUAL_SECTION
-    SetDetailsPrint textonly
-    DetailPrint "Deleting directories | \${APP_DIRNAME}\manual..."
-    SetDetailsPrint listonly
-    rmDir /r "$INSTDIR\${APP_DIRNAME}\manual"
-  !endif  # SETUP_NO_MANUAL_SECTION
-
-  # recursive (/r) remove the \App\licenses directory
-  SetDetailsPrint textonly
-  DetailPrint "Deleting directories | \${APP_DIRNAME}\licenses..."
-  SetDetailsPrint listonly
-  rmDir /r "$INSTDIR\${APP_DIRNAME}\licenses"
-  
-  # recursive (/r) remove the \App\disclaimers directory
-  SetDetailsPrint textonly
-  DetailPrint "Deleting directories | \${APP_DIRNAME}\disclaimers..."
-  SetDetailsPrint listonly
-  rmDir /r "$INSTDIR\${APP_DIRNAME}\disclaimers"  
-
-  # recursive (/r) remove the \App\assembly directory
-  SetDetailsPrint textonly
-  DetailPrint "Deleting directories | \${APP_DIRNAME}\assembly..."
-  SetDetailsPrint listonly
-  rmDir /r "$INSTDIR\${APP_DIRNAME}\assembly"
-
-  # Try to remove the \App directory, this will only happen if it is empty
-  # Never set /r flag, this is not safe !
-  SetDetailsPrint textonly
-  DetailPrint "Deleting directories | \${APP_DIRNAME} (only if empty)..."
-  SetDetailsPrint listonly
-  rmDir "$INSTDIR\${APP_DIRNAME}"
+  rmDir /r "$INSTDIR\${APP_DIRNAME}"
 
   # recursive (/r) remove the \Src directory
   !ifndef SETUP_NO_SOURCES_SECTION
