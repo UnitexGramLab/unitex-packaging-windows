@@ -215,9 +215,10 @@ downloadJRE:
 downloadsuccessful:
 
   DetailPrint "Launching JRE setup"
-  
-  !define JRE_INSTALL_CMD_SILENT '"$TEMP\jre_setup.exe" /s REBOOT=Suppress JAVAUPDATE=0 WEBSTARTICON=0 /L \"$TEMP\jre_setup.log\"'
-  !define JRE_INSTALL_CMD_NORMAL '"$TEMP\jre_setup.exe" /passive REBOOT=Suppress JAVAUPDATE=0 WEBSTARTICON=0 /L \"$TEMP\jre_setup.log\"'
+
+  # @see https://docs.oracle.com/javase/8/docs/technotes/guides/install/config.html
+  !define JRE_INSTALL_CMD_SILENT '"$TEMP\jre_setup.exe" INSTALL_SILENT=Enable'
+  !define JRE_INSTALL_CMD_NORMAL '"$TEMP\jre_setup.exe" '
   
   IfSilent define_silent_command define_normal_or_silent_command
   
