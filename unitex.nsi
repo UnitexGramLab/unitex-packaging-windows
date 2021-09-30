@@ -1108,18 +1108,18 @@ reboot your computer.${NEW_LINE}${NEW_LINE}$_CLICK"
 !define MUI_PAGE_HEADER_TEXT    "${PRETTYAPPNAME} workspace folder"
 
 # Custom page header subtext
-!define MUI_PAGE_HEADER_SUBTEXT "Choose the folder in which to create your workspace."
+!define MUI_PAGE_HEADER_SUBTEXT "Choose the folder in which set your workspace."
 
 # Custom directory top text
-!define MUI_DIRECTORYPAGE_TEXT_TOP "Setup will create your workspace  \
-        in the following folder. To select a different folder, click \
-        &Workspace and select another.${NEW_LINE}${NEW_LINE} \
+!define MUI_DIRECTORYPAGE_TEXT_TOP "Setup will set the following folder \
+        as your workspace. To select a different folder, click \
+        &Workspace and select another.${NEW_LINE}${NEW_LINE}\
         Notice that this folder will be your ${PRETTYAPPNAME} workspace \
         folder. It must be different from the installation folder."
 
 # Custom destination folder text
-!define MUI_DIRECTORYPAGE_TEXT_DESTINATION "Destination folder where \
-        your ${PRETTYAPPNAME} workspace will be created"
+!define MUI_DIRECTORYPAGE_TEXT_DESTINATION "Destination folder that will \
+        be used as your ${PRETTYAPPNAME} folder:"
 
 # Store the workspace folder in WORKSPACE_DIR
 Var WORKSPACE_DIR
